@@ -1,27 +1,38 @@
 ---
 import '../styles/global.css';
-import { site, nav } from '../site';
+import { site } from '../site';
+import { t, prefix, switchPath, langs, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
   backLink?: boolean;
 }
-const { title = site.title, description = site.description, backLink = false } = Astro.props;
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
+const { lang, backLink = false } = Astro.props;
+const s = t[lang];
+const title = Astro.props.title ?? s.siteTitle;
+const description = Astro.props.description ?? s.description;
+const path = Astro.url.pathname;
+const home = `${prefix(lang)}/`;
+const abs = (p: string) => (Astro.site ? new URL(p, Astro.site).href : p);
+const canonical = Astro.site ? new URL(path, Astro.site) : null;
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonical && <link rel="canonical" href={canonical} />}
+    {langs.map((l) => <link rel="alternate" hreflang={l} href={abs(switchPath(path, l))} />)}
+    <link rel="alternate" hreflang="x-default" href={abs(switchPath(path, 'en'))} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,31 +41,42 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
     />
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">{s.skip}</a>
     <div class="container">
       <header class="site-header">
-        <a href="/" class="brand">{site.name}</a>
-        {backLink ? (
-          <a href="/#work" class="label"><span aria-hidden="true">←</span> All work</a>
-        ) : (
-          <nav aria-label="Main">
-            <ul>
-              {nav.map((item) => (
-                <li>
-                  <a href={item.href} class="label">
-                    <span class="label--subtle">{item.n}</span> {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        <a href={home} class="brand">{site.name}</a>
+        <div class="header-right">
+          {backLink ? (
+            <a href={`${home}#work`} class="label"><span aria-hidden="true">←</span> {s.allWork}</a>
+          ) : (
+            <nav aria-label="Main">
+              <ul>
+                {s.nav.map((item) => (
+                  <li>
+                    <a href={`${home}#${item.hash}`} class="label">
+                      <span class="label--subtle">{item.n}</span> {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+          <div class="lang label" role="group" aria-label={s.langLabel}>
+            {langs.map((l) =>
+              l === lang ? (
+                <span class="lang-current" aria-current="true">{l.toUpperCase()}</span>
+              ) : (
+                <a href={switchPath(path, l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
+              ),
+            )}
+          </div>
+        </div>
       </header>
       <main id="main">
         <slot />
       </main>
       <footer id="contact" class="site-footer">
-        <span class="label label--muted">{site.availability}</span>
+        <span class="label label--muted">{s.availability}</span>
         <div class="footer-links">
           <a class="label" href={`mailto:${site.email}`}>{site.email}</a>
           {site.linkedin && <a class="label" href={site.linkedin}>LinkedIn</a>}
@@ -75,6 +97,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
     border-bottom: 1px solid var(--color-border);
   }
   .brand { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .header-right { display: flex; flex-wrap: wrap; align-items: center; gap: var(--p-space-2) 28px; }
   nav ul {
     display: flex;
     flex-wrap: wrap;
@@ -84,6 +107,17 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
     padding: 0;
   }
   nav a { display: inline-block; padding: 12px 0; }
+  .lang {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding-left: 20px;
+    border-left: 1px solid var(--color-border);
+  }
+  .lang a, .lang-current { display: inline-block; padding: 12px 6px; }
+  .lang a { color: var(--color-text-subtle); }
+  .lang a:hover { color: var(--color-text); }
+  .lang-current { color: var(--color-text); }
   .site-footer {
     display: flex;
     flex-wrap: wrap;

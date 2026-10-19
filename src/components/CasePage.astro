@@ -1,0 +1,139 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { site } from '../site';
+import { t, prefix, type Lang } from '../i18n';
+import { slugOf, pad } from '../cases';
+
+interface Props {
+  lang: Lang;
+  entry: CollectionEntry<'work'>;
+  next: CollectionEntry<'work'>;
+}
+const { lang, entry, next } = Astro.props;
+const s = t[lang];
+const { Content } = await render(entry);
+---
+<Base lang={lang} title={`${entry.data.title} · ${site.name}`} description={entry.data.summary} backLink>
+  <section class="intro">
+    <span class="label label--subtle">{s.caseWord} {pad(entry.data.order)} · {entry.data.kicker}</span>
+    <h1>{entry.data.title}</h1>
+    <p class="lead">{entry.data.lead}</p>
+  </section>
+
+  <dl class="meta">
+    {entry.data.meta.map((m) => (
+      <div>
+        <dt class="label label--subtle">{m.label}</dt>
+        <dd>{m.value}</dd>
+      </div>
+    ))}
+  </dl>
+
+  <div class="placeholder hero">{entry.data.hero}</div>
+
+  <article class="prose">
+    <Content />
+  </article>
+
+  <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
+    <span class="label label--subtle">{s.nextCase} · {pad(next.data.order)}</span>
+    <span class="next-title">{next.data.title} <span aria-hidden="true">→</span></span>
+  </a>
+</Base>
+
+<style>
+  .intro { padding: 88px 0 56px; display: flex; flex-direction: column; gap: 28px; }
+  h1 {
+    margin: 0;
+    font-size: clamp(36px, 5vw, 68px);
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.035em;
+    max-width: 16ch;
+  }
+  .lead { margin: 0; font-size: 20px; line-height: 1.55; color: var(--color-text-muted); max-width: 52ch; }
+
+  .meta {
+    margin: 0 0 72px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    border-top: 1px solid var(--color-border-strong);
+  }
+  .meta div { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--color-border); }
+  .meta dt { font-size: 11px; margin-bottom: 6px; }
+  .meta dd { margin: 0; font-size: 15px; }
+
+  .hero { margin-bottom: 96px; }
+
+  .next {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 40px 0 48px;
+    border-top: 1px solid var(--color-border-strong);
+  }
+  .next-title { font-size: clamp(24px, 3vw, 32px); letter-spacing: -0.025em; }
+
+  /* Case body: section label on the left, reading column on the right.
+     Sparse auto-placement puts the first block after each heading on the
+     heading's row, so labels stay aligned with their section. */
+  .prose {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0 var(--p-space-7);
+    padding-bottom: 104px;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+  @media (min-width: 900px) {
+    .prose {
+      grid-template-columns: minmax(180px, 1fr) minmax(0, 2.2fr);
+    }
+    .prose :global(> *) { grid-column: 2; max-width: 680px; }
+    .prose :global(> h2) { grid-column: 1; }
+    .prose :global(> figure) { grid-column: 1 / -1; max-width: none; }
+  }
+  .prose :global(> *) { margin: 0 0 16px; }
+  .prose :global(h2) {
+    font-family: var(--p-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    line-height: 1.6;
+    padding-top: 6px;
+    margin-top: 56px;
+  }
+  .prose :global(h2 + *) { margin-top: 56px; }
+  .prose :global(h2:first-child), .prose :global(h2:first-child + *) { margin-top: 0; }
+  .prose :global(strong) { font-weight: 500; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
+  .prose :global(li) { margin-bottom: 8px; }
+  .prose :global(li::marker) { color: var(--color-text-subtle); }
+  .prose :global(figure) { margin: 48px 0; display: flex; flex-direction: column; gap: 12px; }
+  .prose :global(figcaption) {
+    font-family: var(--p-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+  .prose :global(figure .placeholder) { aspect-ratio: 16 / 7; }
+  .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .prose :global(th) {
+    text-align: left;
+    font-family: var(--p-font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    padding: 10px 12px 10px 0;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+  .prose :global(td) { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+</style>

@@ -1,8 +1,11 @@
 ---
 // Hero object: the token architecture drawn as three stacked layers.
+import { t, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const s = t[Astro.props.lang];
 ---
 <figure class="token-figure">
-  <svg viewBox="0 0 470 400" role="img" aria-label="Token architecture drawn as three stacked layers: primitive, semantic and component">
+  <svg viewBox="0 0 470 400" role="img" aria-label={s.figAlt}>
     <g fill="none" stroke="var(--color-decor)" stroke-width="1">
       <path d="M40 40 v10 M35 45 h10 M430 360 v10 M425 365 h10" />
       <path d="M190 300 v-60 M190 230 v-60" stroke-dasharray="3 4" />
@@ -20,13 +23,13 @@
     <circle cx="330" cy="230" r="3" fill="var(--color-text-subtle)" />
     <circle cx="330" cy="300" r="3" fill="var(--color-text-subtle)" />
     <g font-family="Geist Mono, monospace" font-size="11" letter-spacing="0.5">
-      <text x="386" y="164" fill="var(--color-text)">COMPONENT</text>
-      <text x="386" y="234" fill="var(--color-text-muted)">SEMANTIC</text>
-      <text x="386" y="304" fill="var(--color-text-muted)">PRIMITIVE</text>
+      <text x="386" y="164" fill="var(--color-text)">{s.layers[0]}</text>
+      <text x="386" y="234" fill="var(--color-text-muted)">{s.layers[1]}</text>
+      <text x="386" y="304" fill="var(--color-text-muted)">{s.layers[2]}</text>
     </g>
   </svg>
   <figcaption class="label label--subtle">
-    <span>Fig. 01 · Token architecture</span><span>3 brands · 1 system</span>
+    <span>{s.figCaption[0]}</span><span>{s.figCaption[1]}</span>
   </figcaption>
 </figure>
 
