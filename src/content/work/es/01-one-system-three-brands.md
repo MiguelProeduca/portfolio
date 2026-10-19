@@ -41,8 +41,8 @@ Sin Figma Enterprise no hay herencia nativa entre marcas, así que cada marca vi
 **Arquitectura en capas.** Los tokens fluyen por cinco colecciones encadenadas, de los valores en bruto a los componentes: primitivos, semánticos comunes, semánticos de color, semánticos de componente y componentes. Cada marca resuelve sus valores con sus propios modos.
 
 <figure>
-  <div class="placeholder">[Diagrama · arquitectura de colecciones]</div>
-  <figcaption>Fig. 02 · Cinco colecciones encadenadas más una sección custom</figcaption>
+  <img src="/work/ds-variables.jpg" alt="Panel de variables de Figma: colecciones Primitive, Semantic/Common, Semantic/Color Scheme, Component/Common, Component/Color Scheme y Custom, con una columna de modo por marca: Estudiantes, Prodi, Foundations y Aura" loading="lazy" />
+  <figcaption>Fig. 02 · Las colecciones en Figma, con un modo por marca. Aura es el tema base de PrimeNG.</figcaption>
 </figure>
 
 **Adaptar o crear.** Si PrimeNG tiene el componente, su estructura no se toca y solo cambian los tokens. Si no lo tiene, se crea desde cero en la sección custom, replicando la anatomía de tokens de PrimeNG con tokens nuevos. Para desarrollo y para cada marca, un componente custom es indistinguible de uno nativo.
