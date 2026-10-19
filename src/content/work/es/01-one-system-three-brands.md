@@ -10,6 +10,7 @@ meta:
   - { label: "Empresa", value: "UNIR · Grupo Proeduca" }
   - { label: "Marcas", value: "Estudiantes, Prodi, Foundations" }
   - { label: "Herramientas", value: "Figma, Token Studio, Zeroheight" }
+cover: "/work/ds-cover.jpg"
 hero: "[Imagen principal · el mismo componente en las tres marcas]"
 ---
 
