@@ -10,7 +10,8 @@ meta:
   - { label: "Brand", value: "Estudiantes" }
   - { label: "Platforms", value: "Mobile, tablet and desktop" }
   - { label: "Status", value: "In handoff to engineering" }
-hero: "[Hero image · board view on desktop and mobile]"
+cover: "/work/student-cover.jpg"
+hero: "Student app screens on mobile: my space, mail, degree page and the task board"
 ---
 
 ## Problem
