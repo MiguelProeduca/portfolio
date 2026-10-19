@@ -30,7 +30,11 @@ const { Content } = await render(entry);
     ))}
   </dl>
 
-  <div class="placeholder hero">{entry.data.hero}</div>
+  {entry.data.cover ? (
+    <img class="hero hero-img" src={entry.data.cover} alt={entry.data.hero.replace(/^\[|\]$/g, '')} />
+  ) : (
+    <div class="placeholder hero">{entry.data.hero}</div>
+  )}
 
   <article class="prose">
     <Content />
@@ -67,6 +71,7 @@ const { Content } = await render(entry);
   .meta dd { margin: 0; font-size: 15px; font-weight: 500; }
 
   .hero { margin-bottom: 104px; aspect-ratio: 16 / 9; }
+  .hero-img { width: 100%; height: auto; object-fit: cover; border-radius: var(--p-radius-md); }
 
   .next {
     display: flex;
