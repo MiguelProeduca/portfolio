@@ -11,6 +11,7 @@ meta:
   - { label: "Plataformas", value: "Mobile, tablet y desktop" }
   - { label: "Estado", value: "En traspaso a desarrollo" }
 cover: "/work/student-cover.jpg"
+coverBorder: true
 hero: "Pantallas de la app del estudiante en móvil: mi espacio, correo, página de titulación y el tablero de tareas"
 ---
 

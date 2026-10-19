@@ -11,6 +11,7 @@ meta:
   - { label: "Platforms", value: "Mobile, tablet and desktop" }
   - { label: "Status", value: "In handoff to engineering" }
 cover: "/work/student-cover.jpg"
+coverBorder: true
 hero: "Student app screens on mobile: my space, mail, degree page and the task board"
 ---
 
