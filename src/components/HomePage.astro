@@ -21,7 +21,7 @@ const base = prefix(lang);
         <li class={i === 0 ? 'wide' : ''}>
           <a href={`${base}/work/${slugOf(c.id)}/`} class="card">
             <span class="card-media">
-              {c.data.cover && <img src={c.data.cover} style={`object-position: ${c.data.coverPosition}`} alt="" loading={i === 0 ? 'eager' : 'lazy'} />}
+              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i === 0 ? 'eager' : 'lazy'} />}
             </span>
             <span class="card-text">
               <span class="card-title">{c.data.title}</span>

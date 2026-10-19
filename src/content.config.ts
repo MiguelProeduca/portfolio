@@ -14,7 +14,7 @@ const work = defineCollection({
     meta: z.array(z.object({ label: z.string(), value: z.string() })),
     hero: z.string(), // placeholder text until the real image exists
     cover: z.string().optional(), // card image on the home, e.g. "/work/ds-cover.jpg" in public/
-    coverPosition: z.string().default('center'), // CSS object-position for the home card crop, e.g. "right"
+    coverPosition: z.string().optional(), // CSS object-position for the home card crop, e.g. "right"
     draft: z.boolean().default(false),
   }),
 });
