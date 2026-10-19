@@ -11,7 +11,7 @@ meta:
   - { label: "Brands", value: "Estudiantes, Prodi, Foundations" }
   - { label: "Tools", value: "Figma, Token Studio, Zeroheight" }
 cover: "/work/ds-cover.jpg"
-hero: "[Hero image · the same component in three brands]"
+hero: "Overview of design system components: chat input, task cards, sidebar, calendar, buttons and form fields"
 ---
 
 ## Context
