@@ -1,0 +1,37 @@
+---
+// Hero object: the token architecture drawn as three stacked layers.
+---
+<figure class="token-figure">
+  <svg viewBox="0 0 470 400" role="img" aria-label="Token architecture drawn as three stacked layers: primitive, semantic and component">
+    <g fill="none" stroke="var(--color-decor)" stroke-width="1">
+      <path d="M40 40 v10 M35 45 h10 M430 360 v10 M425 365 h10" />
+      <path d="M190 300 v-60 M190 230 v-60" stroke-dasharray="3 4" />
+    </g>
+    <path d="M190 250 L330 300 L190 350 L50 300 Z" fill="var(--color-surface-muted)" stroke="var(--color-text-subtle)" />
+    <path d="M190 180 L330 230 L190 280 L50 230 Z" fill="var(--color-bg)" stroke="var(--color-text-subtle)" />
+    <path d="M190 110 L330 160 L190 210 L50 160 Z" fill="var(--color-surface)" stroke="var(--color-accent)" stroke-width="1.5" />
+    <g stroke="var(--color-border)" stroke-width="1">
+      <path d="M120 135 L260 185 M155 122 L295 172 M85 148 L225 198" />
+    </g>
+    <g fill="none" stroke="var(--color-text-subtle)" stroke-width="1">
+      <path d="M330 160 H380" /><path d="M330 230 H380" /><path d="M330 300 H380" />
+    </g>
+    <circle cx="330" cy="160" r="3" fill="var(--color-accent)" />
+    <circle cx="330" cy="230" r="3" fill="var(--color-text-subtle)" />
+    <circle cx="330" cy="300" r="3" fill="var(--color-text-subtle)" />
+    <g font-family="Geist Mono, monospace" font-size="11" letter-spacing="0.5">
+      <text x="386" y="164" fill="var(--color-text)">COMPONENT</text>
+      <text x="386" y="234" fill="var(--color-text-muted)">SEMANTIC</text>
+      <text x="386" y="304" fill="var(--color-text-muted)">PRIMITIVE</text>
+    </g>
+  </svg>
+  <figcaption class="label label--subtle">
+    <span>Fig. 01 · Token architecture</span><span>3 brands · 1 system</span>
+  </figcaption>
+</figure>
+
+<style>
+  .token-figure { margin: 0; display: flex; flex-direction: column; gap: var(--p-space-3); }
+  svg { width: 100%; height: auto; overflow: visible; }
+  figcaption { display: flex; justify-content: space-between; gap: var(--p-space-3); flex-wrap: wrap; font-size: 11px; }
+</style>
