@@ -15,8 +15,7 @@ const base = prefix(lang);
     <h1>{s.h1a} <span class="subtle">{s.h1b}</span></h1>
   </section>
 
-  <section id="work" class="work" aria-labelledby="work-title">
-    <h2 id="work-title" class="work-head">{s.selectedWork} <span class="subtle">· {s.workYears}</span></h2>
+  <section id="work" class="work" aria-label={s.selectedWork}>
     <ul class="cards">
       {cases.map((c, i) => (
         <li class={i === 0 ? 'wide' : ''}>
@@ -89,7 +88,6 @@ const base = prefix(lang);
     max-width: 21ch;
   }
 
-  .work-head { margin: 0 0 24px; font-size: 16px; font-weight: 500; }
   .cards {
     list-style: none; margin: 0; padding: 0;
     display: grid; grid-template-columns: 1fr; gap: 24px;
