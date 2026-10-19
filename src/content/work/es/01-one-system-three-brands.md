@@ -63,8 +63,8 @@ Al principio la IA usaba el layout vertical y el chat el horizontal. El producto
 Los archivos e imágenes entran por un slot, con su propio componente de adjunto y sus estados de carga. Cubre mobile y desktop, estados de envío (enviar, cargando, parar generación), audio y transcripción, bloqueado, botón de añadir y con o sin adjuntos.
 
 <figure>
-  <div class="placeholder">[Matriz · input de chat, tres marcas × dos layouts]</div>
-  <figcaption>Fig. 03 · Un componente, dos layouts, tres marcas</figcaption>
+  <img src="/work/ds-chat-input.jpg" alt="El mismo input de chat en tres marcas: Prodi en layout vertical con esquinas muy redondeadas, Estudiantes en horizontal redondeado y Foundations en horizontal con esquinas rectas" loading="lazy" />
+  <figcaption>Fig. 03 · Un componente, dos layouts, tres marcas: vertical en Prodi, horizontal en Estudiantes y Foundations.</figcaption>
 </figure>
 
 ## Resultado

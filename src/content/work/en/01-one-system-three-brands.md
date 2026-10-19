@@ -63,8 +63,8 @@ At first the AI used the vertical layout and the chat the horizontal one. The pr
 Files and images come in through a slot, with their own attachment component and loading states. It covers mobile and desktop, send states (send, loading, stop generating), audio and transcription, disabled, an add button, and with or without attachments.
 
 <figure>
-  <div class="placeholder">[Matrix · chat input, three brands × two layouts]</div>
-  <figcaption>Fig. 03 · One component, two layouts, three brands</figcaption>
+  <img src="/work/ds-chat-input.jpg" alt="The same chat input in three brands: Prodi in a vertical layout with very rounded corners, Estudiantes horizontal and rounded, Foundations horizontal with square corners" loading="lazy" />
+  <figcaption>Fig. 03 · One component, two layouts, three brands: vertical in Prodi, horizontal in Estudiantes and Foundations.</figcaption>
 </figure>
 
 ## Result
