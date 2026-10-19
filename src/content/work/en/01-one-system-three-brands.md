@@ -41,8 +41,8 @@ Without Figma Enterprise there is no native inheritance between brands, so each 
 **Layered architecture.** Tokens flow through five chained collections, from raw values to components: primitives, shared semantics, colour semantics, component semantics and components. Each brand resolves its values through its own modes.
 
 <figure>
-  <img src="/work/ds-variables.jpg" alt="Figma variables panel: Primitive, Semantic/Common, Semantic/Color Scheme, Component/Common, Component/Color Scheme and Custom collections, with one mode column per brand: Estudiantes, Prodi, Foundations and Aura" loading="lazy" />
-  <figcaption>Fig. 02 · The collections in Figma, with one mode per brand. Aura is PrimeNG's base theme.</figcaption>
+  <img src="/work/ds-variables.jpg" alt="Figma variables panel: Primitive, Semantic/Common, Semantic/Color Scheme, Component/Common, Component/Color Scheme and Custom collections, with the primary button tokens and one mode column per brand: Estudiantes, Prodi, Foundations and the base theme" loading="lazy" />
+  <figcaption>Fig. 02 · The primary button in the component collection. Each brand is a mode and resolves its own hover and active shades. The last column is PrimeNG's base theme.</figcaption>
 </figure>
 
 **Adapt or create.** If PrimeNG has the component, its structure stays and only tokens change. If it doesn't, it's built from scratch in the custom section, mirroring PrimeNG's token anatomy with new tokens. For engineering and for every brand, a custom component is indistinguishable from a native one.
