@@ -10,7 +10,9 @@ meta:
   - { label: "Marca", value: "Prodi" }
   - { label: "Plataformas", value: "Desktop y mobile" }
   - { label: "Estado", value: "Visor del alumno en piloto" }
-hero: "[Imagen principal · espacio del profesor y visor del alumno, uno junto al otro]"
+cover: "/work/ai-cover.jpg"
+coverPosition: "right"
+hero: "Espacio del profesor y visor del alumno, uno junto al otro"
 ---
 
 ## Parte 1 · El profesor crea

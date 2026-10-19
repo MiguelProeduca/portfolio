@@ -10,7 +10,9 @@ meta:
   - { label: "Brand", value: "Prodi" }
   - { label: "Platforms", value: "Desktop and mobile" }
   - { label: "Status", value: "Student viewer in pilot" }
-hero: "[Hero image · teacher workspace and student viewer side by side]"
+cover: "/work/ai-cover.jpg"
+coverPosition: "right"
+hero: "Teacher workspace and student viewer side by side"
 ---
 
 ## Part 1 · Teachers create
