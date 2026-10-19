@@ -133,6 +133,12 @@ const base = prefix(lang);
     }
   }
   .card-text .subtle { color: var(--color-text-muted); }
+  /* on pointer devices the caption appears on hover / keyboard focus; touch keeps it visible */
+  @media (hover: hover) {
+    .card-text { opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
+    .card:hover .card-text, .card:focus-visible .card-text { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .card-text { transform: none !important; } }
   .card-title { font-weight: 500; }
 
   .text { display: flex; flex-direction: column; gap: 20px; font-size: 16px; line-height: 1.6; }
