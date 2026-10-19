@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 
-// Replace with your final domain before deploying (used for canonical URLs).
-export default defineConfig({
-  site: 'https://example.com',
-});
+// When you have your own domain, add it here (used for canonical URLs):
+// export default defineConfig({ site: 'https://your-domain.com' });
+export default defineConfig({});
