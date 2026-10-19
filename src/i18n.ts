@@ -17,29 +17,23 @@ export const t = {
     description:
       'Senior Design Systems Designer in Madrid. I design the systems that AI products are built on.',
     skip: 'Skip to content',
+    home: 'Home',
     nav: [
-      { n: '01', label: 'Work', hash: 'work' },
-      { n: '02', label: 'How I work', hash: 'how' },
-      { n: '03', label: 'About', hash: 'about' },
-      { n: '04', label: 'Contact', hash: 'contact' },
+      { label: 'Work', hash: 'work' },
+      { label: 'About', hash: 'about' },
+      { label: 'Contact', hash: 'contact' },
     ],
     langLabel: 'Language',
     allWork: 'All work',
     availability: 'Open to Design Systems roles · EU / Remote',
 
-    tags: ['Design Systems', 'AI products', 'Madrid, ES'],
-    h1: 'I design the systems that AI products are built on.',
-    sub: 'Senior Design Systems Designer at UNIR. I lead a multi-brand design system and design AI products for teachers and students.',
-    seeWork: 'See the work',
-    getInTouch: 'Get in touch',
-    figCaption: ['Fig. 01 · Token architecture', '3 brands · 1 system'],
-    figAlt: 'Token architecture drawn as three stacked layers: primitive, semantic and component',
-    layers: ['COMPONENT', 'SEMANTIC', 'PRIMITIVE'],
+    h1a: "I'm Miguel—a senior design systems designer.",
+    h1b: 'I design the systems that AI products are built on.',
 
-    selectedWork: 'Selected work',
-    cases: 'cases',
+    selectedWork: 'Featured work',
+    workYears: '2024–2026',
 
-    howLabel: '02 · How I work',
+    howLabel: 'How I work',
     howTitle: 'AI to scale. Human judgment to decide.',
     howIntro:
       "A design system with thousands of variables can't be kept by hand. I use Claude connected to Figma (MCP) for the work that doesn't scale.",
@@ -55,7 +49,7 @@ export const t = {
     notDelegatedV:
       'Decisions and design. AI can give me a starting point, but I design the screens and review everything it does.',
 
-    aboutLabel: '03 · About',
+    aboutLabel: 'About me',
     about: [
       "I came to product from advertising. Almost four years in creative and strategy, with projects like an interactive site for the launch of a National Geographic documentary series. That's where I learned to build a conceptual world from scratch, and to think about how an idea is told so it persuades.",
       'I moved to product because I wanted my work to have a tangible impact: things people use every day and find useful. At UNIR I lead the multi-brand design system and design AI products for teachers and students.',
@@ -73,6 +67,7 @@ export const t = {
     education:
       'Design Systems (Uxer School, 2023) · UX/UI (Upgrade Hub, 2022–23) · Creativity (Zink School, 2020–21; Young Creative award, CDEC Festival 2021) · Advertising & PR (URJC, 2014–19)',
 
+    contactTitle: 'Building a design system? Drop me an email.',
     caseWord: 'Case',
     nextCase: 'Next case',
   },
@@ -82,29 +77,23 @@ export const t = {
     description:
       'Diseñador senior de sistemas de diseño en Madrid. Diseño los sistemas sobre los que se construyen productos de IA.',
     skip: 'Saltar al contenido',
+    home: 'Inicio',
     nav: [
-      { n: '01', label: 'Proyectos', hash: 'work' },
-      { n: '02', label: 'Cómo trabajo', hash: 'how' },
-      { n: '03', label: 'Sobre mí', hash: 'about' },
-      { n: '04', label: 'Contacto', hash: 'contact' },
+      { label: 'Proyectos', hash: 'work' },
+      { label: 'Sobre mí', hash: 'about' },
+      { label: 'Contacto', hash: 'contact' },
     ],
     langLabel: 'Idioma',
     allWork: 'Todos los proyectos',
     availability: 'Abierto a puestos de sistemas de diseño · Europa / remoto',
 
-    tags: ['Sistemas de diseño', 'Productos de IA', 'Madrid, ES'],
-    h1: 'Diseño los sistemas sobre los que se construyen productos de IA.',
-    sub: 'Diseñador senior de sistemas de diseño en UNIR. Lidero un sistema de diseño multimarca y diseño productos de IA para profesores y alumnos.',
-    seeWork: 'Ver proyectos',
-    getInTouch: 'Contactar',
-    figCaption: ['Fig. 01 · Arquitectura de tokens', '3 marcas · 1 sistema'],
-    figAlt: 'Arquitectura de tokens dibujada como tres capas apiladas: primitiva, semántica y componente',
-    layers: ['COMPONENTE', 'SEMÁNTICA', 'PRIMITIVA'],
+    h1a: 'Soy Miguel, diseñador senior de sistemas de diseño.',
+    h1b: 'Diseño los sistemas sobre los que se construyen productos de IA.',
 
     selectedWork: 'Proyectos destacados',
-    cases: 'casos',
+    workYears: '2024–2026',
 
-    howLabel: '02 · Cómo trabajo',
+    howLabel: 'Cómo trabajo',
     howTitle: 'IA para escalar. Criterio humano para decidir.',
     howIntro:
       'Un sistema de diseño con miles de variables no se mantiene a mano. Uso Claude conectado a Figma (MCP) para el trabajo que escala mal.',
@@ -120,7 +109,7 @@ export const t = {
     notDelegatedV:
       'Las decisiones y el diseño. La IA puede darme un punto de partida, pero las pantallas las diseño yo y reviso todo lo que hace.',
 
-    aboutLabel: '03 · Sobre mí',
+    aboutLabel: 'Sobre mí',
     about: [
       'Llegué al producto desde la publicidad. Pasé casi cuatro años en creatividad y estrategia, con proyectos como una web interactiva para el estreno de una serie documental de National Geographic. Allí aprendí a construir un universo conceptual desde cero y a pensar en cómo se cuenta una idea para que convenza.',
       'Me pasé al producto porque quería que mi trabajo tuviera un impacto tangible: cosas que la gente usa cada día y que le resultan útiles. En UNIR lidero el sistema de diseño multimarca y diseño productos de IA para profesores y alumnos.',
@@ -138,6 +127,7 @@ export const t = {
     education:
       'Sistemas de diseño (Uxer School, 2023) · UX/UI (Upgrade Hub, 2022–23) · Creatividad (Zink School, 2020–21; premio Joven Creativo, CDEC Festival 2021) · Publicidad y RR. PP. (URJC, 2014–19)',
 
+    contactTitle: '¿Construyendo un sistema de diseño? Escríbeme.',
     caseWord: 'Caso',
     nextCase: 'Siguiente caso',
   },
