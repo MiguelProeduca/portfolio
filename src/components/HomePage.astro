@@ -91,6 +91,39 @@ const projectLinks = cases.flatMap((c) =>
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
+  <script is:inline>
+    (function () {
+      var moon = document.querySelector('.moon');
+      if (!moon || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.hero-projects .hp').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || getComputedStyle(moon).display === 'none') return;
+          var img = moon.querySelector('img[data-i="' + a.dataset.i + '"]');
+          if (!img) return;
+          e.preventDefault();
+          var r = moon.getBoundingClientRect();
+          var cx = r.left + r.width / 2, cy = r.top + r.height / 2, r0 = r.width * 0.42;
+          var far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+          var z = document.createElement('div');
+          z.className = 'moon-zoom';
+          z.style.backgroundImage = 'url(' + img.currentSrc + ')';
+          z.style.backgroundPosition = cx + 'px ' + cy + 'px';
+          z.style.backgroundSize = 'auto ' + r.height + 'px';
+          z.style.clipPath = 'circle(' + r0 + 'px at ' + cx + 'px ' + cy + 'px)';
+          z.style.filter = 'blur(2px)';
+          document.body.appendChild(z);
+          z.getBoundingClientRect();
+          z.style.backgroundPosition = 'center'; z.style.backgroundSize = 'cover';
+          z.style.transition += ', background-size .8s cubic-bezier(.7,0,.2,1), background-position .8s cubic-bezier(.7,0,.2,1)';
+          z.style.clipPath = 'circle(' + far + 'px at ' + cx + 'px ' + cy + 'px)';
+          z.style.filter = 'none';
+          setTimeout(function () { location.href = a.href; }, 780);
+        });
+      });
+      // coming back with the browser's back button: clear the overlay
+      addEventListener('pageshow', function () { document.querySelectorAll('.moon-zoom').forEach(function (n) { n.remove(); }); });
+    })();
+  </script>
 </Base>
 
 <style>
@@ -144,6 +177,8 @@ const projectLinks = cases.flatMap((c) =>
     position: absolute; z-index: 0; pointer-events: none;
     top: 30%; right: clamp(40px, 6vw, 110px);
     width: clamp(240px, 25vw, 420px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
+    mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
     filter: drop-shadow(0 0 60px rgba(255, 255, 255, .35));
   }
   .hero-fg {
@@ -154,7 +189,7 @@ const projectLinks = cases.flatMap((c) =>
   .hero-fg--dark { opacity: 0; }
   :global([data-theme="dark"]) .hero-fg--light { opacity: 0; }
   :global([data-theme="dark"]) .hero-fg--dark { opacity: 1; }
-  .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+  .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; }
   .moon-face {
     background:
       linear-gradient(215deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .45) 62%, rgba(255, 255, 255, 0) 92%);
@@ -177,6 +212,12 @@ const projectLinks = cases.flatMap((c) =>
   @media (prefers-reduced-motion: reduce) { .moon img { transition: opacity .2s ease; transform: none; } }
   @media (max-width: 760px) {
     .moon { display: none; }
+  }
+  /* Click: the moon grows to fill the screen, then we land on the project. */
+  :global(.moon-zoom) {
+    position: fixed; inset: 0; z-index: 50; pointer-events: none;
+    background: var(--color-bg) center / cover no-repeat;
+    transition: clip-path .8s cubic-bezier(.7, 0, .2, 1), filter .8s ease;
   }
   /* Bottom bar: just the project names. Hover shifts the colour. */
   .hero-projects {
