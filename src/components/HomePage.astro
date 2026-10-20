@@ -16,32 +16,25 @@ const projectLinks = cases.flatMap((c) =>
     cover: c.data.cover,
   })),
 );
+const pile = [
+  { src: '/pile/c57.webp', l: 74.448, t: 12.047, w: 31.908 },
+  { src: '/pile/c71.webp', l: 14.609, t: 24.387, w: 28.081 },
+  { src: '/pile/c72.webp', l: 18.898, t: 50.067, w: 26.806 },
+  { src: '/pile/c73.webp', l: 35.633, t: 8.999, w: 24.123 },
+  { src: '/pile/c74.webp', l: 48.646, t: 10.733, w: 23.296 },
+  { src: '/pile/c75.webp', l: 61.195, t: 42.460, w: 28.349 },
+  { src: '/pile/c76.webp', l: 36.250, t: 35.636, w: 27.500 },
+];
 ---
-<Base lang={lang} overlay>
-  <section class="hero" slot="hero">
-    <img class="hero-bg hero-bg--light" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
-    <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" />
-    <div class="hero-text">
-      <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
-      <p class="hero-sub">{s.heroSub}</p>
-    </div>
-    <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
-      {projectLinks.map((l, k) => (
-        <a href={l.href} class="hp" data-i={k}>
-          <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
-        </a>
-      ))}
-    </nav>
-    {/* The moon: a white gradient disc. Hovering a project fills it with its cover. */}
-    <div class="moon" aria-hidden="true">
-      <span class="moon-face"></span>
-      {projectLinks.map((l, k) => l.cover && <img src={l.cover} data-i={k} alt="" loading="lazy" />)}
-    </div>
-    {/* Foreground cut-outs (clouds / mountains) so the moon sits behind them, in front of the sky. */}
-    <img class="hero-fg hero-fg--light" src="/collage-clouds.webp" alt="" />
-    <img class="hero-fg hero-fg--dark" src="/collage-dark-mountains.webp" alt="" />
+<Base lang={lang}>
+  <section class="pile" slot="hero" aria-label={s.photoAlt}>
+    <h1 class="sr-only">{s.h1a} {s.h1b}</h1>
+    {pile.map((c, k) => (
+      <span class="pc" style={`left:${c.l}%;top:${c.t}%;width:${c.w}%;--d:${k}`}>
+        <img src={c.src} alt="" draggable="false" />
+      </span>
+    ))}
   </section>
-
 
   <section id="about" class="split" aria-labelledby="about-title">
     <h2 id="about-title" class="h2">{s.aboutLabel}</h2>
@@ -91,158 +84,26 @@ const projectLinks = cases.flatMap((c) =>
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
-  <script is:inline>
-    (function () {
-      var moon = document.querySelector('.moon');
-      if (!moon || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.hero-projects .hp').forEach(function (a) {
-        a.addEventListener('click', function (e) {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || getComputedStyle(moon).display === 'none') return;
-          var img = moon.querySelector('img[data-i="' + a.dataset.i + '"]');
-          if (!img) return;
-          e.preventDefault();
-          var r = moon.getBoundingClientRect();
-          var cx = r.left + r.width / 2, cy = r.top + r.height / 2, r0 = r.width * 0.42;
-          var far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
-          var z = document.createElement('div');
-          z.className = 'moon-zoom';
-          z.style.backgroundImage = 'url(' + img.currentSrc + ')';
-          z.style.backgroundPosition = cx + 'px ' + cy + 'px';
-          z.style.backgroundSize = 'auto ' + r.height + 'px';
-          z.style.clipPath = 'circle(' + r0 + 'px at ' + cx + 'px ' + cy + 'px)';
-          z.style.filter = 'blur(2px)';
-          document.body.appendChild(z);
-          z.getBoundingClientRect();
-          z.style.backgroundPosition = 'center'; z.style.backgroundSize = 'cover';
-          z.style.transition += ', background-size .8s cubic-bezier(.7,0,.2,1), background-position .8s cubic-bezier(.7,0,.2,1)';
-          z.style.clipPath = 'circle(' + far + 'px at ' + cx + 'px ' + cy + 'px)';
-          z.style.filter = 'none';
-          setTimeout(function () { location.href = a.href; }, 780);
-        });
-      });
-      // coming back with the browser's back button: clear the overlay
-      addEventListener('pageshow', function () { document.querySelectorAll('.moon-zoom').forEach(function (n) { n.remove(); }); });
-    })();
-  </script>
 </Base>
 
 <style>
-  .photo { margin: 104px 0 0; }
-  .photo img { width: 100%; height: auto; border-radius: var(--p-radius-md); }
-  .hero {
-    position: relative; overflow: hidden; isolation: isolate;
-    margin: 8px;
-    height: calc(100svh - 16px); min-height: 560px;
-    border-radius: var(--p-radius-lg);
-    background: #E8E9E6;
-    display: flex; align-items: flex-start;
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* A loose pile of cards, positioned as in the Figma (1920 × 1187 stage). */
+  .pile { position: relative; width: 100%; aspect-ratio: 1920 / 1187; max-height: calc(100svh - 54px); overflow: hidden; margin: 0 auto; }
+  @supports (aspect-ratio: 1) { .pile { max-width: calc((100svh - 54px) * 1920 / 1187); } }
+  .pc {
+    position: absolute; display: block;
+    transition: transform .5s cubic-bezier(.2, .8, .2, 1), filter .5s ease;
+    animation: drop .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d) * 70ms);
   }
-  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
-  .hero-bg { transition: opacity .7s cubic-bezier(.4, 0, .2, 1); }
-  .hero-bg--dark { opacity: 0; }
-  .hero-bg--dimmed { filter: brightness(.38) saturate(.75) contrast(1.05); }
-  :global([data-theme="dark"]) .hero { background: #0B0D10; }
-  :global([data-theme="dark"]) .hero-bg--light { opacity: 0; }
-  :global([data-theme="dark"]) .hero-bg--dark { opacity: 1; }
-  /* keep the headline legible where the peaks rise behind it on narrow screens */
-  @media (max-width: 640px) {
-    :global([data-theme="dark"]) .hero::before {
-      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-      background: linear-gradient(to bottom, rgba(8, 12, 14, .55), rgba(8, 12, 14, .35) 55%, transparent 75%);
-    }
+  .pc img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
+  .pc:hover {
+    z-index: 20; transform: translateY(-14px) scale(1.06) rotate(-2deg);
+    filter: drop-shadow(0 28px 40px rgba(24, 28, 38, .28));
   }
-  /* text lines up with the full-width nav above it */
-  .hero-text {
-    position: relative; z-index: 1;
-    width: 100%;
-    padding: clamp(120px, 15vh, 176px) clamp(12px, 2.2vw, 32px) 40px;
-  }
-  @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
-  .hero h1 { color: var(--color-heading); }
-  .hero-soft { color: var(--color-heading-soft); }
-  :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
-  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3E5F74; }
-  h1 {
-    margin: 0;
-    font-size: clamp(40px, 5.8vw, 72px);
-    line-height: 1.04;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    max-width: 20ch;
-  }
-
-  .work { padding-top: clamp(64px, 8vw, 104px); }
-  .hero { flex-direction: column; justify-content: space-between; }
-  .moon {
-    position: absolute; z-index: 0; pointer-events: none;
-    top: 30%; right: clamp(40px, 6vw, 110px);
-    width: clamp(240px, 25vw, 420px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-    -webkit-mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
-    mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
-    filter: drop-shadow(0 0 60px rgba(255, 255, 255, .35));
-  }
-  .hero-fg {
-    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
-    object-fit: cover; object-position: center bottom;
-    transition: opacity .7s cubic-bezier(.4, 0, .2, 1);
-  }
-  .hero-fg--dark { opacity: 0; }
-  :global([data-theme="dark"]) .hero-fg--light { opacity: 0; }
-  :global([data-theme="dark"]) .hero-fg--dark { opacity: 1; }
-  .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .moon-face {
-    background:
-      linear-gradient(215deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .45) 62%, rgba(255, 255, 255, 0) 92%);
-    opacity: .72; transition: opacity .5s ease;
-  }
-  .moon img {
-    object-fit: cover; opacity: 0; transform: scale(1.08);
-    transition: opacity .45s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
-  }
-  .hero:has(.hp[data-i="0"]:hover, .hp[data-i="0"]:focus-visible) .moon img[data-i="0"],
-  .hero:has(.hp[data-i="1"]:hover, .hp[data-i="1"]:focus-visible) .moon img[data-i="1"],
-  .hero:has(.hp[data-i="2"]:hover, .hp[data-i="2"]:focus-visible) .moon img[data-i="2"],
-  .hero:has(.hp[data-i="3"]:hover, .hp[data-i="3"]:focus-visible) .moon img[data-i="3"],
-  .hero:has(.hp[data-i="4"]:hover, .hp[data-i="4"]:focus-visible) .moon img[data-i="4"] { opacity: .9; transform: none; }
-  .hero:has(.hp:hover, .hp:focus-visible) .moon-face { opacity: 0; }
-  :global([data-theme="dark"]) .moon { filter: drop-shadow(0 0 70px rgba(200, 220, 230, .18)); }
-  :global([data-theme="dark"]) .moon-face {
-    background: linear-gradient(215deg, rgba(232, 238, 240, .9) 0%, rgba(205, 216, 222, .55) 34%, rgba(169, 191, 201, .16) 66%, rgba(169, 191, 201, 0) 92%);
-  }
-  @media (prefers-reduced-motion: reduce) { .moon img { transition: opacity .2s ease; transform: none; } }
-  @media (max-width: 760px) {
-    .moon { display: none; }
-  }
-  /* Click: the moon grows to fill the screen, then we land on the project. */
-  :global(.moon-zoom) {
-    position: fixed; inset: 0; z-index: 50; pointer-events: none;
-    background: var(--color-bg) center / cover no-repeat;
-    transition: clip-path .8s cubic-bezier(.7, 0, .2, 1), filter .8s ease;
-  }
-  /* Bottom bar: just the project names. Hover shifts the colour. */
-  .hero-projects {
-    position: relative; z-index: 1; align-self: stretch;
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 32px;
-    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
-    color: var(--color-heading);
-  }
-  .hp { padding: 10px 0; font-size: 16px; transition: color .25s ease; }
-  .hp:hover, .hp:focus-visible { color: var(--p-color-surface-0); }
-  .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
-  .hp-type { font-weight: 600; }
-  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
-  :global([data-theme="dark"]) .hp:hover, :global([data-theme="dark"]) .hp:focus-visible { color: #A9BFC9; }
-  @media (max-width: 760px) {
-    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
-    .hp { padding: 8px 0; font-size: 15px; }
-  }
-  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
-  @media (max-width: 760px) {
-    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
-    .hero-projects a { padding: 8px 0; }
-  }
-  .work-head { margin: 0 0 28px; font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--color-heading); }
-  .work-years { color: var(--color-heading-soft); font-weight: 600; }
+  .pc:nth-child(odd):hover { transform: translateY(-14px) scale(1.06) rotate(2deg); }
+  @keyframes drop { from { opacity: 0; transform: translateY(40px) scale(.96); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pc { animation: none; transition: none; } .pc:hover { transform: none; } }
   .cards { display: flex; flex-direction: column; gap: 24px; }
   .col { display: contents; }
   @media (min-width: 760px) {

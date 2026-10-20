@@ -16,7 +16,7 @@ const { Content } = await render(entry);
 ---
 <Base lang={lang} title={`${entry.data.title} · ${site.name}`} description={entry.data.summary}>
   <div class="case">
-    <aside class="panel grain">
+    <aside class="panel">
       <span class="kicker">{entry.data.kicker}</span>
       <h1>{entry.data.title}</h1>
       <p class="lead">{entry.data.lead}</p>
@@ -51,7 +51,7 @@ const { Content } = await render(entry);
 
 <style>
   /* Collage version: a tinted, grainy title panel that stays put while the work scrolls. */
-  .case { --panel-bg: #D3DDE1; --panel-text: #2B2F33; --panel-soft: #3E5F74; --panel-line: rgba(43, 47, 51, .14); }
+  .case { --panel-bg: #F7F8FD; --panel-text: #383C48; --panel-soft: #5A6481; --panel-line: #EBEEFA; }
   :global([data-theme="dark"]) .case { --panel-bg: #171B2B; --panel-text: #C9CEDB; --panel-soft: #9097AA; --panel-line: rgba(255, 255, 255, .1); }
   .case { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 8px; }
   @media (min-width: 1000px) {
