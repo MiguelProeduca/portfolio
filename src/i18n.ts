@@ -19,11 +19,11 @@ export const t = {
     skip: 'Skip to content',
     home: 'Home',
     nav: [
-      { label: 'Work', hash: 'work' },
       { label: 'About', hash: 'about' },
       { label: 'Contact', hash: 'contact' },
     ],
     langLabel: 'Language',
+    themeLabel: 'Dark mode',
     allWork: 'All work',
     availability: 'Open to Design Systems roles · EU / Remote',
 
@@ -31,8 +31,8 @@ export const t = {
     h1b: 'From idea to detail.',
     heroSub: 'I come from a creative background. I design interfaces and design systems, paying attention to how they work, how they look and what they convey.',
 
-    selectedWork: 'Featured work',
-    workYears: '2024–2026',
+    selectedWork: 'My work',
+    workYears: '2022 – 2026',
 
     howLabel: 'How I work',
     howTitle: 'AI to scale. Human judgment to decide.',
@@ -81,11 +81,11 @@ export const t = {
     skip: 'Saltar al contenido',
     home: 'Inicio',
     nav: [
-      { label: 'Proyectos', hash: 'work' },
       { label: 'Sobre mí', hash: 'about' },
       { label: 'Contacto', hash: 'contact' },
     ],
     langLabel: 'Idioma',
+    themeLabel: 'Modo oscuro',
     allWork: 'Todos los proyectos',
     availability: 'Abierto a puestos de sistemas de diseño · Europa / remoto',
 
@@ -93,8 +93,8 @@ export const t = {
     h1b: 'De la idea al detalle.',
     heroSub: 'Vengo de la creatividad. Diseño interfaces y sistemas de diseño con atención a cómo funcionan, cómo se ven y qué transmiten.',
 
-    selectedWork: 'Proyectos destacados',
-    workYears: '2024–2026',
+    selectedWork: 'Mis trabajos',
+    workYears: '2022 – 2026',
 
     howLabel: 'Cómo trabajo',
     howTitle: 'IA para escalar. Criterio humano para decidir.',

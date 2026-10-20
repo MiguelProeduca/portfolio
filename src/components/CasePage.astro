@@ -15,110 +15,91 @@ const s = t[lang];
 const { Content } = await render(entry);
 ---
 <Base lang={lang} title={`${entry.data.title} · ${site.name}`} description={entry.data.summary}>
-  <section class="intro">
-    <span class="subtle kicker">{entry.data.kicker}</span>
-    <h1>{entry.data.title}</h1>
-    <p class="lead">{entry.data.lead}</p>
-  </section>
+  <div class="case">
+    <aside class="panel grain">
+      <span class="kicker">{entry.data.kicker}</span>
+      <h1>{entry.data.title}</h1>
+      <p class="lead">{entry.data.lead}</p>
+      <dl class="meta">
+        {entry.data.meta.map((m) => (
+          <div>
+            <dt>{m.label}</dt>
+            <dd>{m.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </aside>
 
-  <dl class="meta">
-    {entry.data.meta.map((m) => (
-      <div>
-        <dt class="subtle">{m.label}</dt>
-        <dd>{m.value}</dd>
-      </div>
-    ))}
-  </dl>
+    <div class="body">
+      {entry.data.cover ? (
+        <img class="hero-img" src={entry.data.cover} alt={entry.data.hero.replace(/^\[|\]$/g, '')} />
+      ) : (
+        <div class="placeholder hero-img">{entry.data.hero}</div>
+      )}
 
-  {entry.data.cover ? (
-    <img class="hero hero-img" src={entry.data.cover} alt={entry.data.hero.replace(/^\[|\]$/g, '')} />
-  ) : (
-    <div class="placeholder hero">{entry.data.hero}</div>
-  )}
+      <article class="prose">
+        <Content />
+      </article>
 
-  <article class="prose">
-    <Content />
-  </article>
-
-  <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
-    <span class="subtle">{s.nextCase}</span>
-    <span class="next-title">{next.data.title} <span aria-hidden="true">→</span></span>
-  </a>
+      <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
+        <span class="subtle">{s.nextCase}</span>
+        <span class="next-title">{next.data.title} <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+  </div>
 </Base>
 
 <style>
-  .intro { padding: clamp(64px, 9vw, 120px) 0 56px; display: flex; flex-direction: column; gap: 20px; }
-  .kicker { font-size: 15px; }
+  /* Collage version: a tinted, grainy title panel that stays put while the work scrolls. */
+  .case { --panel-bg: #D3DDE1; --panel-text: #2B2F33; --panel-soft: #3E5F74; --panel-line: rgba(43, 47, 51, .14); }
+  :global([data-theme="dark"]) .case { --panel-bg: #171B2B; --panel-text: #C9CEDB; --panel-soft: #9097AA; --panel-line: rgba(255, 255, 255, .1); }
+  .case { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 8px; }
+  @media (min-width: 1000px) {
+    .case { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 56px; align-items: start; }
+    .panel { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow: auto; }
+  }
+  .panel {
+    background: var(--panel-bg);
+    border-radius: var(--p-radius-lg);
+    padding: clamp(28px, 3vw, 40px);
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .kicker { font-size: 14px; color: var(--panel-soft); }
   h1 {
     margin: 0;
-    font-size: clamp(34px, 4.6vw, 60px);
-    line-height: 1.08;
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    max-width: 18ch;
+    font-size: clamp(36px, 4vw, 54px);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.04em;
   }
-  .lead { margin: 0; font-size: clamp(18px, 1.6vw, 21px); line-height: 1.55; color: var(--color-text-muted); max-width: 54ch; }
+  .lead { margin: 0; font-size: 16px; line-height: 1.6; color: var(--panel-text); }
+  .meta { margin: 8px 0 0; display: flex; flex-direction: column; }
+  .meta div { padding: 12px 0; border-top: 1px solid var(--panel-line); }
+  .meta dt { font-size: 12px; color: var(--panel-soft); margin-bottom: 2px; }
+  .meta dd { margin: 0; font-size: 14px; font-weight: 500; }
 
-  .meta {
-    margin: 0 0 56px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0 32px;
-    border-top: 1px solid var(--color-border);
-  }
-  .meta div { padding: 16px 0; border-bottom: 1px solid var(--color-border); }
-  .meta dt { font-size: 13px; margin-bottom: 4px; }
-  .meta dd { margin: 0; font-size: 15px; font-weight: 500; }
-
-  .hero { margin-bottom: 104px; aspect-ratio: 16 / 9; }
-  .hero-img { width: 100%; height: auto; object-fit: cover; border-radius: var(--p-radius-md); }
+  .hero-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--p-radius-md); margin-bottom: 72px; }
 
   .next {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 40px 0 0;
-    border-top: 1px solid var(--color-border);
+    display: flex; flex-direction: column; gap: 8px;
+    padding: 40px 0 0; border-top: 1px solid var(--color-border);
   }
   .next:hover { color: inherit; }
   .next:hover .next-title { color: var(--color-text-subtle); }
-  .next-title { font-size: clamp(26px, 3vw, 36px); font-weight: 600; letter-spacing: -0.03em; transition: color .15s; }
+  .next-title { font-size: clamp(26px, 3vw, 36px); font-weight: 700; letter-spacing: -0.03em; transition: color .15s; }
 
-  /* Case body: section title on the left, reading column on the right.
-     Sparse auto-placement puts the first block after each heading on the
-     heading's row, so titles stay aligned with their section. */
-  .prose {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0 48px;
-    padding-bottom: 104px;
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--color-text-muted);
-  }
-  @media (min-width: 900px) {
-    .prose { grid-template-columns: minmax(200px, 1fr) minmax(0, 1.6fr); }
-    .prose :global(> *) { grid-column: 2; max-width: 660px; }
-    .prose :global(> h2) { grid-column: 1; }
-    .prose :global(> figure) { grid-column: 1 / -1; max-width: none; }
-  }
+  .prose { padding-bottom: 96px; font-size: 17px; line-height: 1.65; color: var(--color-text-muted); max-width: 720px; }
   .prose :global(> *) { margin: 0 0 16px; }
   .prose :global(h2) {
-    font-size: clamp(20px, 1.8vw, 24px);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.3;
-    color: var(--color-text);
-    margin-top: 80px;
+    font-size: clamp(22px, 2vw, 28px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.25;
+    color: var(--color-text); margin: 72px 0 16px;
   }
-  .prose :global(h2 + *) { margin-top: 80px; }
-  .prose :global(h2:first-child), .prose :global(h2:first-child + *) { margin-top: 0; }
-  @media (max-width: 899px) { .prose :global(h2 + *) { margin-top: 0; } .prose :global(h2) { margin-top: 56px; } }
+  .prose :global(h2:first-child) { margin-top: 0; }
   .prose :global(strong) { font-weight: 600; color: var(--color-text); }
   .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
   .prose :global(li) { margin-bottom: 8px; }
   .prose :global(li::marker) { color: var(--color-text-subtle); }
-  .prose :global(figure) { margin: 56px 0; display: flex; flex-direction: column; gap: 12px; }
+  .prose :global(figure) { margin: 48px 0; display: flex; flex-direction: column; gap: 12px; }
   .prose :global(figcaption) { font-size: 13px; color: var(--color-text-subtle); }
   .prose :global(figure .placeholder) { aspect-ratio: 16 / 8; }
   .prose :global(figure img) { width: 100%; height: auto; border-radius: var(--p-radius-md); border: 1px solid var(--color-border); }

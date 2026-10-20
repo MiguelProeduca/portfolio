@@ -3,6 +3,8 @@ order: 3
 title: Todas las tareas en un solo lugar
 cardTitle: "App del estudiante · UNIR"
 cardSub: "Un espacio para organizar el día a día académico."
+heroLinks:
+  - { label: "Portal del estudiante", type: "Proyecto" }
 kicker: Producto
 tag: Producto · App del estudiante
 summary: Un organizador de tareas para estudiantes, con reglas que mantienen fiables los datos oficiales.

@@ -9,30 +9,39 @@ const { lang } = Astro.props;
 const s = t[lang];
 const cases = await getCases(lang);
 const base = prefix(lang);
+const projectLinks = cases.flatMap((c) =>
+  (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => ({
+    ...l,
+    href: `${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`,
+    cover: c.data.cover,
+  })),
+);
 ---
-<Base lang={lang}>
-  <section class="hero">
-    <h1>{s.h1a} <span class="subtle">{s.h1b}</span></h1>
-    <p class="hero-sub">{s.heroSub}</p>
+<Base lang={lang} overlay>
+  <section class="hero" slot="hero">
+    <img class="hero-bg hero-bg--light" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
+    <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" />
+    <div class="hero-text">
+      <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
+      <p class="hero-sub">{s.heroSub}</p>
+    </div>
+    <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
+      {projectLinks.map((l, k) => (
+        <a href={l.href} class="hp" data-i={k}>
+          <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
+        </a>
+      ))}
+    </nav>
+    {/* The moon: a white gradient disc. Hovering a project fills it with its cover. */}
+    <div class="moon" aria-hidden="true">
+      <span class="moon-face"></span>
+      {projectLinks.map((l, k) => l.cover && <img src={l.cover} data-i={k} alt="" loading="lazy" />)}
+    </div>
+    {/* Foreground cut-outs (clouds / mountains) so the moon sits behind them, in front of the sky. */}
+    <img class="hero-fg hero-fg--light" src="/collage-clouds.webp" alt="" />
+    <img class="hero-fg hero-fg--dark" src="/collage-dark-mountains.webp" alt="" />
   </section>
 
-  <section id="work" class="work" aria-label={s.selectedWork}>
-    <ul class="cards">
-      {cases.map((c, i) => (
-        <li class={i === 0 ? 'wide' : ''}>
-          <a href={`${base}/work/${slugOf(c.id)}/`} class:list={["card", { "card--bordered": c.data.coverBorder }]}>
-            <span class="card-media">
-              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i === 0 ? 'eager' : 'lazy'} />}
-            </span>
-            <span class="card-text">
-              <span class="card-title">{c.data.cardTitle ?? c.data.title}</span>
-              <span class="subtle">{c.data.cardSub ?? c.data.kicker}</span>
-            </span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
 
   <section id="about" class="split" aria-labelledby="about-title">
     <h2 id="about-title" class="h2">{s.aboutLabel}</h2>
@@ -82,13 +91,77 @@ const base = prefix(lang);
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
+  <script is:inline>
+    (function () {
+      var moon = document.querySelector('.moon');
+      if (!moon || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.querySelectorAll('.hero-projects .hp').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || getComputedStyle(moon).display === 'none') return;
+          var img = moon.querySelector('img[data-i="' + a.dataset.i + '"]');
+          if (!img) return;
+          e.preventDefault();
+          var r = moon.getBoundingClientRect();
+          var cx = r.left + r.width / 2, cy = r.top + r.height / 2, r0 = r.width * 0.42;
+          var far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+          var z = document.createElement('div');
+          z.className = 'moon-zoom';
+          z.style.backgroundImage = 'url(' + img.currentSrc + ')';
+          z.style.backgroundPosition = cx + 'px ' + cy + 'px';
+          z.style.backgroundSize = 'auto ' + r.height + 'px';
+          z.style.clipPath = 'circle(' + r0 + 'px at ' + cx + 'px ' + cy + 'px)';
+          z.style.filter = 'blur(2px)';
+          document.body.appendChild(z);
+          z.getBoundingClientRect();
+          z.style.backgroundPosition = 'center'; z.style.backgroundSize = 'cover';
+          z.style.transition += ', background-size .8s cubic-bezier(.7,0,.2,1), background-position .8s cubic-bezier(.7,0,.2,1)';
+          z.style.clipPath = 'circle(' + far + 'px at ' + cx + 'px ' + cy + 'px)';
+          z.style.filter = 'none';
+          setTimeout(function () { location.href = a.href; }, 780);
+        });
+      });
+      // coming back with the browser's back button: clear the overlay
+      addEventListener('pageshow', function () { document.querySelectorAll('.moon-zoom').forEach(function (n) { n.remove(); }); });
+    })();
+  </script>
 </Base>
 
 <style>
   .photo { margin: 104px 0 0; }
   .photo img { width: 100%; height: auto; border-radius: var(--p-radius-md); }
-  .hero { padding: clamp(72px, 10vw, 136px) 0 clamp(96px, 12vw, 168px); }
-  .hero-sub { margin: 28px 0 0; max-width: 52ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--color-text-muted); }
+  .hero {
+    position: relative; overflow: hidden; isolation: isolate;
+    margin: 8px;
+    height: calc(100svh - 16px); min-height: 560px;
+    border-radius: var(--p-radius-lg);
+    background: #E8E9E6;
+    display: flex; align-items: flex-start;
+  }
+  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
+  .hero-bg { transition: opacity .7s cubic-bezier(.4, 0, .2, 1); }
+  .hero-bg--dark { opacity: 0; }
+  .hero-bg--dimmed { filter: brightness(.38) saturate(.75) contrast(1.05); }
+  :global([data-theme="dark"]) .hero { background: #0B0D10; }
+  :global([data-theme="dark"]) .hero-bg--light { opacity: 0; }
+  :global([data-theme="dark"]) .hero-bg--dark { opacity: 1; }
+  /* keep the headline legible where the peaks rise behind it on narrow screens */
+  @media (max-width: 640px) {
+    :global([data-theme="dark"]) .hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: linear-gradient(to bottom, rgba(8, 12, 14, .55), rgba(8, 12, 14, .35) 55%, transparent 75%);
+    }
+  }
+  /* text lines up with the full-width nav above it */
+  .hero-text {
+    position: relative; z-index: 1;
+    width: 100%;
+    padding: clamp(120px, 15vh, 176px) clamp(12px, 2.2vw, 32px) 40px;
+  }
+  @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
+  .hero h1 { color: var(--color-heading); }
+  .hero-soft { color: var(--color-heading-soft); }
+  :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
+  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3E5F74; }
   h1 {
     margin: 0;
     font-size: clamp(40px, 5.8vw, 72px);
@@ -98,13 +171,83 @@ const base = prefix(lang);
     max-width: 20ch;
   }
 
-  .cards {
-    list-style: none; margin: 0; padding: 0;
-    display: grid; grid-template-columns: 1fr; gap: 24px;
+  .work { padding-top: clamp(64px, 8vw, 104px); }
+  .hero { flex-direction: column; justify-content: space-between; }
+  .moon {
+    position: absolute; z-index: 0; pointer-events: none;
+    top: 30%; right: clamp(40px, 6vw, 110px);
+    width: clamp(240px, 25vw, 420px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
+    -webkit-mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
+    mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
+    filter: drop-shadow(0 0 60px rgba(255, 255, 255, .35));
   }
+  .hero-fg {
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+    object-fit: cover; object-position: center bottom;
+    transition: opacity .7s cubic-bezier(.4, 0, .2, 1);
+  }
+  .hero-fg--dark { opacity: 0; }
+  :global([data-theme="dark"]) .hero-fg--light { opacity: 0; }
+  :global([data-theme="dark"]) .hero-fg--dark { opacity: 1; }
+  .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .moon-face {
+    background:
+      linear-gradient(215deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .45) 62%, rgba(255, 255, 255, 0) 92%);
+    opacity: .72; transition: opacity .5s ease;
+  }
+  .moon img {
+    object-fit: cover; opacity: 0; transform: scale(1.08);
+    transition: opacity .45s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
+  }
+  .hero:has(.hp[data-i="0"]:hover, .hp[data-i="0"]:focus-visible) .moon img[data-i="0"],
+  .hero:has(.hp[data-i="1"]:hover, .hp[data-i="1"]:focus-visible) .moon img[data-i="1"],
+  .hero:has(.hp[data-i="2"]:hover, .hp[data-i="2"]:focus-visible) .moon img[data-i="2"],
+  .hero:has(.hp[data-i="3"]:hover, .hp[data-i="3"]:focus-visible) .moon img[data-i="3"],
+  .hero:has(.hp[data-i="4"]:hover, .hp[data-i="4"]:focus-visible) .moon img[data-i="4"] { opacity: .9; transform: none; }
+  .hero:has(.hp:hover, .hp:focus-visible) .moon-face { opacity: 0; }
+  :global([data-theme="dark"]) .moon { filter: drop-shadow(0 0 70px rgba(200, 220, 230, .18)); }
+  :global([data-theme="dark"]) .moon-face {
+    background: linear-gradient(215deg, rgba(232, 238, 240, .9) 0%, rgba(205, 216, 222, .55) 34%, rgba(169, 191, 201, .16) 66%, rgba(169, 191, 201, 0) 92%);
+  }
+  @media (prefers-reduced-motion: reduce) { .moon img { transition: opacity .2s ease; transform: none; } }
+  @media (max-width: 760px) {
+    .moon { display: none; }
+  }
+  /* Click: the moon grows to fill the screen, then we land on the project. */
+  :global(.moon-zoom) {
+    position: fixed; inset: 0; z-index: 50; pointer-events: none;
+    background: var(--color-bg) center / cover no-repeat;
+    transition: clip-path .8s cubic-bezier(.7, 0, .2, 1), filter .8s ease;
+  }
+  /* Bottom bar: just the project names. Hover shifts the colour. */
+  .hero-projects {
+    position: relative; z-index: 1; align-self: stretch;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 32px;
+    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
+    color: var(--color-heading);
+  }
+  .hp { padding: 10px 0; font-size: 16px; transition: color .25s ease; }
+  .hp:hover, .hp:focus-visible { color: var(--p-color-surface-0); }
+  .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
+  .hp-type { font-weight: 600; }
+  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
+  :global([data-theme="dark"]) .hp:hover, :global([data-theme="dark"]) .hp:focus-visible { color: #A9BFC9; }
+  @media (max-width: 760px) {
+    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
+    .hp { padding: 8px 0; font-size: 15px; }
+  }
+  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
+  @media (max-width: 760px) {
+    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
+    .hero-projects a { padding: 8px 0; }
+  }
+  .work-head { margin: 0 0 28px; font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--color-heading); }
+  .work-years { color: var(--color-heading-soft); font-weight: 600; }
+  .cards { display: flex; flex-direction: column; gap: 24px; }
+  .col { display: contents; }
   @media (min-width: 760px) {
-    .cards { grid-template-columns: 1fr 1fr; gap: 32px; }
-    .cards .wide { grid-column: 1 / -1; }
+    .cards { flex-direction: row; align-items: flex-start; gap: 32px; }
+    .col { display: flex; flex-direction: column; gap: 32px; flex: 1 1 0; min-width: 0; }
   }
   .card {
     display: flex; flex-direction: column; height: 100%;
@@ -118,8 +261,8 @@ const base = prefix(lang);
     background: var(--color-surface-strong);
     overflow: hidden;
   }
-  .wide .card-media { aspect-ratio: 16 / 9; }
-  @media (min-width: 760px) { .wide .card-media { aspect-ratio: 21 / 9; } }
+  .card--short .card-media { aspect-ratio: 6 / 5; }
+  .card--tall .card-media { aspect-ratio: 1 / 1.08; }
   .card-media img {
     width: 100%; height: 100%; object-fit: cover;
     transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
@@ -132,27 +275,26 @@ const base = prefix(lang);
     position: absolute; left: 0; right: 0; bottom: 0;
     display: flex; flex-direction: column; gap: 2px;
     padding: 14px 20px 16px; font-size: 15px;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(232, 233, 230, 0.94);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
   }
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .card-text {
-      background: rgba(255, 255, 255, 0.62);
+      background: rgba(232, 233, 230, 0.62);
       -webkit-backdrop-filter: blur(18px) saturate(1.6);
       backdrop-filter: blur(18px) saturate(1.6);
     }
   }
   .card-text .subtle { color: var(--color-text-muted); }
+  :global([data-theme="dark"]) .card-text { background: rgba(16, 18, 22, 0.92); border-top-color: rgba(255,255,255,.06); }
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :global([data-theme="dark"]) .card-text { background: rgba(16, 18, 22, 0.55); }
+  }
+  :global([data-theme="dark"]) .card--bordered::after { border-color: var(--color-border); }
   .card--bordered::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    border: 1px solid #F4F6FD; border-radius: inherit;
+    border: 1px solid #D3DDE1; border-radius: inherit;
   }
-  /* on pointer devices the caption appears on hover / keyboard focus; touch keeps it visible */
-  @media (hover: hover) {
-    .card-text { opacity: 0; transform: translateY(8px); transition: opacity .25s ease, transform .3s cubic-bezier(.2,.7,.2,1); }
-    .card:hover .card-text, .card:focus-visible .card-text { opacity: 1; transform: none; }
-  }
-  @media (prefers-reduced-motion: reduce) { .card-text { transform: none !important; } }
   .card-title { font-weight: 500; }
 
   .text { display: flex; flex-direction: column; gap: 20px; font-size: 16px; line-height: 1.6; }

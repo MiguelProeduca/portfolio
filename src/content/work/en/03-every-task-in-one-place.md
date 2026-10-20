@@ -3,6 +3,8 @@ order: 3
 title: Every task in one place
 cardTitle: "Student app · UNIR"
 cardSub: "A space to organise everyday academic life."
+heroLinks:
+  - { label: "Student portal", type: "Project" }
 kicker: Product
 tag: Product · Student app
 summary: A task organizer for students, with rules that keep official data reliable.
