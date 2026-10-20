@@ -20,11 +20,12 @@ const base = prefix(lang);
     </div>
     <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
       {cases.flatMap((c) => (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => (
-        <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`}>
+        <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`} data-cover={c.data.cover}>
           <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
         </a>
       )))}
     </nav>
+    <div class="hp-preview" aria-hidden="true"><img alt="" /></div>
   </section>
 
 
@@ -76,6 +77,39 @@ const base = prefix(lang);
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
+  <script is:inline>
+    (function () {
+      if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      var box = document.querySelector('.hp-preview'); if (!box) return;
+      var img = box.querySelector('img');
+      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var x = 0, y = 0, tx = 0, ty = 0, raf = 0;
+      // preload covers so the first hover is instant
+      document.querySelectorAll('.hero-projects a[data-cover]').forEach(function (a) { var i = new Image(); i.src = a.dataset.cover; });
+      function loop() {
+        x += (tx - x) * (reduce ? 1 : 0.18); y += (ty - y) * (reduce ? 1 : 0.18);
+        box.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+        raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(loop) : 0;
+      }
+      function move(e) {
+        var w = box.offsetWidth, h = box.offsetHeight;
+        tx = Math.min(Math.max(e.clientX - w / 2, 12), innerWidth - w - 12);
+        ty = e.clientY - h - 28;
+        if (!raf) raf = requestAnimationFrame(loop);
+      }
+      document.querySelectorAll('.hero-projects a[data-cover]').forEach(function (a) {
+        a.addEventListener('mouseenter', function (e) {
+          img.src = a.dataset.cover;
+          var w = box.offsetWidth, h = box.offsetHeight;
+          x = tx = Math.min(Math.max(e.clientX - w / 2, 12), innerWidth - w - 12); y = ty = e.clientY - h - 28;
+          box.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+          box.classList.add('is-on');
+        });
+        a.addEventListener('mousemove', move);
+        a.addEventListener('mouseleave', function () { box.classList.remove('is-on'); });
+      });
+    })();
+  </script>
 </Base>
 
 <style>
@@ -129,12 +163,24 @@ const base = prefix(lang);
     position: relative; z-index: 1; align-self: stretch;
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px;
     padding: 20px clamp(12px, 2.2vw, 32px) 24px;
-    font-size: 14px; color: var(--color-heading);
+    font-size: 16px; color: var(--color-heading);
   }
   .hero-projects a { padding: 10px 0; transition: opacity .2s ease; }
-  .hero-projects a:hover { color: inherit; opacity: .6; }
-  .hp-name { font-weight: 700; text-transform: uppercase; letter-spacing: .01em; }
-  .hp-type { font-weight: 500; }
+  .hero-projects a:hover { color: inherit; }
+  .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
+  .hp-type { font-weight: 600; }
+  .hero-projects:has(a:hover) a:not(:hover) { opacity: .45; }
+  .hero-projects a:hover { opacity: 1 !important; }
+  .hp-preview {
+    position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none;
+    width: clamp(280px, 26vw, 420px); aspect-ratio: 16 / 10;
+    border-radius: 14px; overflow: hidden; background: var(--color-surface-muted);
+    box-shadow: 0 30px 60px -18px rgba(20, 28, 40, .45), 0 8px 18px -8px rgba(20, 28, 40, .3);
+    opacity: 0; scale: .92; transition: opacity .25s ease, scale .35s cubic-bezier(.2, .7, .2, 1);
+  }
+  .hp-preview.is-on { opacity: 1; scale: 1; }
+  .hp-preview img { width: 100%; height: 100%; object-fit: cover; }
+  @media (hover: none) { .hp-preview { display: none; } }
   :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
   @media (max-width: 760px) {
     .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
