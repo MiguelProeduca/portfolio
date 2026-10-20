@@ -13,6 +13,8 @@ const work = defineCollection({
     lead: z.string(), // intro paragraph on the case page
     meta: z.array(z.object({ label: z.string(), value: z.string() })),
     hero: z.string(), // placeholder text until the real image exists
+    cardTitle: z.string().optional(), // home card title (falls back to title)
+    cardSub: z.string().optional(), // home card subtitle (falls back to kicker)
     cover: z.string().optional(), // card image on the home, e.g. "/work/ds-cover.jpg" in public/
     coverBorder: z.boolean().default(false), // thin border on the home card, for light covers
     coverPosition: z.string().optional(), // CSS object-position for the home card crop, e.g. "right"
