@@ -17,6 +17,14 @@
   --p-color-night-100: #EDEDED;
   --p-color-signal-500: #FF4F00;
   --p-color-signal-400: #FF6A2B;
+  --p-color-cloud-50: #E8E9E6;
+  --p-color-cloud-100: #D3DDE1;
+  --p-color-cloud-300: #A9BFC9;
+  --p-color-cloud-500: #7C9DAE;
+  --p-color-cloud-600: #56788D;
+  --p-color-cloud-650: #4B6A7E;
+  --p-color-cloud-700: #3E5F74;
+  --p-color-cloud-900: #2B2F33;
   --p-font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --p-space-1: 4px;
   --p-space-2: 8px;
@@ -34,18 +42,18 @@
   --p-radius-pill: 999px;
 
   /* semantic · light */
-  --color-bg: var(--p-color-gray-0);
-  --color-surface: var(--p-color-gray-0);
-  --color-surface-muted: var(--p-color-gray-50);
-  --color-surface-strong: var(--p-color-gray-100);
-  --color-text: var(--p-color-gray-950);
-  --color-text-muted: var(--p-color-gray-700);
-  --color-text-subtle: var(--p-color-gray-500);
-  --color-border: var(--p-color-gray-200);
-  --color-border-strong: var(--p-color-gray-400);
-  --color-accent: var(--p-color-signal-500);
-  --color-inverse-bg: var(--p-color-gray-950);
-  --color-inverse-text: var(--p-color-gray-0);
+  --color-bg: var(--p-color-cloud-50);
+  --color-surface: var(--p-color-cloud-50);
+  --color-surface-muted: var(--p-color-cloud-100);
+  --color-surface-strong: var(--p-color-cloud-300);
+  --color-text: var(--p-color-cloud-900);
+  --color-text-muted: var(--p-color-cloud-700);
+  --color-text-subtle: var(--p-color-cloud-650);
+  --color-border: var(--p-color-cloud-100);
+  --color-border-strong: var(--p-color-cloud-300);
+  --color-accent: var(--p-color-cloud-700);
+  --color-inverse-bg: var(--p-color-cloud-900);
+  --color-inverse-text: var(--p-color-cloud-50);
 }
 
 :root[data-theme="dark"] {

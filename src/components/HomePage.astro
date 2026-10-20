@@ -96,7 +96,7 @@ const base = prefix(lang);
     margin: 8px;
     height: calc(100svh - 16px); min-height: 560px;
     border-radius: var(--p-radius-lg);
-    background: #E9EBEC;
+    background: #E8E9E6;
     display: flex; align-items: flex-start;
   }
   .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
@@ -120,10 +120,10 @@ const base = prefix(lang);
     padding: clamp(120px, 14vh, 168px) calc(clamp(20px, 5.5vw, 80px) - 8px) 40px;
   }
   @media (max-width: 640px) { .hero-text { padding-top: 176px; } }
-  .hero-soft { color: #6B7278; }
+  .hero-soft { color: #56788D; }
   :global([data-theme="dark"]) .hero-soft { color: #8C96A0; }
   :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
-  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3D4246; }
+  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3E5F74; }
   h1 {
     margin: 0;
     font-size: clamp(40px, 5.8vw, 72px);
@@ -168,12 +168,12 @@ const base = prefix(lang);
     position: absolute; left: 0; right: 0; bottom: 0;
     display: flex; flex-direction: column; gap: 2px;
     padding: 14px 20px 16px; font-size: 15px;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(232, 233, 230, 0.94);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
   }
   @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .card-text {
-      background: rgba(255, 255, 255, 0.62);
+      background: rgba(232, 233, 230, 0.62);
       -webkit-backdrop-filter: blur(18px) saturate(1.6);
       backdrop-filter: blur(18px) saturate(1.6);
     }
@@ -186,7 +186,7 @@ const base = prefix(lang);
   :global([data-theme="dark"]) .card--bordered::after { border-color: var(--color-border); }
   .card--bordered::after {
     content: ''; position: absolute; inset: 0; pointer-events: none;
-    border: 1px solid #F4F6FD; border-radius: inherit;
+    border: 1px solid #D3DDE1; border-radius: inherit;
   }
   /* on pointer devices the caption appears on hover / keyboard focus; touch keeps it visible */
   @media (hover: hover) {
