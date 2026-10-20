@@ -22,9 +22,6 @@ const base = prefix(lang);
       {cases.flatMap((c) => (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => (
         <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`} class="hp">
           <span class="hp-label"><span><span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span></span></span>
-          {c.data.cover && (
-            <span class="hp-media"><img src={c.data.cover} alt="" loading="lazy" /></span>
-          )}
         </a>
       )))}
     </nav>
@@ -128,55 +125,22 @@ const base = prefix(lang);
 
   .work { padding-top: clamp(64px, 8vw, 104px); }
   .hero { flex-direction: column; justify-content: space-between; }
-  /* Bottom bar: four equal glass cells. On hover a cell grows upwards and
-     reveals the project cover underneath its label. */
+  /* Bottom bar: just the project names. Hover shifts the colour. */
   .hero-projects {
     position: relative; z-index: 1; align-self: stretch;
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 32px;
+    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
     color: var(--color-heading);
   }
-  .hp {
-    display: flex; flex-direction: column;
-    background: rgba(232, 233, 230, .42);
-    -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
-    transition: background-color .3s ease;
-  }
-  .hp:hover { color: inherit; background: rgba(232, 233, 230, .7); }
-  .hp-label {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 76px; padding: 0 12px; text-align: center; font-size: clamp(14px, 1.08vw, 16px); line-height: 1.3;
-  }
+  .hp { padding: 10px 0; font-size: 16px; transition: color .25s ease; }
+  .hp:hover, .hp:focus-visible { color: var(--p-color-surface-0); }
   .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
   .hp-type { font-weight: 600; }
-  .hp-media {
-    display: block; height: 0; overflow: hidden;
-    transition: height .6s cubic-bezier(.65, 0, .2, 1);
-  }
-  .hp-media img {
-    display: block; width: 100%; height: clamp(240px, 36vh, 400px); object-fit: cover; object-position: center top;
-    transform: translateY(14%); transition: transform .8s cubic-bezier(.2, .7, .2, 1);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .hp:hover .hp-media, .hp:focus-visible .hp-media { height: clamp(240px, 36vh, 400px); }
-    .hp:hover .hp-media img, .hp:focus-visible .hp-media img { transform: none; }
-    .hero-projects:has(.hp:hover) .hp:not(:hover) .hp-label { opacity: .5; }
-  }
-  .hp-label { transition: opacity .25s ease; }
   :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
-  :global([data-theme="dark"]) .hp { background: rgba(14, 18, 20, .38); }
-  :global([data-theme="dark"]) .hp:hover { background: rgba(14, 18, 20, .62); }
-  @media (prefers-reduced-motion: reduce) {
-    .hp-media, .hp-media img { transition: none; }
-    .hp-media img { transform: none; }
-  }
-  @media (max-width: 900px) {
-    .hero-projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .hp-label { min-height: 60px; font-size: 14px; }
-  }
-  @media (max-width: 560px) {
-    .hero-projects { grid-template-columns: 1fr; }
-    .hp + .hp { border-top: 1px solid rgba(43, 47, 51, .12); }
-    .hp-label { justify-content: flex-start; min-height: 52px; padding: 0 20px; }
+  :global([data-theme="dark"]) .hp:hover, :global([data-theme="dark"]) .hp:focus-visible { color: #A9BFC9; }
+  @media (max-width: 760px) {
+    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
+    .hp { padding: 8px 0; font-size: 15px; }
   }
   :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
   @media (max-width: 760px) {
