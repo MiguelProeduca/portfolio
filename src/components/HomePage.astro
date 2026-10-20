@@ -20,24 +20,18 @@ const base = prefix(lang);
     </div>
   </section>
 
-  <section id="work" class="work" aria-labelledby="work-title" slot="hero">
-    <div class="container">
-      <h2 id="work-title" class="work-head">{s.selectedWork} <span class="work-years">· {s.workYears}</span></h2>
-    </div>
-    {/* Full-width bands, one per project, as in the original Figma home. */}
-    <ul class="bands">
+  <section id="work" class="work" aria-labelledby="work-title">
+    <h2 id="work-title" class="work-head">{s.selectedWork} <span class="work-years">· {s.workYears}</span></h2>
+    {/* A row of square tiles: 4 across on desktop, 2 on tablet, 1 on mobile. */}
+    <ul class="tiles">
       {cases.map((c, i) => (
         <li>
-          <a href={`${base}/work/${slugOf(c.id)}/`} class:list={["band", "grain", `band--${i % 5}`]}>
-            <span class="band-text">
-              <span class="band-title">{(c.data.cardTitle ?? c.data.title).split(' · ')[0]}</span>
-              <span class="band-sub">{c.data.cardSub ?? c.data.kicker}</span>
+          <a href={`${base}/work/${slugOf(c.id)}/`} class="tile">
+            <span class="tile-media grain">
+              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 4 ? 'eager' : 'lazy'} />}
             </span>
-            {c.data.cover && (
-              <span class="band-media">
-                <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 2 ? 'eager' : 'lazy'} />
-              </span>
-            )}
+            <span class="tile-title">{c.data.cardTitle ?? c.data.title}</span>
+            <span class="tile-sub">{c.data.cardSub ?? c.data.kicker}</span>
           </a>
         </li>
       ))}
@@ -140,47 +134,21 @@ const base = prefix(lang);
   }
 
   .work { padding-top: clamp(64px, 8vw, 104px); }
-  .bands { list-style: none; margin: 0 8px; padding: 0; border-radius: var(--p-radius-lg); overflow: hidden; }
-  .band {
-    --band: #DFE7FF;
-    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center;
-    gap: 24px; min-height: clamp(320px, 32vw, 480px);
-    padding: clamp(28px, 4vw, 56px) clamp(20px, 5vw, 80px);
-    background: var(--band); color: #181C26; overflow: hidden;
+  .tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
+  @media (max-width: 1000px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } }
+  .tile { display: flex; flex-direction: column; gap: 4px; }
+  .tile:hover { color: inherit; }
+  .tile-media {
+    display: block; aspect-ratio: 1 / 1; margin-bottom: 12px;
+    border-radius: var(--p-radius-md); overflow: hidden;
+    background: var(--color-surface-muted);
   }
-  .band:hover { color: #181C26; }
-  .band--0 { --band: #DFE7FF; }
-  .band--1 { --band: #EBFBDC; }
-  .band--2 { --band: #F1F1F8; }
-  .band--3 { --band: #DBC9E7; }
-  .band--4 { --band: #D1DEEF; }
-  :global([data-theme="dark"]) .band { color: #EDEDED; }
-  :global([data-theme="dark"]) .band:hover { color: #EDEDED; }
-  :global([data-theme="dark"]) .band--0 { --band: #1E2433; }
-  :global([data-theme="dark"]) .band--1 { --band: #232D1E; }
-  :global([data-theme="dark"]) .band--2 { --band: #222429; }
-  :global([data-theme="dark"]) .band--3 { --band: #2A2233; }
-  :global([data-theme="dark"]) .band--4 { --band: #1C2633; }
-  .band-text { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
-  .band-title {
-    font-size: clamp(30px, 4.4vw, 64px); line-height: .98; font-weight: 800; letter-spacing: -0.045em;
-    text-transform: uppercase; max-width: 12ch;
-  }
-  .band-sub { font-size: 13px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; opacity: .8; max-width: 34ch; }
-  .band-media {
-    display: block; justify-self: center; width: min(100%, 520px); aspect-ratio: 4 / 3;
-    border-radius: 14px; overflow: hidden; transform: rotate(-3deg);
-    box-shadow: 0 30px 60px -20px rgba(20, 28, 40, .35), 0 8px 18px -8px rgba(20, 28, 40, .25);
-    transition: transform .5s cubic-bezier(.2, .7, .2, 1);
-  }
-  .bands li:nth-child(even) .band-media { transform: rotate(3deg); }
-  .band:hover .band-media { transform: rotate(0deg) scale(1.03); }
-  .band-media img { width: 100%; height: 100%; object-fit: cover; }
-  @media (prefers-reduced-motion: reduce) { .band:hover .band-media { transform: none; } }
-  @media (max-width: 760px) {
-    .band { grid-template-columns: 1fr; padding-block: 48px 40px; }
-    .band-media { width: 86%; }
-  }
+  .tile-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+  .tile:hover .tile-media img { transform: scale(1.04); }
+  @media (prefers-reduced-motion: reduce) { .tile:hover .tile-media img { transform: none; } }
+  .tile-title { font-size: 16px; font-weight: 600; color: var(--color-heading); }
+  .tile-sub { font-size: 14px; line-height: 1.45; color: var(--color-text-subtle); }
   .work-head { margin: 0 0 28px; font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--color-heading); }
   .work-years { color: var(--color-heading-soft); font-weight: 600; }
   .cards { display: flex; flex-direction: column; gap: 24px; }
