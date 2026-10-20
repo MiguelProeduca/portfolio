@@ -19,7 +19,6 @@ export const t = {
     skip: 'Skip to content',
     home: 'Home',
     nav: [
-      { label: 'Work', hash: 'work' },
       { label: 'About', hash: 'about' },
       { label: 'Contact', hash: 'contact' },
     ],
@@ -82,7 +81,6 @@ export const t = {
     skip: 'Saltar al contenido',
     home: 'Inicio',
     nav: [
-      { label: 'Proyectos', hash: 'work' },
       { label: 'Sobre mí', hash: 'about' },
       { label: 'Contacto', hash: 'contact' },
     ],

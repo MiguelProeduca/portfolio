@@ -3,6 +3,8 @@ order: 1
 title: One system, three brands
 cardTitle: "Multi-brand design system"
 cardSub: "One design system for three brands."
+heroLinks:
+  - { label: "Multi-brand design system", type: "Design system" }
 kicker: Design system
 tag: Design system · UNIR
 summary: Three fragmented design systems unified into one, on PrimeNG.

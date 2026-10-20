@@ -18,27 +18,15 @@ const base = prefix(lang);
       <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
       <p class="hero-sub">{s.heroSub}</p>
     </div>
+    <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
+      {cases.flatMap((c) => (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => (
+        <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`}>
+          <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
+        </a>
+      )))}
+    </nav>
   </section>
 
-  <section id="work" class="work" aria-labelledby="work-title" slot="hero">
-    <h2 id="work-title" class="sr-only">{s.selectedWork} · {s.workYears}</h2>
-    {/* Full-bleed row of squares right under the hero, as in the Figma. */}
-    <ul class="tiles">
-      {cases.map((c, i) => (
-        <li>
-          <a href={`${base}/work/${slugOf(c.id)}/`} class="tile">
-            <span class="tile-media">
-              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 4 ? 'eager' : 'lazy'} />}
-            </span>
-            <span class="tile-text">
-              <span class="tile-title">{c.data.cardTitle ?? c.data.title}</span>
-              <span class="tile-sub">{c.data.cardSub ?? c.data.kicker}</span>
-            </span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
 
   <section id="about" class="split" aria-labelledby="about-title">
     <h2 id="about-title" class="h2">{s.aboutLabel}</h2>
@@ -136,34 +124,22 @@ const base = prefix(lang);
   }
 
   .work { padding-top: clamp(64px, 8vw, 104px); }
-  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .work { padding: 0; }
-  .tiles {
-    list-style: none; margin: 12px 8px 0; padding: 0;
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  .hero { flex-direction: column; justify-content: space-between; }
+  .hero-projects {
+    position: relative; z-index: 1; align-self: stretch;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px;
+    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
+    font-size: 14px; color: var(--color-heading);
   }
-  @media (max-width: 1000px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 560px) { .tiles { grid-template-columns: 1fr; } }
-  .tile {
-    position: relative; display: block; aspect-ratio: 1 / 1;
-    border-radius: var(--p-radius-lg); overflow: hidden; background: var(--color-surface-muted);
+  .hero-projects a { padding: 10px 0; transition: opacity .2s ease; }
+  .hero-projects a:hover { color: inherit; opacity: .6; }
+  .hp-name { font-weight: 700; text-transform: uppercase; letter-spacing: .01em; }
+  .hp-type { font-weight: 500; }
+  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
+  @media (max-width: 760px) {
+    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
+    .hero-projects a { padding: 8px 0; }
   }
-  .tile:hover { color: inherit; }
-  .tile-media { position: absolute; inset: 0; }
-  .tile-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .tile:hover .tile-media img { transform: scale(1.04); }
-  @media (prefers-reduced-motion: reduce) { .tile:hover .tile-media img { transform: none; } }
-  .tile-text {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    display: flex; flex-direction: column; gap: 2px; padding: 14px 18px 16px;
-    background: rgba(232, 233, 230, 0.94);
-  }
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .tile-text { background: rgba(232, 233, 230, 0.66); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); }
-    :global([data-theme="dark"]) .tile-text { background: rgba(16, 18, 22, 0.55); }
-  }
-  .tile-title { font-size: 15px; font-weight: 600; color: var(--color-heading); }
-  .tile-sub { font-size: 13px; line-height: 1.4; color: var(--color-text-muted); }
   .work-head { margin: 0 0 28px; font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--color-heading); }
   .work-years { color: var(--color-heading-soft); font-weight: 600; }
   .cards { display: flex; flex-direction: column; gap: 24px; }

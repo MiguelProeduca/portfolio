@@ -3,6 +3,8 @@ order: 1
 title: Un sistema, tres marcas
 cardTitle: "Sistema de diseño multimarca"
 cardSub: "Un sistema de diseño para tres marcas."
+heroLinks:
+  - { label: "Sistema de diseño multimarca", type: "Sistema de diseño" }
 kicker: Sistema de diseño
 tag: Sistema de diseño · UNIR
 summary: Tres sistemas de diseño fragmentados unificados en uno, sobre PrimeNG.

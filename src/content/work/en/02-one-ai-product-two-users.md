@@ -3,6 +3,9 @@ order: 2
 title: One AI product, two users
 cardTitle: "SUPER EDU & AGC"
 cardSub: "AI for teachers and students."
+heroLinks:
+  - { label: "SUPER EDU", type: "Project", hash: "part-2--students-study" }
+  - { label: "AGC", type: "Project", hash: "part-1--teachers-create" }
 kicker: AI product
 tag: AI product · Prodi
 summary: Teachers create a course with AI. Students study it with AI.
