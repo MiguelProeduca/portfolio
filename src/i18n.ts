@@ -69,7 +69,7 @@ export const t = {
       'Design Systems (Uxer School, 2023) · UX/UI (Upgrade Hub, 2022–23) · Creativity (Zink School, 2020–21; Young Creative award, CDEC Festival 2021) · Advertising & PR (URJC, 2014–19)',
 
     contactTitle: 'Building a design system? Drop me an email.',
-    photoAlt: 'Miguel at work',
+    photoAlt: 'Collage by Miguel: a tiny figure standing on a sea of clouds',
     caseWord: 'Case',
     nextCase: 'Next case',
   },
@@ -131,7 +131,7 @@ export const t = {
       'Sistemas de diseño (Uxer School, 2023) · UX/UI (Upgrade Hub, 2022–23) · Creatividad (Zink School, 2020–21; premio Joven Creativo, CDEC Festival 2021) · Publicidad y RR. PP. (URJC, 2014–19)',
 
     contactTitle: '¿Construyendo un sistema de diseño? Escríbeme.',
-    photoAlt: 'Miguel trabajando',
+    photoAlt: 'Collage de Miguel: una figura diminuta de pie sobre un mar de nubes',
     caseWord: 'Caso',
     nextCase: 'Siguiente caso',
   },
