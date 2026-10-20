@@ -13,7 +13,7 @@ const base = prefix(lang);
 <Base lang={lang} overlay>
   <section class="hero" slot="hero">
     <img class="hero-bg hero-bg--light" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
-    <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" loading="lazy" />
+    <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" />
     <div class="hero-text">
       <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
       <p class="hero-sub">{s.heroSub}</p>
@@ -100,11 +100,12 @@ const base = prefix(lang);
     display: flex; align-items: flex-start;
   }
   .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
-  .hero-bg--dark { display: none; }
+  .hero-bg { transition: opacity .7s cubic-bezier(.4, 0, .2, 1); }
+  .hero-bg--dark { opacity: 0; }
   .hero-bg--dimmed { filter: brightness(.38) saturate(.75) contrast(1.05); }
   :global([data-theme="dark"]) .hero { background: #0B0D10; }
-  :global([data-theme="dark"]) .hero-bg--light { display: none; }
-  :global([data-theme="dark"]) .hero-bg--dark { display: block; }
+  :global([data-theme="dark"]) .hero-bg--light { opacity: 0; }
+  :global([data-theme="dark"]) .hero-bg--dark { opacity: 1; }
   /* keep the headline legible where the peaks rise behind it on narrow screens */
   @media (max-width: 640px) {
     :global([data-theme="dark"]) .hero::before {

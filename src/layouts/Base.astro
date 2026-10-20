@@ -102,11 +102,21 @@ const year = new Date().getFullYear();
         var btn = document.querySelector('.theme-switch');
         function sync() { btn.setAttribute('aria-pressed', String(root.getAttribute('data-theme') === 'dark')); }
         sync();
-        btn.addEventListener('click', function () {
-          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function apply(next) {
           root.setAttribute('data-theme', next);
           try { localStorage.setItem('theme', next); } catch (e) {}
           sync();
+        }
+        btn.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          if (reduce) return apply(next);
+          // smooth crossfade of the whole page where supported
+          if (document.startViewTransition) { document.startViewTransition(function () { apply(next); }); return; }
+          // fallback: ease colours for a moment
+          root.classList.add('theme-anim');
+          apply(next);
+          setTimeout(function () { root.classList.remove('theme-anim'); }, 700);
         });
       })();
     </script>

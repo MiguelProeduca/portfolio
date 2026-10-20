@@ -95,3 +95,10 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: 13px;
   color: var(--color-text-subtle);
 }
+
+/* light/dark change: gentle crossfade */
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: .7s; animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+  transition: background-color .6s ease, color .6s ease, border-color .6s ease, fill .6s ease, opacity .6s ease !important;
+}
