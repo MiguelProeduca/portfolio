@@ -24,6 +24,7 @@ export const t = {
       { label: 'Contact', hash: 'contact' },
     ],
     langLabel: 'Language',
+    themeLabel: 'Dark mode',
     allWork: 'All work',
     availability: 'Open to Design Systems roles · EU / Remote',
 
@@ -86,6 +87,7 @@ export const t = {
       { label: 'Contacto', hash: 'contact' },
     ],
     langLabel: 'Idioma',
+    themeLabel: 'Modo oscuro',
     allWork: 'Todos los proyectos',
     availability: 'Abierto a puestos de sistemas de diseño · Europa / remoto',
 
