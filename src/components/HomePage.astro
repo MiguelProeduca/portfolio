@@ -79,34 +79,34 @@ const base = prefix(lang);
   </section>
   <script is:inline>
     (function () {
+      // Hovering a project raises a square "drawer" from the bar, revealing its cover.
       if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-      var box = document.querySelector('.hp-preview'); if (!box) return;
+      var hero = document.querySelector('.hero');
+      var box = document.querySelector('.hp-preview'); if (!box || !hero) return;
       var img = box.querySelector('img');
-      var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var x = 0, y = 0, tx = 0, ty = 0, raf = 0;
-      // preload covers so the first hover is instant
-      document.querySelectorAll('.hero-projects a[data-cover]').forEach(function (a) { var i = new Image(); i.src = a.dataset.cover; });
-      function loop() {
-        x += (tx - x) * (reduce ? 1 : 0.18); y += (ty - y) * (reduce ? 1 : 0.18);
-        box.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
-        raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.5 ? requestAnimationFrame(loop) : 0;
-      }
-      function move(e) {
-        var w = box.offsetWidth, h = box.offsetHeight;
-        tx = Math.min(Math.max(e.clientX - w / 2, 12), innerWidth - w - 12);
-        ty = e.clientY - h - 28;
-        if (!raf) raf = requestAnimationFrame(loop);
-      }
-      document.querySelectorAll('.hero-projects a[data-cover]').forEach(function (a) {
-        a.addEventListener('mouseenter', function (e) {
-          img.src = a.dataset.cover;
-          var w = box.offsetWidth, h = box.offsetHeight;
-          x = tx = Math.min(Math.max(e.clientX - w / 2, 12), innerWidth - w - 12); y = ty = e.clientY - h - 28;
-          box.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      var links = document.querySelectorAll('.hero-projects a[data-cover]');
+      links.forEach(function (a) { var i = new Image(); i.src = a.dataset.cover; });
+      var hideT = 0;
+      links.forEach(function (a) {
+        a.addEventListener('mouseenter', function () {
+          clearTimeout(hideT);
+          var h = hero.getBoundingClientRect(), r = a.getBoundingClientRect();
+          var w = box.offsetWidth;
+          var left = Math.min(Math.max(r.left - h.left, 16), h.width - w - 16);
+          var bottom = h.bottom - r.top + 6;
+          var wasOn = box.classList.contains('is-on');
+          box.style.left = left + 'px'; box.style.bottom = bottom + 'px';
+          if (wasOn && img.getAttribute('src') !== a.dataset.cover) {
+            box.classList.add('is-swap');
+            setTimeout(function () { img.src = a.dataset.cover; box.classList.remove('is-swap'); }, 140);
+          } else {
+            img.src = a.dataset.cover;
+          }
           box.classList.add('is-on');
         });
-        a.addEventListener('mousemove', move);
-        a.addEventListener('mouseleave', function () { box.classList.remove('is-on'); });
+        a.addEventListener('mouseleave', function () {
+          hideT = setTimeout(function () { box.classList.remove('is-on'); }, 60);
+        });
       });
     })();
   </script>
@@ -172,14 +172,27 @@ const base = prefix(lang);
   .hero-projects:has(a:hover) a:not(:hover) { opacity: .45; }
   .hero-projects a:hover { opacity: 1 !important; }
   .hp-preview {
-    position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none;
-    width: clamp(220px, 19vw, 320px); aspect-ratio: 16 / 10;
+    position: absolute; left: 0; bottom: 80px; z-index: 2; pointer-events: none;
+    width: clamp(220px, 19vw, 320px); aspect-ratio: 1 / 1;
     border-radius: 14px; overflow: hidden; background: var(--color-surface-muted);
     box-shadow: 0 30px 60px -18px rgba(20, 28, 40, .45), 0 8px 18px -8px rgba(20, 28, 40, .3);
-    opacity: 0; scale: .92; transition: opacity .25s ease, scale .35s cubic-bezier(.2, .7, .2, 1);
+    clip-path: inset(100% 0 0 0 round 14px);
+    transition: clip-path .55s cubic-bezier(.65, 0, .2, 1), left .45s cubic-bezier(.65, 0, .2, 1);
   }
-  .hp-preview.is-on { opacity: 1; scale: 1; }
-  .hp-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .hp-preview.is-on { clip-path: inset(0 0 0 0 round 14px); }
+  .hp-preview img {
+    width: 100%; height: 100%; object-fit: cover;
+    transform: translateY(18%) scale(1.08);
+    transition: transform .7s cubic-bezier(.2, .7, .2, 1), opacity .14s ease;
+  }
+  .hp-preview.is-on img { transform: none; }
+  .hp-preview.is-swap img { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-preview, .hp-preview img { transition: opacity .2s ease; }
+    .hp-preview { clip-path: none; opacity: 0; }
+    .hp-preview.is-on { opacity: 1; }
+    .hp-preview img { transform: none; }
+  }
   @media (hover: none) { .hp-preview { display: none; } }
   :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
   @media (max-width: 760px) {
