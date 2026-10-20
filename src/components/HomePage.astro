@@ -105,6 +105,13 @@ const base = prefix(lang);
   :global([data-theme="dark"]) .hero { background: #0B0D10; }
   :global([data-theme="dark"]) .hero-bg--light { display: none; }
   :global([data-theme="dark"]) .hero-bg--dark { display: block; }
+  /* keep the headline legible where the peaks rise behind it on narrow screens */
+  @media (max-width: 640px) {
+    :global([data-theme="dark"]) .hero::before {
+      content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: linear-gradient(to bottom, rgba(8, 12, 14, .55), rgba(8, 12, 14, .35) 55%, transparent 75%);
+    }
+  }
   /* text lines up with the page container even though the hero is full-bleed (8px inset) */
   .hero-text {
     width: 100%;
