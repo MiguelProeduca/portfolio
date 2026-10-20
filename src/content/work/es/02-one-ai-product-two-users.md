@@ -15,6 +15,7 @@ meta:
   - { label: "Marca", value: "Prodi" }
   - { label: "Plataformas", value: "Desktop y mobile" }
   - { label: "Estado", value: "Visor del alumno en piloto" }
+tile: "/tiles/prodi.webp"
 cover: "/work/ai-cover.jpg"
 coverPosition: "right"
 hero: "Espacio del profesor y visor del alumno, uno junto al otro"

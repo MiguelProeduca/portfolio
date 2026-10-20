@@ -11,7 +11,7 @@ html { scroll-behavior: smooth; }
 }
 body::before {
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-image: var(--grain); opacity: .05;
+  background-image: var(--grain); opacity: 0;
 }
 .grain { position: relative; isolation: isolate; }
 .grain::after {

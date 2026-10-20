@@ -14,6 +14,7 @@ meta:
   - { label: "Company", value: "UNIR · Grupo Proeduca" }
   - { label: "Brands", value: "Estudiantes, Prodi, Foundations" }
   - { label: "Tools", value: "Figma, Token Studio, Zeroheight" }
+tile: "/tiles/proeduca.webp"
 cover: "/work/ds-cover.jpg"
 hero: "Overview of design system components: chat input, task cards, sidebar, calendar, buttons and form fields"
 ---

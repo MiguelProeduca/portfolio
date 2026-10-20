@@ -14,6 +14,7 @@ meta:
   - { label: "Marca", value: "Estudiantes" }
   - { label: "Plataformas", value: "Mobile, tablet y desktop" }
   - { label: "Estado", value: "En traspaso a desarrollo" }
+tile: "/tiles/unir.webp"
 cover: "/work/student-cover.jpg"
 coverBorder: true
 hero: "Pantallas de la app del estudiante en móvil: mi espacio, correo, página de titulación y el tablero de tareas"

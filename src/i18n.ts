@@ -19,9 +19,11 @@ export const t = {
     skip: 'Skip to content',
     home: 'Home',
     nav: [
+      { label: 'Projects', hash: 'work' },
       { label: 'About', hash: 'about' },
       { label: 'Contact', hash: 'contact' },
     ],
+    hello: ['Hi!', "I'm Miguel Ángel :)", 'A product designer focused on', 'design systems and UI design'],
     langLabel: 'Language',
     themeLabel: 'Dark mode',
     allWork: 'All work',
@@ -81,9 +83,11 @@ export const t = {
     skip: 'Saltar al contenido',
     home: 'Inicio',
     nav: [
+      { label: 'Proyectos', hash: 'work' },
       { label: 'Sobre mí', hash: 'about' },
       { label: 'Contacto', hash: 'contact' },
     ],
+    hello: ['¡Hola!', 'Soy Miguel Ángel :)', 'Diseñador de producto centrado en', 'sistemas de diseño y diseño de UI'],
     langLabel: 'Idioma',
     themeLabel: 'Modo oscuro',
     allWork: 'Todos los proyectos',
