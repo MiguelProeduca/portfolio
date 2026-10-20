@@ -84,6 +84,52 @@ const pile = [
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
+  <script is:inline>
+    (function () {
+      // Cards drift slowly on their own, lean towards the cursor and lift when hovered.
+      var pile = document.querySelector('.pile'); if (!pile) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var cards = [].slice.call(pile.querySelectorAll('.pc'));
+      var R = function (a, b) { return a + Math.random() * (b - a); };
+      var st = cards.map(function (el, i) {
+        return { el: el, depth: R(.4, 1.2), fx: R(.05, .11), fy: R(.04, .09), fr: R(.03, .07),
+                 px: R(0, 6.28), py: R(0, 6.28), pr: R(0, 6.28), ax: R(10, 22), ay: R(8, 18), ar: R(1.5, 3.5),
+                 x: 0, y: 0, r: 0, s: 1, hot: false };
+      });
+      var mx = 0, my = 0, cx = -9999, cy = -9999, t0 = performance.now();
+      pile.addEventListener('pointermove', function (e) {
+        var b = pile.getBoundingClientRect();
+        mx = (e.clientX - b.left) / b.width * 2 - 1; my = (e.clientY - b.top) / b.height * 2 - 1;
+        cx = e.clientX; cy = e.clientY;
+      });
+      pile.addEventListener('pointerleave', function () { mx = my = 0; cx = cy = -9999; });
+      st.forEach(function (c) {
+        c.el.addEventListener('pointerenter', function () { c.hot = true; c.el.classList.add('is-hot'); });
+        c.el.addEventListener('pointerleave', function () { c.hot = false; c.el.classList.remove('is-hot'); });
+      });
+      function frame(now) {
+        var t = (now - t0) / 1000;
+        st.forEach(function (c) {
+          // slow, slightly chaotic drift
+          var tx = Math.sin(t * c.fx * 6.28 + c.px) * c.ax + Math.sin(t * c.fx * 2.7 + c.py) * c.ax * .4;
+          var ty = Math.cos(t * c.fy * 6.28 + c.py) * c.ay + Math.sin(t * c.fy * 3.1 + c.px) * c.ay * .4;
+          var tr = Math.sin(t * c.fr * 6.28 + c.pr) * c.ar;
+          // parallax towards the cursor
+          tx += mx * 28 * c.depth; ty += my * 22 * c.depth;
+          // gentle push away from the cursor when it is close (not when hovering the card)
+          var b = c.el.getBoundingClientRect(), dx = b.left + b.width / 2 - cx, dy = b.top + b.height / 2 - cy, d = Math.hypot(dx, dy);
+          if (!c.hot && d < 360 && d > 1) { var f = (1 - d / 360) * 26; tx += dx / d * f; ty += dy / d * f; }
+          var ts = 1;
+          if (c.hot) { ty -= 16; tr *= .2; ts = 1.06; }
+          var k = c.hot ? .14 : .05;
+          c.x += (tx - c.x) * k; c.y += (ty - c.y) * k; c.r += (tr - c.r) * k; c.s += (ts - c.s) * .14;
+          c.el.style.transform = 'translate3d(' + c.x.toFixed(2) + 'px,' + c.y.toFixed(2) + 'px,0) rotate(' + c.r.toFixed(2) + 'deg) scale(' + c.s.toFixed(3) + ')';
+        });
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
 </Base>
 
 <style>
@@ -92,18 +138,16 @@ const pile = [
   .pile { position: relative; width: 100%; aspect-ratio: 1920 / 1187; max-height: calc(100svh - 54px); overflow: hidden; margin: 0 auto; }
   @supports (aspect-ratio: 1) { .pile { max-width: calc((100svh - 54px) * 1920 / 1187); } }
   .pc {
-    position: absolute; display: block;
-    transition: transform .5s cubic-bezier(.2, .8, .2, 1), filter .5s ease;
-    animation: drop .7s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d) * 70ms);
+    position: absolute; display: block; cursor: pointer; will-change: transform;
+    transition: filter .5s ease;
   }
-  .pc img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
-  .pc:hover {
-    z-index: 20; transform: translateY(-14px) scale(1.06) rotate(-2deg);
-    filter: drop-shadow(0 28px 40px rgba(24, 28, 38, .28));
+  .pc img {
+    display: block; width: 100%; height: auto; pointer-events: none; user-select: none;
+    animation: drop .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--d) * 90ms);
   }
-  .pc:nth-child(odd):hover { transform: translateY(-14px) scale(1.06) rotate(2deg); }
+  .pc:hover, .pc.is-hot { z-index: 20; filter: drop-shadow(0 28px 40px rgba(24, 28, 38, .28)); }
   @keyframes drop { from { opacity: 0; transform: translateY(40px) scale(.96); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .pc { animation: none; transition: none; } .pc:hover { transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pc img { animation: none; } }
   .cards { display: flex; flex-direction: column; gap: 24px; }
   .col { display: contents; }
   @media (min-width: 760px) {
