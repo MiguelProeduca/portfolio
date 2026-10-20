@@ -1,6 +1,8 @@
 ---
 order: 2
 title: Un producto de IA, dos usuarios
+cardTitle: "SUPER EDU y AGC"
+cardSub: "Inteligencia artificial para profesores y estudiantes."
 kicker: Producto de IA
 tag: Producto de IA · Prodi
 summary: El profesor crea una asignatura con IA. El alumno la estudia con IA.

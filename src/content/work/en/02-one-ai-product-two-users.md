@@ -1,6 +1,8 @@
 ---
 order: 2
 title: One AI product, two users
+cardTitle: "SUPER EDU & AGC"
+cardSub: "AI for teachers and students."
 kicker: AI product
 tag: AI product · Prodi
 summary: Teachers create a course with AI. Students study it with AI.

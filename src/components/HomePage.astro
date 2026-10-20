@@ -29,8 +29,8 @@ const base = prefix(lang);
               {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i === 0 ? 'eager' : 'lazy'} />}
             </span>
             <span class="card-text">
-              <span class="card-title">{c.data.title}</span>
-              <span class="subtle">{c.data.kicker}</span>
+              <span class="card-title">{c.data.cardTitle ?? c.data.title}</span>
+              <span class="subtle">{c.data.cardSub ?? c.data.kicker}</span>
             </span>
           </a>
         </li>
