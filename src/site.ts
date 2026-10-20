@@ -3,4 +3,5 @@ export const site = {
   name: 'Miguel Ángel Mengs',
   email: 'm.mengsarevalo@gmail.com',
   linkedin: '', // e.g. https://www.linkedin.com/in/your-handle
+  photo: '', // full-width photo between "How I work" and "Experience", e.g. '/me.jpg' in public/
 };

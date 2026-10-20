@@ -55,6 +55,12 @@ const base = prefix(lang);
     </div>
   </section>
 
+  {site.photo && (
+    <figure class="photo">
+      <img src={site.photo} alt={s.photoAlt} loading="lazy" />
+    </figure>
+  )}
+
   <section id="experience" class="split" aria-labelledby="exp-title">
     <h2 id="exp-title" class="h2">{s.experienceLabel}</h2>
     <div class="text">
@@ -79,6 +85,8 @@ const base = prefix(lang);
 </Base>
 
 <style>
+  .photo { margin: 104px 0 0; }
+  .photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--p-radius-md); }
   .hero { padding: clamp(72px, 10vw, 136px) 0 clamp(96px, 12vw, 168px); }
   .hero-sub { margin: 28px 0 0; max-width: 52ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--color-text-muted); }
   h1 {
