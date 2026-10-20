@@ -37,6 +37,9 @@ const projectLinks = cases.flatMap((c) =>
       <span class="moon-face"></span>
       {projectLinks.map((l, k) => l.cover && <img src={l.cover} data-i={k} alt="" loading="lazy" />)}
     </div>
+    {/* Foreground cut-outs (clouds / mountains) so the moon sits behind them, in front of the sky. */}
+    <img class="hero-fg hero-fg--light" src="/collage-clouds.webp" alt="" />
+    <img class="hero-fg hero-fg--dark" src="/collage-dark-mountains.webp" alt="" />
   </section>
 
 
@@ -139,15 +142,23 @@ const projectLinks = cases.flatMap((c) =>
   .hero { flex-direction: column; justify-content: space-between; }
   .moon {
     position: absolute; z-index: 0; pointer-events: none;
-    top: clamp(110px, 16vh, 170px); right: clamp(24px, 3.5vw, 64px);
+    top: 30%; right: clamp(40px, 6vw, 110px);
     width: clamp(240px, 25vw, 420px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
     filter: drop-shadow(0 0 60px rgba(255, 255, 255, .35));
   }
+  .hero-fg {
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+    object-fit: cover; object-position: center bottom;
+    transition: opacity .7s cubic-bezier(.4, 0, .2, 1);
+  }
+  .hero-fg--dark { opacity: 0; }
+  :global([data-theme="dark"]) .hero-fg--light { opacity: 0; }
+  :global([data-theme="dark"]) .hero-fg--dark { opacity: 1; }
   .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
   .moon-face {
     background:
       linear-gradient(215deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .45) 62%, rgba(255, 255, 255, 0) 92%);
-    transition: opacity .5s ease;
+    opacity: .72; transition: opacity .5s ease;
   }
   .moon img {
     object-fit: cover; opacity: 0; transform: scale(1.08);
@@ -157,7 +168,7 @@ const projectLinks = cases.flatMap((c) =>
   .hero:has(.hp[data-i="1"]:hover, .hp[data-i="1"]:focus-visible) .moon img[data-i="1"],
   .hero:has(.hp[data-i="2"]:hover, .hp[data-i="2"]:focus-visible) .moon img[data-i="2"],
   .hero:has(.hp[data-i="3"]:hover, .hp[data-i="3"]:focus-visible) .moon img[data-i="3"],
-  .hero:has(.hp[data-i="4"]:hover, .hp[data-i="4"]:focus-visible) .moon img[data-i="4"] { opacity: 1; transform: none; }
+  .hero:has(.hp[data-i="4"]:hover, .hp[data-i="4"]:focus-visible) .moon img[data-i="4"] { opacity: .9; transform: none; }
   .hero:has(.hp:hover, .hp:focus-visible) .moon-face { opacity: 0; }
   :global([data-theme="dark"]) .moon { filter: drop-shadow(0 0 70px rgba(200, 220, 230, .18)); }
   :global([data-theme="dark"]) .moon-face {
