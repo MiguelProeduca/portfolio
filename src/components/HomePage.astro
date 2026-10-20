@@ -12,8 +12,11 @@ const base = prefix(lang);
 ---
 <Base lang={lang}>
   <section class="hero">
-    <h1>{s.h1a} <span class="subtle">{s.h1b}</span></h1>
-    <p class="hero-sub">{s.heroSub}</p>
+    <img class="hero-bg" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
+    <div class="hero-text">
+      <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
+      <p class="hero-sub">{s.heroSub}</p>
+    </div>
   </section>
 
   <section id="work" class="work" aria-label={s.selectedWork}>
@@ -87,8 +90,17 @@ const base = prefix(lang);
 <style>
   .photo { margin: 104px 0 0; }
   .photo img { width: 100%; height: auto; border-radius: var(--p-radius-md); }
-  .hero { padding: clamp(72px, 10vw, 136px) 0 clamp(96px, 12vw, 168px); }
-  .hero-sub { margin: 28px 0 0; max-width: 52ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--color-text-muted); }
+  .hero {
+    position: relative; overflow: hidden; isolation: isolate;
+    margin: 8px 0 clamp(64px, 8vw, 104px);
+    min-height: clamp(560px, 62vw, 760px);
+    border-radius: var(--p-radius-lg);
+    background: #E9EBEC;
+  }
+  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
+  .hero-text { padding: clamp(28px, 4.5vw, 64px); }
+  .hero-soft { color: #6B7278; }
+  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3D4246; }
   h1 {
     margin: 0;
     font-size: clamp(40px, 5.8vw, 72px);
