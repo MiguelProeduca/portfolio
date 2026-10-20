@@ -20,12 +20,14 @@ const base = prefix(lang);
     </div>
     <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
       {cases.flatMap((c) => (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => (
-        <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`} data-cover={c.data.cover}>
-          <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
+        <a href={`${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`} class="hp">
+          <span class="hp-label"><span><span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span></span></span>
+          {c.data.cover && (
+            <span class="hp-media"><img src={c.data.cover} alt="" loading="lazy" /></span>
+          )}
         </a>
       )))}
     </nav>
-    <div class="hp-preview" aria-hidden="true"><img alt="" /></div>
   </section>
 
 
@@ -77,39 +79,6 @@ const base = prefix(lang);
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
     <p class="subtle">{s.availability}</p>
   </section>
-  <script is:inline>
-    (function () {
-      // Hovering a project raises a square "drawer" from the bar, revealing its cover.
-      if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-      var hero = document.querySelector('.hero');
-      var box = document.querySelector('.hp-preview'); if (!box || !hero) return;
-      var img = box.querySelector('img');
-      var links = document.querySelectorAll('.hero-projects a[data-cover]');
-      links.forEach(function (a) { var i = new Image(); i.src = a.dataset.cover; });
-      var hideT = 0;
-      links.forEach(function (a) {
-        a.addEventListener('mouseenter', function () {
-          clearTimeout(hideT);
-          var h = hero.getBoundingClientRect(), r = a.getBoundingClientRect();
-          var w = box.offsetWidth;
-          var left = Math.min(Math.max(r.left - h.left, 16), h.width - w - 16);
-          var bottom = h.bottom - r.top + 6;
-          var wasOn = box.classList.contains('is-on');
-          box.style.left = left + 'px'; box.style.bottom = bottom + 'px';
-          if (wasOn && img.getAttribute('src') !== a.dataset.cover) {
-            box.classList.add('is-swap');
-            setTimeout(function () { img.src = a.dataset.cover; box.classList.remove('is-swap'); }, 140);
-          } else {
-            img.src = a.dataset.cover;
-          }
-          box.classList.add('is-on');
-        });
-        a.addEventListener('mouseleave', function () {
-          hideT = setTimeout(function () { box.classList.remove('is-on'); }, 60);
-        });
-      });
-    })();
-  </script>
 </Base>
 
 <style>
@@ -159,41 +128,56 @@ const base = prefix(lang);
 
   .work { padding-top: clamp(64px, 8vw, 104px); }
   .hero { flex-direction: column; justify-content: space-between; }
+  /* Bottom bar: four equal glass cells. On hover a cell grows upwards and
+     reveals the project cover underneath its label. */
   .hero-projects {
     position: relative; z-index: 1; align-self: stretch;
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px;
-    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
-    font-size: 16px; color: var(--color-heading);
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end;
+    color: var(--color-heading);
   }
-  .hero-projects a { padding: 10px 0; transition: opacity .2s ease; }
-  .hero-projects a:hover { color: inherit; }
+  .hp {
+    display: flex; flex-direction: column;
+    background: rgba(232, 233, 230, .42);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4);
+    transition: background-color .3s ease;
+  }
+  .hp:hover { color: inherit; background: rgba(232, 233, 230, .7); }
+  .hp-label {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 76px; padding: 0 12px; text-align: center; font-size: clamp(14px, 1.08vw, 16px); line-height: 1.3;
+  }
   .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
   .hp-type { font-weight: 600; }
-  .hero-projects:has(a:hover) a:not(:hover) { opacity: .45; }
-  .hero-projects a:hover { opacity: 1 !important; }
-  .hp-preview {
-    position: absolute; left: 0; bottom: 80px; z-index: 2; pointer-events: none;
-    width: clamp(220px, 19vw, 320px); aspect-ratio: 1 / 1;
-    border-radius: 14px; overflow: hidden; background: var(--color-surface-muted);
-    box-shadow: 0 30px 60px -18px rgba(20, 28, 40, .45), 0 8px 18px -8px rgba(20, 28, 40, .3);
-    clip-path: inset(100% 0 0 0 round 14px);
-    transition: clip-path .55s cubic-bezier(.65, 0, .2, 1), left .45s cubic-bezier(.65, 0, .2, 1);
+  .hp-media {
+    display: block; height: 0; overflow: hidden;
+    transition: height .6s cubic-bezier(.65, 0, .2, 1);
   }
-  .hp-preview.is-on { clip-path: inset(0 0 0 0 round 14px); }
-  .hp-preview img {
-    width: 100%; height: 100%; object-fit: cover;
-    transform: translateY(18%) scale(1.08);
-    transition: transform .7s cubic-bezier(.2, .7, .2, 1), opacity .14s ease;
+  .hp-media img {
+    display: block; width: 100%; height: clamp(240px, 36vh, 400px); object-fit: cover; object-position: center top;
+    transform: translateY(14%); transition: transform .8s cubic-bezier(.2, .7, .2, 1);
   }
-  .hp-preview.is-on img { transform: none; }
-  .hp-preview.is-swap img { opacity: 0; }
+  @media (hover: hover) and (pointer: fine) {
+    .hp:hover .hp-media, .hp:focus-visible .hp-media { height: clamp(240px, 36vh, 400px); }
+    .hp:hover .hp-media img, .hp:focus-visible .hp-media img { transform: none; }
+    .hero-projects:has(.hp:hover) .hp:not(:hover) .hp-label { opacity: .5; }
+  }
+  .hp-label { transition: opacity .25s ease; }
+  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
+  :global([data-theme="dark"]) .hp { background: rgba(14, 18, 20, .38); }
+  :global([data-theme="dark"]) .hp:hover { background: rgba(14, 18, 20, .62); }
   @media (prefers-reduced-motion: reduce) {
-    .hp-preview, .hp-preview img { transition: opacity .2s ease; }
-    .hp-preview { clip-path: none; opacity: 0; }
-    .hp-preview.is-on { opacity: 1; }
-    .hp-preview img { transform: none; }
+    .hp-media, .hp-media img { transition: none; }
+    .hp-media img { transform: none; }
   }
-  @media (hover: none) { .hp-preview { display: none; } }
+  @media (max-width: 900px) {
+    .hero-projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hp-label { min-height: 60px; font-size: 14px; }
+  }
+  @media (max-width: 560px) {
+    .hero-projects { grid-template-columns: 1fr; }
+    .hp + .hp { border-top: 1px solid rgba(43, 47, 51, .12); }
+    .hp-label { justify-content: flex-start; min-height: 52px; padding: 0 20px; }
+  }
   :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
   @media (max-width: 760px) {
     .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
