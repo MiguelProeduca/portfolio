@@ -27,8 +27,9 @@ export const t = {
     allWork: 'All work',
     availability: 'Open to Design Systems roles · EU / Remote',
 
-    h1a: "I'm Miguel—a senior design systems designer.",
-    h1b: 'I design the systems that AI products are built on.',
+    h1a: "I'm Miguel, a product designer.",
+    h1b: 'From idea to detail.',
+    heroSub: 'I come from a creative background. I design interfaces and design systems, paying attention to how they work, how they look and what they convey.',
 
     selectedWork: 'Featured work',
     workYears: '2024–2026',
@@ -87,8 +88,9 @@ export const t = {
     allWork: 'Todos los proyectos',
     availability: 'Abierto a puestos de sistemas de diseño · Europa / remoto',
 
-    h1a: 'Soy Miguel, diseñador senior de sistemas de diseño.',
-    h1b: 'Diseño los sistemas sobre los que se construyen productos de IA.',
+    h1a: 'Soy Miguel, diseñador de producto.',
+    h1b: 'De la idea al detalle.',
+    heroSub: 'Vengo de la creatividad. Diseño interfaces y sistemas de diseño con atención a cómo funcionan, cómo se ven y qué transmiten.',
 
     selectedWork: 'Proyectos destacados',
     workYears: '2024–2026',
