@@ -120,8 +120,8 @@ const base = prefix(lang);
     padding: clamp(120px, 15vh, 176px) clamp(12px, 2.2vw, 32px) 40px;
   }
   @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
-  .hero-soft { color: #56788D; }
-  :global([data-theme="dark"]) .hero-soft { color: #8C96A0; }
+  .hero h1 { color: var(--color-heading); }
+  .hero-soft { color: var(--color-heading-soft); }
   :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
   .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3E5F74; }
   h1 {
