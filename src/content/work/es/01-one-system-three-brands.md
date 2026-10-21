@@ -7,8 +7,8 @@ heroLinks:
   - { label: "Diseño multimarca", type: "Sistema de diseño" }
 kicker: Sistema de diseño
 tag: Sistema de diseño · UNIR
-summary: Tres sistemas de diseño fragmentados unificados en uno, sobre PrimeNG.
-lead: UNIR tenía tres productos con tres sistemas de diseño distintos. Los unifiqué en un solo sistema multimarca sobre PrimeNG, sin Figma Enterprise. Hoy da servicio a la app de estudiantes, a Prodi y al back office interno.
+summary: "Un sistema de diseño multimarca sobre PrimeNG para los tres productos de UNIR."
+lead: "Un sistema de diseño para los tres productos de UNIR: la app de estudiantes, los productos de IA de Prodi y el back office. Una sola librería sobre PrimeNG, con cada marca resuelta en los tokens."
 meta:
   - { label: "Rol", value: "Diseñador responsable del sistema de diseño" }
   - { label: "Empresa", value: "UNIR · Grupo Proeduca" }
@@ -18,67 +18,53 @@ cover: "/work/ds-cover.jpg"
 hero: "Vista general de componentes del sistema: input de chat, tarjetas de tarea, sidebar, calendario, botones y campos de formulario"
 ---
 
-## Contexto
+## El sistema
 
-Cada producto de UNIR había crecido con su propio sistema de diseño, iterado muchas veces por separado:
+Un único sistema de diseño para los tres productos digitales de UNIR, cada uno con su marca:
 
-- **Estudiantes:** la app donde los alumnos estudian y hablan con sus compañeros.
+- **Estudiantes:** la app donde los alumnos estudian, se organizan y hablan con sus compañeros.
 - **Prodi:** los productos de IA, un asistente de chat y generadores de contenido para profesores y alumnos.
 - **Foundations:** la marca interna, el back office.
 
-El resultado era un sistema fragmentado: varios botones distintos para lo mismo, decisiones duplicadas y nada que garantizara coherencia entre productos.
+Comparten una sola librería de componentes y una sola arquitectura de tokens. Lo que cambia entre marcas (color, radios, tipografía, tono) se resuelve en los tokens, no en los componentes. Partimos de **PrimeNG** como base, porque es la librería sobre la que construye desarrollo, y encima añadimos todo lo que los productos necesitan y PrimeNG no trae.
 
-## Problema
+Antes, cada producto había crecido con su propio sistema y había varias versiones de las mismas piezas. Unificarlos fue el punto de partida, no el objetivo: el objetivo es poder diseñar y construir más rápido sin perder coherencia.
 
-Unificar tres sistemas en uno sin que ninguna marca perdiera su identidad.
+## Cómo está construido
 
-Partíamos de PrimeNG como base común, pero una librería genérica solo cubre lo genérico. Los productos, sobre todo los de IA, necesitaban componentes que no existen en PrimeNG. Si cada uno se resolvía a su manera, el sistema volvería a fragmentarse.
-
-## Restricción
-
-Sin Figma Enterprise no hay herencia nativa entre marcas, así que cada marca vive como un modo en cinco colecciones encadenadas, más una sección custom. Cambiar una pantalla de marca obliga a cambiar el modo en cada una de ellas.
-
-**Cómo lo resolví:** todas las colecciones comparten la misma convención de nombres de modo. Cambiar de marca deja de ser una búsqueda colección por colección y pasa a ser un gesto repetible y predecible.
-
-## Decisiones
-
-**Arquitectura en capas.** Los tokens fluyen por cinco colecciones encadenadas, de los valores en bruto a los componentes: primitivos, semánticos comunes, semánticos de color, semánticos de componente y componentes. Cada marca resuelve sus valores con sus propios modos.
+**Tokens en capas.** Los valores fluyen por cinco colecciones encadenadas: primitivos, semánticos comunes, semánticos de color, semánticos de componente y componentes. Cada marca es un modo, y todas las colecciones comparten la misma convención de nombres de modo, así que cambiar una pantalla de marca es un gesto predecible. Lo montamos así porque sin Figma Enterprise no hay herencia nativa entre marcas.
 
 <figure>
   <img src="/work/ds-variables.jpg" alt="Panel de variables de Figma: colecciones Primitive, Semantic/Common, Semantic/Color Scheme, Component/Common, Component/Color Scheme y Custom, con los tokens del botón primario y una columna de modo por marca: Estudiantes, Prodi, Foundations y el tema base" loading="lazy" />
   <figcaption>Fig. 02 · El botón primario en la colección de componentes. Cada marca es un modo y resuelve su hover y su active con su propio tono. La última columna es el tema base de PrimeNG.</figcaption>
 </figure>
 
-**Adaptar o crear.** Si PrimeNG tiene el componente, su estructura no se toca y solo cambian los tokens. Si no lo tiene, se crea desde cero en la sección custom, replicando la anatomía de tokens de PrimeNG con tokens nuevos. Para desarrollo y para cada marca, un componente custom es indistinguible de uno nativo.
+**Componentes de PrimeNG y componentes propios.** Si PrimeNG tiene el componente, su estructura no se toca y solo cambian los tokens. Si no lo tiene, lo creamos en una sección propia replicando la anatomía de tokens de PrimeNG, de modo que para desarrollo y para cada marca un componente propio funciona igual que uno nativo.
 
-Entre los componentes custom creados así están el input de chat, el chatbox, la sidebar, la agenda, el organizador de tareas, el file upload, la top bar, la nav bar, la menu bar y un stepper para mobile.
+Así se han creado, entre otros, el input de chat, el chatbox, la sidebar, la agenda, el organizador de tareas, el file upload, la top bar, la nav bar, la menu bar y un stepper para mobile.
 
-## Ejemplo · el input de chat
+## Un componente de cerca · el input de chat
 
-Un solo componente sirve a dos tipos de conversación: con la IA y entre estudiantes.
-
-**La decisión clave fue atar el componente al layout, no al caso de uso.** En lugar de una propiedad "IA / Chat", tiene "vertical / horizontal":
+Es el componente en el que más se nota el enfoque del sistema. Sirve a dos tipos de conversación, con la IA y entre estudiantes, y en lugar de una propiedad "IA / Chat" tiene **"vertical / horizontal"**: el componente depende del layout, no del caso de uso.
 
 - **Vertical:** el texto en su propia fila y las acciones debajo, pensado para prompts largos.
 - **Horizontal:** acciones, texto y enviar en una sola línea, como en cualquier mensajería.
 
-Al principio la IA usaba el layout vertical y el chat el horizontal. El producto evolucionaba rápido y pronto la IA necesitó también el horizontal. El componente ya lo soportaba.
-
-Los archivos e imágenes entran por un slot, con su propio componente de adjunto y sus estados de carga. Cubre mobile y desktop, estados de envío (enviar, cargando, parar generación), audio y transcripción, bloqueado, botón de añadir y con o sin adjuntos.
+Cuando la IA necesitó también el layout horizontal, el componente ya lo soportaba. Los archivos e imágenes entran por un slot con su propio componente de adjunto, y cubre mobile y desktop, estados de envío (enviar, cargando, parar generación), audio y transcripción, bloqueado y con o sin adjuntos.
 
 <figure>
   <img src="/work/ds-chat-input.jpg" alt="El mismo input de chat en tres marcas: Prodi en layout vertical con esquinas muy redondeadas, Estudiantes en horizontal redondeado y Foundations en horizontal con esquinas rectas" loading="lazy" />
   <figcaption>Fig. 03 · Un componente, dos layouts, tres marcas: vertical en Prodi, horizontal en Estudiantes y Foundations.</figcaption>
 </figure>
 
-## Resultado
+## Cómo se trabaja con él
 
-Tres sistemas pasaron a ser uno, al servicio de tres productos muy distintos: la app de estudiantes, las herramientas de IA y el back office interno. Lo construimos mano a mano con desarrollo, no como una entrega cerrada.
+El sistema se construye mano a mano con desarrollo, no se entrega cerrado. Las pantallas nuevas se montan con piezas que ya existen, y cuando hace falta una nueva entra en el sistema para que la puedan usar las tres marcas.
 
-Donde había varios botones ahora hay uno, y las pantallas nuevas se montan con componentes que ya existen en lugar de diseñarse desde cero.
+Para el mantenimiento a escala (auditar tokens, renombrar variables, documentar componentes) uso IA conectada a Figma. Las decisiones de diseño las tomo yo.
 
-**La prueba de verdad está por llegar.** La marca Estudiantes va a absorber Prodi. Como ambas comparten estructura, y los componentes exclusivos de IA ya existen también en el modo Estudiantes, la fusión será prácticamente un cambio de modo.
+## Dónde está hoy
 
-## Siguiente paso
+Da servicio a la app de estudiantes, a las herramientas de IA y al back office interno. Donde había varias versiones de una pieza ahora hay una.
 
-Llevar el sistema a código. La arquitectura de tokens está pensada para que ese salto sea limpio.
+Lo siguiente es la fusión de Prodi dentro de Estudiantes: como comparten estructura, y los componentes de IA ya existen en el modo Estudiantes, será prácticamente un cambio de modo. Y después, llevar el sistema a código, para lo que la arquitectura de tokens ya está preparada.
