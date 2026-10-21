@@ -22,7 +22,7 @@ const projectLinks = cases.flatMap((c) =>
     <img class="hero-bg hero-bg--light" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
     <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" />
     <div class="hero-text">
-      <h1>{s.h1a} {s.h1b}</h1>
+      <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
       <p class="hero-sub">{s.heroSub}</p>
     </div>
   </section>
@@ -87,16 +87,20 @@ const projectLinks = cases.flatMap((c) =>
   :global([data-theme="dark"]) .hero { background: #0B0D10; }
   :global([data-theme="dark"]) .hero-bg--light { opacity: 0; }
   :global([data-theme="dark"]) .hero-bg--dark { opacity: 1; }
-  .hero-text { max-width: 1280px; margin: 0 auto; padding: clamp(120px, 16vh, 180px) clamp(20px, 5.5vw, 80px) 40px; }
+  /* text lines up with the nav (MA) */
+  .hero-text { padding: clamp(120px, 15vh, 176px) calc(8px + clamp(12px, 2.2vw, 32px)) 40px; }
+  @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
   .hero h1 {
-    margin: 0; max-width: 15ch; color: var(--color-heading);
-    font-size: clamp(40px, 5.2vw, 76px); line-height: 1.02; font-weight: 700; letter-spacing: -0.04em;
+    margin: 0; max-width: 20ch; color: var(--color-heading);
+    font-size: clamp(40px, 5.8vw, 72px); line-height: 1.04; font-weight: 800; letter-spacing: -0.04em;
   }
+  .hero-soft { color: var(--color-heading-soft); }
   .hero-sub {
-    margin: 28px 0 0; max-width: 30ch; color: var(--color-heading);
-    font-size: clamp(20px, 2vw, 32px); line-height: 1.2; font-weight: 600; letter-spacing: -0.025em;
+    margin: 24px 0 0; max-width: 46ch; color: #3E5F74;
+    font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; font-weight: 400;
   }
-  :global([data-theme="dark"]) .hero h1, :global([data-theme="dark"]) .hero-sub { color: #EDEDED; }
+  :global([data-theme="dark"]) .hero h1 { color: #EDEDED; }
+  :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
 
   .block { padding-top: clamp(40px, 5vw, 64px); }
   .eyebrow {
