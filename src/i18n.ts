@@ -51,6 +51,7 @@ export const t = {
       'Decisions and design. AI can give me a starting point, but I design the screens and review everything it does.',
 
     aboutLabel: 'About me',
+    pileCaption: 'Outside work: collages and posters.',
     about: [
       "I came to product from advertising. Almost four years in creative and strategy, with projects like an interactive site for the launch of a National Geographic documentary series. That's where I learned to build a conceptual world from scratch, and to think about how an idea is told so it persuades.",
       'I moved to product because I wanted my work to have a tangible impact: things people use every day and find useful. At UNIR I lead the multi-brand design system and design AI products for teachers and students.',
@@ -113,6 +114,7 @@ export const t = {
       'Las decisiones y el diseño. La IA puede darme un punto de partida, pero las pantallas las diseño yo y reviso todo lo que hace.',
 
     aboutLabel: 'Sobre mí',
+    pileCaption: 'Fuera del trabajo: collages y carteles.',
     about: [
       'Llegué al producto desde la publicidad. Pasé casi cuatro años en creatividad y estrategia, con proyectos como una web interactiva para el estreno de una serie documental de National Geographic. Allí aprendí a construir un universo conceptual desde cero y a pensar en cómo se cuenta una idea para que convenza.',
       'Me pasé al producto porque quería que mi trabajo tuviera un impacto tangible: cosas que la gente usa cada día y que le resultan útiles. En UNIR lidero el sistema de diseño multimarca y diseño productos de IA para profesores y alumnos.',
