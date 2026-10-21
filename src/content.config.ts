@@ -16,6 +16,8 @@ const work = defineCollection({
     cardTitle: z.string().optional(), // home card title (falls back to title)
     cardSub: z.string().optional(), // home card subtitle (falls back to kicker)
     heroLinks: z.array(z.object({ label: z.string(), type: z.string(), hash: z.string().optional() })).optional(), // links in the hero's bottom bar
+    company: z.string().optional(), // card label, e.g. "PROEDUCA"
+    year: z.string().optional(), // card year
     cover: z.string().optional(), // card image on the home, e.g. "/work/ds-cover.jpg" in public/
     coverBorder: z.boolean().default(false), // thin border on the home card, for light covers
     coverPosition: z.string().optional(), // CSS object-position for the home card crop, e.g. "right"

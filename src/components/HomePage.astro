@@ -22,303 +22,122 @@ const projectLinks = cases.flatMap((c) =>
     <img class="hero-bg hero-bg--light" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" />
     <img class:list={["hero-bg", "hero-bg--dark", { "hero-bg--dimmed": !site.collageDark }]} src={site.collageDark || '/collage.jpg'} alt="" />
     <div class="hero-text">
-      <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
+      <h1>{s.h1a} {s.h1b}</h1>
       <p class="hero-sub">{s.heroSub}</p>
     </div>
-    <nav id="work" class="hero-projects" aria-label={s.selectedWork}>
-      {projectLinks.map((l, k) => (
-        <a href={l.href} class="hp" data-i={k}>
-          <span class="hp-name">{l.label}</span> · <span class="hp-type">{l.type}</span>
-        </a>
+  </section>
+
+  <section id="work" class="block" aria-labelledby="work-title">
+    <h2 id="work-title" class="eyebrow">{s.recentWork}</h2>
+    <ul class="grid">
+      {cases.map((c, i) => (
+        <li>
+          <a href={`${base}/work/${slugOf(c.id)}/`} class="item">
+            <span class="item-media">
+              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 2 ? 'eager' : 'lazy'} />}
+            </span>
+            <span class="item-row">
+              <span class="item-co">{c.data.company ?? c.data.kicker}</span>
+              <span class="item-year">{c.data.year}</span>
+            </span>
+            <span class="item-sub">{c.data.cardTitle ?? c.data.title}</span>
+          </a>
+        </li>
       ))}
-    </nav>
-    {/* The moon: a white gradient disc. Hovering a project fills it with its cover. */}
-    <div class="moon" aria-hidden="true">
-      <span class="moon-face"></span>
-      {projectLinks.map((l, k) => l.cover && <img src={l.cover} data-i={k} alt="" loading="lazy" />)}
-    </div>
-    {/* Foreground cut-outs (clouds / mountains) so the moon sits behind them, in front of the sky. */}
-    <img class="hero-fg hero-fg--light" src="/collage-clouds.webp" alt="" />
-    <img class="hero-fg hero-fg--dark" src="/collage-dark-mountains.webp" alt="" />
+    </ul>
   </section>
 
-
-  <section id="about" class="split" aria-labelledby="about-title">
-    <h2 id="about-title" class="h2">{s.aboutLabel}</h2>
-    <div class="text">
-      {s.about.map((p, i) => <p class={i === 0 ? 'big' : 'muted'}>{p}</p>)}
-      <p class="muted">{s.aboutLast}</p>
+  <section id="about" class="block about" aria-labelledby="about-title">
+    <img class="about-photo" src={site.portrait} alt={s.portraitAlt} loading="lazy" />
+    <div class="about-text">
+      <p class="tag">{s.aboutTag}</p>
+      <h2 id="about-title">{s.h1a} {s.h1b}</h2>
+      <p>{s.heroSub}</p>
     </div>
   </section>
 
-  <section id="how" class="split" aria-labelledby="how-title">
-    <h2 id="how-title" class="h2">{s.howLabel}</h2>
-    <div class="text">
-      <p class="big">{s.howTitle} <span class="subtle">{s.howIntro}</span></p>
-      <ul class="rows">
-        {s.how.map((r) => (
-          <li><span class="row-k">{r.k}</span><span class="muted">{r.v}</span></li>
-        ))}
-        <li><span class="row-k">{s.notDelegatedK}</span><span class="muted">{s.notDelegatedV}</span></li>
-      </ul>
-    </div>
+  <section id="experience" class="block" aria-labelledby="exp-title">
+    <h2 id="exp-title" class="eyebrow">{s.whereWorked}</h2>
+    <ul class="jobs">
+      {s.experience.map((e) => (
+        <li>
+          <span class="job-dates">{e.dates}</span>
+          <span class="job-role">{e.role}</span>
+          <span class="job-co">{e.company}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="edu">{s.education}</p>
   </section>
 
-  {site.photo && (
-    <figure class="photo">
-      <img src={site.photo} alt={s.photoAlt} loading="lazy" />
-    </figure>
-  )}
-
-  <section id="experience" class="split" aria-labelledby="exp-title">
-    <h2 id="exp-title" class="h2">{s.experienceLabel}</h2>
-    <div class="text">
-      <ul class="rows exp">
-        {s.experience.map((e) => (
-          <li>
-            <span class="row-k">{e.company}</span>
-            <span class="muted exp-role">{e.role}</span>
-            <span class="subtle">{e.dates}</span>
-          </li>
-        ))}
-      </ul>
-      <p class="edu subtle">{s.education}</p>
-    </div>
-  </section>
-
-  <section id="contact" class="contact" aria-labelledby="contact-title">
+  <section id="contact" class="cta" aria-labelledby="contact-title">
     <h2 id="contact-title">{s.contactTitle}</h2>
-    <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
-    <p class="subtle">{s.availability}</p>
+    <a class="cta-mail" href={`mailto:${site.email}`}>{site.email}</a>
   </section>
-  <script is:inline>
-    (function () {
-      var moon = document.querySelector('.moon');
-      if (!moon || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      document.querySelectorAll('.hero-projects .hp').forEach(function (a) {
-        a.addEventListener('click', function (e) {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0 || getComputedStyle(moon).display === 'none') return;
-          var img = moon.querySelector('img[data-i="' + a.dataset.i + '"]');
-          if (!img) return;
-          e.preventDefault();
-          var r = moon.getBoundingClientRect();
-          var cx = r.left + r.width / 2, cy = r.top + r.height / 2, r0 = r.width * 0.42;
-          var far = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
-          var z = document.createElement('div');
-          z.className = 'moon-zoom';
-          z.style.backgroundImage = 'url(' + img.currentSrc + ')';
-          z.style.backgroundPosition = cx + 'px ' + cy + 'px';
-          z.style.backgroundSize = 'auto ' + r.height + 'px';
-          z.style.clipPath = 'circle(' + r0 + 'px at ' + cx + 'px ' + cy + 'px)';
-          z.style.filter = 'blur(2px)';
-          document.body.appendChild(z);
-          z.getBoundingClientRect();
-          z.style.backgroundPosition = 'center'; z.style.backgroundSize = 'cover';
-          z.style.transition += ', background-size .8s cubic-bezier(.7,0,.2,1), background-position .8s cubic-bezier(.7,0,.2,1)';
-          z.style.clipPath = 'circle(' + far + 'px at ' + cx + 'px ' + cy + 'px)';
-          z.style.filter = 'none';
-          setTimeout(function () { location.href = a.href; }, 780);
-        });
-      });
-      // coming back with the browser's back button: clear the overlay
-      addEventListener('pageshow', function () { document.querySelectorAll('.moon-zoom').forEach(function (n) { n.remove(); }); });
-    })();
-  </script>
 </Base>
 
 <style>
-  .photo { margin: 104px 0 0; }
-  .photo img { width: 100%; height: auto; border-radius: var(--p-radius-md); }
   .hero {
     position: relative; overflow: hidden; isolation: isolate;
-    margin: 8px;
-    height: calc(100svh - 16px); min-height: 560px;
-    border-radius: var(--p-radius-lg);
-    background: #E8E9E6;
-    display: flex; align-items: flex-start;
+    height: min(100svh, 1080px); min-height: 560px; background: #E8E9E6;
   }
-  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; }
-  .hero-bg { transition: opacity .7s cubic-bezier(.4, 0, .2, 1); }
+  .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; z-index: -1; transition: opacity .7s cubic-bezier(.4, 0, .2, 1); }
   .hero-bg--dark { opacity: 0; }
-  .hero-bg--dimmed { filter: brightness(.38) saturate(.75) contrast(1.05); }
+  .hero-bg--dimmed { filter: brightness(.38) saturate(.75); }
   :global([data-theme="dark"]) .hero { background: #0B0D10; }
   :global([data-theme="dark"]) .hero-bg--light { opacity: 0; }
   :global([data-theme="dark"]) .hero-bg--dark { opacity: 1; }
-  /* keep the headline legible where the peaks rise behind it on narrow screens */
-  @media (max-width: 640px) {
-    :global([data-theme="dark"]) .hero::before {
-      content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
-      background: linear-gradient(to bottom, rgba(8, 12, 14, .55), rgba(8, 12, 14, .35) 55%, transparent 75%);
-    }
+  .hero-text { max-width: 1280px; margin: 0 auto; padding: clamp(120px, 16vh, 180px) clamp(20px, 5.5vw, 80px) 40px; }
+  .hero h1 {
+    margin: 0; max-width: 15ch; color: var(--color-heading);
+    font-size: clamp(40px, 5.2vw, 76px); line-height: 1.02; font-weight: 700; letter-spacing: -0.04em;
   }
-  /* text lines up with the full-width nav above it */
-  .hero-text {
-    position: relative; z-index: 1;
-    width: 100%;
-    padding: clamp(120px, 15vh, 176px) clamp(12px, 2.2vw, 32px) 40px;
+  .hero-sub {
+    margin: 28px 0 0; max-width: 30ch; color: var(--color-heading);
+    font-size: clamp(20px, 2vw, 32px); line-height: 1.2; font-weight: 600; letter-spacing: -0.025em;
   }
-  @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
-  .hero h1 { color: var(--color-heading); }
-  .hero-soft { color: var(--color-heading-soft); }
-  :global([data-theme="dark"]) .hero-sub { color: #C3C9CF; }
-  .hero-sub { margin: 24px 0 0; max-width: 46ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: #3E5F74; }
-  h1 {
-    margin: 0;
-    font-size: clamp(40px, 5.8vw, 72px);
-    line-height: 1.04;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    max-width: 20ch;
-  }
+  :global([data-theme="dark"]) .hero h1, :global([data-theme="dark"]) .hero-sub { color: #EDEDED; }
 
-  .work { padding-top: clamp(64px, 8vw, 104px); }
-  .hero { flex-direction: column; justify-content: space-between; }
-  .moon {
-    position: absolute; z-index: 0; pointer-events: none;
-    top: 30%; right: clamp(40px, 6vw, 110px);
-    width: clamp(240px, 25vw, 420px); aspect-ratio: 1; border-radius: 50%; overflow: hidden;
-    -webkit-mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
-    mask-image: radial-gradient(circle closest-side, #000 84%, transparent 100%);
-    filter: drop-shadow(0 0 60px rgba(255, 255, 255, .35));
+  .block { padding-top: clamp(40px, 5vw, 64px); }
+  .eyebrow {
+    margin: 0 0 24px; display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-subtle);
   }
-  .hero-fg {
-    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
-    object-fit: cover; object-position: center bottom;
-    transition: opacity .7s cubic-bezier(.4, 0, .2, 1);
-  }
-  .hero-fg--dark { opacity: 0; }
-  :global([data-theme="dark"]) .hero-fg--light { opacity: 0; }
-  :global([data-theme="dark"]) .hero-fg--dark { opacity: 1; }
-  .moon-face, .moon img { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .moon-face {
-    background:
-      linear-gradient(215deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, .9) 30%, rgba(255, 255, 255, .45) 62%, rgba(255, 255, 255, 0) 92%);
-    opacity: .72; transition: opacity .5s ease;
-  }
-  .moon img {
-    object-fit: cover; opacity: 0; transform: scale(1.08);
-    transition: opacity .45s ease, transform .9s cubic-bezier(.2, .7, .2, 1);
-  }
-  .hero:has(.hp[data-i="0"]:hover, .hp[data-i="0"]:focus-visible) .moon img[data-i="0"],
-  .hero:has(.hp[data-i="1"]:hover, .hp[data-i="1"]:focus-visible) .moon img[data-i="1"],
-  .hero:has(.hp[data-i="2"]:hover, .hp[data-i="2"]:focus-visible) .moon img[data-i="2"],
-  .hero:has(.hp[data-i="3"]:hover, .hp[data-i="3"]:focus-visible) .moon img[data-i="3"],
-  .hero:has(.hp[data-i="4"]:hover, .hp[data-i="4"]:focus-visible) .moon img[data-i="4"] { opacity: .9; transform: none; }
-  .hero:has(.hp:hover, .hp:focus-visible) .moon-face { opacity: 0; }
-  :global([data-theme="dark"]) .moon { filter: drop-shadow(0 0 70px rgba(200, 220, 230, .18)); }
-  :global([data-theme="dark"]) .moon-face {
-    background: linear-gradient(215deg, rgba(232, 238, 240, .9) 0%, rgba(205, 216, 222, .55) 34%, rgba(169, 191, 201, .16) 66%, rgba(169, 191, 201, 0) 92%);
-  }
-  @media (prefers-reduced-motion: reduce) { .moon img { transition: opacity .2s ease; transform: none; } }
-  @media (max-width: 760px) {
-    .moon { display: none; }
-  }
-  /* Click: the moon grows to fill the screen, then we land on the project. */
-  :global(.moon-zoom) {
-    position: fixed; inset: 0; z-index: 50; pointer-events: none;
-    background: var(--color-bg) center / cover no-repeat;
-    transition: clip-path .8s cubic-bezier(.7, 0, .2, 1), filter .8s ease;
-  }
-  /* Bottom bar: just the project names. Hover shifts the colour. */
-  .hero-projects {
-    position: relative; z-index: 1; align-self: stretch;
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 32px;
-    padding: 20px clamp(12px, 2.2vw, 32px) 24px;
-    color: var(--color-heading);
-  }
-  .hp { padding: 10px 0; font-size: 16px; transition: color .25s ease; }
-  .hp:hover, .hp:focus-visible { color: var(--p-color-surface-0); }
-  .hp-name { font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
-  .hp-type { font-weight: 600; }
-  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
-  :global([data-theme="dark"]) .hp:hover, :global([data-theme="dark"]) .hp:focus-visible { color: #A9BFC9; }
-  @media (max-width: 760px) {
-    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
-    .hp { padding: 8px 0; font-size: 15px; }
-  }
-  :global([data-theme="dark"]) .hero-projects { color: #EDEDED; }
-  @media (max-width: 760px) {
-    .hero-projects { flex-direction: column; gap: 0; padding-bottom: 16px; }
-    .hero-projects a { padding: 8px 0; }
-  }
-  .work-head { margin: 0 0 28px; font-size: clamp(22px, 2.2vw, 28px); font-weight: 700; letter-spacing: -0.025em; color: var(--color-heading); }
-  .work-years { color: var(--color-heading-soft); font-weight: 600; }
-  .cards { display: flex; flex-direction: column; gap: 24px; }
-  .col { display: contents; }
-  @media (min-width: 760px) {
-    .cards { flex-direction: row; align-items: flex-start; gap: 32px; }
-    .col { display: flex; flex-direction: column; gap: 32px; flex: 1 1 0; min-width: 0; }
-  }
-  .card {
-    display: flex; flex-direction: column; height: 100%;
-    background: var(--color-surface-muted);
-    border-radius: var(--p-radius-md);
-    overflow: hidden;
-  }
-  .card:hover { color: inherit; }
-  .card-media {
-    display: block; aspect-ratio: 4 / 3;
-    background: var(--color-surface-strong);
-    overflow: hidden;
-  }
-  .card--short .card-media { aspect-ratio: 6 / 5; }
-  .card--tall .card-media { aspect-ratio: 1 / 1.08; }
-  .card-media img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform 0.5s cubic-bezier(.2,.7,.2,1);
-  }
-  .card:hover .card-media img { transform: scale(1.025); }
-  @media (prefers-reduced-motion: reduce) { .card:hover .card-media img { transform: none; } }
-  /* caption floats over the image as frosted glass */
-  .card { position: relative; }
-  .card-text {
-    position: absolute; left: 0; right: 0; bottom: 0;
-    display: flex; flex-direction: column; gap: 2px;
-    padding: 14px 20px 16px; font-size: 15px;
-    background: rgba(232, 233, 230, 0.94);
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-  }
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .card-text {
-      background: rgba(232, 233, 230, 0.62);
-      -webkit-backdrop-filter: blur(18px) saturate(1.6);
-      backdrop-filter: blur(18px) saturate(1.6);
-    }
-  }
-  .card-text .subtle { color: var(--color-text-muted); }
-  :global([data-theme="dark"]) .card-text { background: rgba(16, 18, 22, 0.92); border-top-color: rgba(255,255,255,.06); }
-  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    :global([data-theme="dark"]) .card-text { background: rgba(16, 18, 22, 0.55); }
-  }
-  :global([data-theme="dark"]) .card--bordered::after { border-color: var(--color-border); }
-  .card--bordered::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    border: 1px solid #D3DDE1; border-radius: inherit;
-  }
-  .card-title { font-weight: 500; }
+  .eyebrow::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 
-  .text { display: flex; flex-direction: column; gap: 20px; font-size: 16px; line-height: 1.6; }
-  .text p { margin: 0; max-width: 620px; }
-  .text .big { font-size: clamp(19px, 1.6vw, 22px); line-height: 1.5; color: var(--color-text); letter-spacing: -0.01em; }
-  .text .rows { margin-top: 12px; }
-  .rows li { display: flex; flex-direction: column; gap: 4px; }
-  .row-k { font-weight: 500; }
-  .exp li { display: grid; grid-template-columns: 1fr; gap: 2px; }
-  .edu { font-size: 14px; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 32px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; gap: 40px; } }
+  .item { display: flex; flex-direction: column; }
+  .item:hover { color: inherit; }
+  .item-media { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--color-surface-muted); margin-bottom: 18px; }
+  .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .item:hover .item-media img { transform: scale(1.03); }
+  .item-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .item-co { font-size: 20px; font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; color: var(--color-heading); }
+  .item-year { font-size: 15px; color: var(--color-text-subtle); }
+  .item-sub { margin-top: 2px; font-size: 15px; color: var(--color-text-muted); }
 
-  .contact {
-    margin-top: 128px;
-    padding: clamp(56px, 8vw, 104px) 24px;
-    background: var(--color-surface-muted);
-    border-radius: var(--p-radius-lg);
-    display: flex; flex-direction: column; align-items: center; gap: 20px;
-    text-align: center;
+  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; padding-top: clamp(72px, 9vw, 120px); }
+  @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
+  .about-photo { width: 100%; aspect-ratio: 0.92; object-fit: cover; display: block; }
+  .tag { margin: 0 0 18px; font-size: 13px; text-transform: uppercase; letter-spacing: .02em; color: var(--color-text-subtle); }
+  .about-text h2 { margin: 0; font-size: clamp(28px, 2.8vw, 44px); line-height: 1.12; font-weight: 500; letter-spacing: -0.03em; color: var(--color-heading); max-width: 14ch; }
+  .about-text p:last-child { margin: 14px 0 0; font-size: 16px; line-height: 1.5; color: var(--color-text-muted); max-width: 44ch; }
+
+  .jobs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-border); }
+  .jobs li { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; align-items: baseline; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--color-border); }
+  .job-dates { font-size: 15px; color: var(--color-text-subtle); }
+  .job-role { font-size: clamp(18px, 1.7vw, 24px); font-weight: 500; letter-spacing: -0.015em; color: var(--color-heading); }
+  .job-co { font-size: 15px; color: var(--color-text-subtle); text-align: right; }
+  @media (max-width: 720px) { .jobs li { grid-template-columns: 1fr auto; } .job-dates { grid-column: 1 / -1; } }
+  .edu { margin: 22px 0 0; font-size: 14px; line-height: 1.6; color: var(--color-text-muted); max-width: 90ch; }
+
+  .cta {
+    margin-top: clamp(64px, 8vw, 96px); padding: clamp(48px, 7vw, 88px) 24px;
+    background: var(--color-surface-strong); border-radius: 20px;
+    display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;
   }
-  .contact h2 {
-    margin: 0; max-width: 16ch;
-    font-size: clamp(30px, 4vw, 52px); line-height: 1.08;
-    font-weight: 600; letter-spacing: -0.035em;
-  }
-  .mail { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.01em; overflow-wrap: anywhere; }
-  .contact p { margin: 0; font-size: 14px; }
+  .cta h2 { margin: 0; max-width: 14ch; font-size: clamp(32px, 4vw, 60px); line-height: 1.04; font-weight: 500; letter-spacing: -0.035em; color: var(--color-heading); }
+  .cta-mail { font-size: clamp(20px, 2.6vw, 40px); font-weight: 500; letter-spacing: -0.02em; color: var(--color-heading); overflow-wrap: anywhere; }
+  .cta-mail:hover { color: var(--color-heading-soft); }
 </style>

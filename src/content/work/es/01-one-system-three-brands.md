@@ -14,6 +14,8 @@ meta:
   - { label: "Empresa", value: "UNIR · Grupo Proeduca" }
   - { label: "Marcas", value: "Estudiantes, Prodi, Foundations" }
   - { label: "Herramientas", value: "Figma, Token Studio, Zeroheight" }
+company: "Proeduca"
+year: "2025"
 cover: "/work/ds-cover.jpg"
 hero: "Vista general de componentes del sistema: input de chat, tarjetas de tarea, sidebar, calendario, botones y campos de formulario"
 ---

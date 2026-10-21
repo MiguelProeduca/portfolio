@@ -14,6 +14,8 @@ meta:
   - { label: "Brand", value: "Estudiantes" }
   - { label: "Platforms", value: "Mobile, tablet and desktop" }
   - { label: "Status", value: "In handoff to engineering" }
+company: "UNIR"
+year: "2026"
 cover: "/work/student-cover.jpg"
 coverBorder: true
 hero: "Student app screens on mobile: my space, mail, degree page and the task board"
