@@ -25,6 +25,7 @@ const projectLinks = cases.flatMap((c) =>
       <h1>{s.h1a} <span class="hero-soft">{s.h1b}</span></h1>
       <p class="hero-sub">{s.heroSub}</p>
     </div>
+    <ul class="skills" aria-label="Skills">{s.skills.map((k) => <li>{k}</li>)}</ul>
   </section>
 
   <section id="work" class="block" aria-labelledby="work-title">
@@ -95,6 +96,16 @@ const projectLinks = cases.flatMap((c) =>
     margin: 0; max-width: 24ch; color: var(--color-heading);
     font-size: clamp(34px, 4.6vw, 64px); line-height: 1.04; font-weight: 800; letter-spacing: -0.04em;
   }
+  /* Skills bar along the bottom of the collage, like the old project bar. */
+  .hero { display: flex; flex-direction: column; justify-content: space-between; }
+  .skills {
+    list-style: none; margin: 0; padding: 20px calc(8px + clamp(12px, 2.2vw, 32px)) 26px;
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 28px;
+    color: var(--color-heading);
+  }
+  .skills li { font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: .01em; }
+  :global([data-theme="dark"]) .skills { color: #EDEDED; }
+  @media (max-width: 760px) { .skills { justify-content: flex-start; gap: 4px 18px; } .skills li { font-size: 13px; } }
   .hero-soft { display: block; color: var(--color-heading-soft); }
   .hero-sub {
     margin: 24px 0 0; max-width: 54ch; color: #3E5F74;
