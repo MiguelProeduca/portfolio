@@ -1,19 +1,19 @@
 ---
 order: 3
-title: Todas las tareas en un solo lugar
+title: El día a día del estudiante, en una sola app
 cardTitle: "App del estudiante · UNIR"
 cardSub: "Un espacio para organizar el día a día académico."
 heroLinks:
   - { label: "Portal del estudiante", type: "Proyecto" }
 kicker: Producto
 tag: Producto · App del estudiante
-summary: Un organizador de tareas para estudiantes, con reglas que mantienen fiables los datos oficiales.
-lead: Diseñé de principio a fin la app del estudiante de UNIR, su espacio virtual con calendario, agenda, tareas, trámites y carné. Este caso se centra en el organizador de tareas, que reúne en un solo lugar todo lo que el alumno tiene que hacer.
+summary: "La app de UNIR donde el alumno tiene todo: su resumen, la agenda, las tareas, el correo, los chats y los trámites."
+lead: "Diseñé desde cero la app del estudiante de UNIR: el lugar donde el alumno ve su resumen, organiza su agenda y sus tareas, se comunica y hace todos sus trámites. Web app pensada como aplicación, en móvil, tablet y escritorio."
 meta:
-  - { label: "Rol", value: "Diseño de principio a fin, con revisión de mi responsable" }
-  - { label: "Marca", value: "Estudiantes" }
-  - { label: "Plataformas", value: "Mobile, tablet y desktop" }
-  - { label: "Estado", value: "En traspaso a desarrollo" }
+  - { label: "Rol", value: "Diseño de UI de principio a fin y flujos de UI" }
+  - { label: "Equipo", value: "Mano a mano con UX/producto y desarrollo" }
+  - { label: "Plataformas", value: "Móvil, tablet y escritorio" }
+  - { label: "Estado", value: "Publicada, en piloto" }
 company: "UNIR"
 year: "2026"
 cover: "/work/student-cover.jpg"
@@ -21,24 +21,51 @@ coverBorder: true
 hero: "Pantallas de la app del estudiante en móvil: mi espacio, correo, página de titulación y el tablero de tareas"
 ---
 
-## Problema
+## La app
 
-Los alumnos echaban en falta un lugar donde tener todas sus tareas juntas. Las entregas, lo académico, los trámites y lo personal vivían dispersos.
+Es el espacio personal del alumno de UNIR. Antes, todo esto vivía en un Moodle y en varias webs dispersas: había que saltar de un sitio a otro y no era fácil saber qué tenías pendiente, como en una universidad tradicional en la que todo pasa por secretaría.
 
-Como la app está en contacto constante con los alumnos, su feedback llegaba directo: necesitaban un sitio para organizarse.
+La app se diseñó desde cero, sin una versión anterior a la que sustituir, para que el alumno tenga su vida académica en un solo sitio.
 
-## Solución
+## Qué tiene
 
-Un organizador con dos vistas de las mismas tareas:
+**Cinco secciones principales:**
 
-- **Tablero.** La vista principal, con una columna por estado, para verlo todo de un vistazo y mover el trabajo de una fase a otra.
-- **Lista.** Una vista más detallada para quien la prefiera. No todos los alumnos se organizan igual.
+- **Mi espacio.** La home: un resumen de tu área personal, de la titulación que estudias (o de las varias, si es el caso) y de lo próximo en tu calendario. Es el centro de la app porque reúne un poco de todo.
+- **Calendario académico.** Una agenda completa, con vistas de día, tres días, semana y mes, como la de cualquier calendario de escritorio.
+- **Tareas.** Un organizador con todo lo que el alumno tiene que hacer, oficial y personal.
+- **Correo.** Un cliente de correo completo, al estilo de Outlook.
+- **Chats.** Conversaciones con compañeros y profesores.
 
-Las tareas se filtran por titulación, asignatura y tipo de tarea. En desktop, los filtros activos aparecen como chips; en mobile se agrupan en un panel inferior de "Filtrar y ordenar".
+**Y secciones secundarias:** tu mentor, trámites y ayuda (donde se hacen todos los trámites de la carrera), la documentación de matrícula, el carné de estudiante, tus servicios, configuración y soporte.
 
-## Lo más difícil · el modelo de tareas
+<figure>
+  <div class="placeholder">[Mi espacio en escritorio, con la sidebar y el resumen]</div>
+  <figcaption>Fig. 02 · Mi espacio, el resumen de todo</figcaption>
+</figure>
 
-Lo complejo no fue la interfaz, sino decidir cómo se comporta cada tarea. Cada una combina un estado (pendiente, completada, descartada) y un tipo.
+## Cómo está planteada
+
+Con tantas secciones, el reto era que no pareciera un laberinto. Lo resolví con una estructura muy reconocible, iterada muchas veces con producto: **una sidebar con todas las secciones y una home que resume lo importante,** para que el alumno entienda dónde está cada cosa sin pensarlo.
+
+Diseñé la UI de principio a fin y los flujos de UI de cada sección. La arquitectura y la UX se trabajaron mano a mano con producto, y la construcción, con desarrollo. Al ser tan grande, en algunos momentos colaboraron otras personas, pero el concepto y el diseño final son míos.
+
+Está pensada como aplicación aunque hoy es una web app, y funciona en móvil, tablet y escritorio. Todo está construido con el [sistema de diseño multimarca](../one-system-three-brands/).
+
+## La agenda
+
+Fue la parte más difícil. Un calendario académico tiene que mostrar mucha información (clases, entregas, exámenes, eventos) en cuatro vistas distintas y en tres tamaños de pantalla, sin perder legibilidad. Como componente, fue el mayor reto de toda la app.
+
+<figure>
+  <div class="placeholder">[Calendario académico en sus vistas de semana y mes]</div>
+  <figcaption>Fig. 03 · El calendario académico</figcaption>
+</figure>
+
+## Las tareas
+
+Es la parte que más me gusta. Reúne en un solo lugar todo lo que el alumno tiene que hacer, con dos vistas de las mismas tareas: **tablero,** con una columna por estado, y **lista,** más detallada.
+
+Lo complejo fue decidir cómo se comporta cada tarea. Hay cuatro tipos, y solo las personales se pueden editar. Las académicas, las entregas y las de gestión se pueden duplicar, y la copia sí es editable. Así lo oficial sigue siendo fiable, pero el alumno puede adaptarlo a su manera de trabajar.
 
 | Tipo | Editable | Duplicable |
 | --- | --- | --- |
@@ -47,27 +74,20 @@ Lo complejo no fue la interfaz, sino decidir cómo se comporta cada tarea. Cada 
 | Entrega | No | Sí, y la copia es editable |
 | Gestión | No | Sí, y la copia es editable |
 
-La decisión más difícil fue si el alumno podía editar cualquier tarea. Decidimos que no: solo las personales. Las demás se pueden duplicar, y la copia sí es editable.
-
-Así el organizador sigue siendo fiable, porque las tareas oficiales no cambian, pero el alumno conserva la libertad de adaptarlas a su manera de trabajar.
-
-## Especificado para desarrollo
-
-El organizador llega a desarrollo sin huecos de interpretación:
-
-- **Empty states,** incluido el de tareas vencidas.
-- **Tooltips explicativos y contextuales** para los tipos de tarea, marcar como completada y las tareas descartadas.
-- **Disposición de columnas en cuatro tamaños** (375, 768, 1280 y 1920), con las reglas de cada uno.
-- **Filtros por dispositivo:** chips en desktop y panel inferior en mobile.
-- **Anotaciones** en cada bloque que explican el comportamiento y los casos límite.
-
-Todo está montado con componentes del sistema de diseño, incluidas las tarjetas de tarea y las columnas del tablero.
-
 <figure>
-  <div class="placeholder">[Vistas de tablero y lista, una junto a la otra]</div>
-  <figcaption>Fig. 02 · Dos vistas de las mismas tareas</figcaption>
+  <div class="placeholder">[Tareas en vista de tablero y de lista]</div>
+  <figcaption>Fig. 04 · Dos vistas de las mismas tareas</figcaption>
 </figure>
 
-## Resultado
+## Correo y chats
 
-El organizador está en traspaso a desarrollo como parte de la evolución de la app del estudiante. Por primera vez, el alumno tendrá todas sus tareas en un solo lugar, dentro de la misma app donde ya consulta su calendario, sus trámites y su carné.
+Las otras dos piezas de las que estoy más contento. El correo funciona como un cliente completo y los chats permiten hablar con compañeros y profesores sin salir de la app, así que el alumno ya no necesita otras herramientas para comunicarse con la universidad.
+
+<figure>
+  <div class="placeholder">[Correo y chats]</div>
+  <figcaption>Fig. 05 · Correo y chats</figcaption>
+</figure>
+
+## Dónde está hoy
+
+La app está publicada y en fase piloto, con alumnos reales. Su feedback nos llega de forma continua y sirve para seguir iterando.
