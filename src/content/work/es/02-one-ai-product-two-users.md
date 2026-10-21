@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title: Un producto de IA, dos usuarios
 cardTitle: "SUPER EDU y AGC"
 cardSub: "Inteligencia artificial para profesores y estudiantes."
@@ -15,6 +15,8 @@ meta:
   - { label: "Marca", value: "Prodi" }
   - { label: "Plataformas", value: "Desktop y mobile" }
   - { label: "Estado", value: "Visor del alumno en piloto" }
+company: "Prodi"
+year: "2025"
 cover: "/work/ai-cover.jpg"
 coverPosition: "right"
 hero: "Espacio del profesor y visor del alumno, uno junto al otro"

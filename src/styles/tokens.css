@@ -37,6 +37,8 @@
   --p-color-surface-800: #383C48;
   --p-color-surface-900: #22252F;
   --p-color-surface-950: #181C26;
+  --p-color-surface-25: #FAFAFA;
+  --p-color-surface-350: #DBDFF5;
   --p-font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --p-space-1: 4px;
   --p-space-2: 8px;
@@ -54,15 +56,15 @@
   --p-radius-pill: 999px;
 
   /* semantic · light */
-  --color-bg: var(--p-color-cloud-50);
-  --color-surface: var(--p-color-cloud-50);
-  --color-surface-muted: var(--p-color-cloud-100);
-  --color-surface-strong: var(--p-color-cloud-300);
-  --color-text: var(--p-color-cloud-900);
-  --color-text-muted: var(--p-color-cloud-700);
-  --color-text-subtle: var(--p-color-cloud-650);
-  --color-border: var(--p-color-cloud-100);
-  --color-border-strong: var(--p-color-cloud-300);
+  --color-bg: var(--p-color-surface-25);
+  --color-surface: var(--p-color-surface-25);
+  --color-surface-muted: var(--p-color-surface-200);
+  --color-surface-strong: var(--p-color-surface-300);
+  --color-text: var(--p-color-surface-950);
+  --color-text-muted: var(--p-color-surface-800);
+  --color-text-subtle: var(--p-color-surface-600);
+  --color-border: var(--p-color-surface-350);
+  --color-border-strong: var(--p-color-surface-400);
   --color-accent: var(--p-color-cloud-700);
   --color-inverse-bg: var(--p-color-cloud-900);
   --color-inverse-text: var(--p-color-cloud-50);

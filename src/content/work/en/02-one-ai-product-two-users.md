@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title: One AI product, two users
 cardTitle: "SUPER EDU & AGC"
 cardSub: "AI for teachers and students."
@@ -15,6 +15,8 @@ meta:
   - { label: "Brand", value: "Prodi" }
   - { label: "Platforms", value: "Desktop and mobile" }
   - { label: "Status", value: "Student viewer in pilot" }
+company: "Prodi"
+year: "2025"
 cover: "/work/ai-cover.jpg"
 coverPosition: "right"
 hero: "Teacher workspace and student viewer side by side"

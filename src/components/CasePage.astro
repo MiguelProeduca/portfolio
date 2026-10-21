@@ -95,6 +95,9 @@ const { Content } = await render(entry);
     color: var(--color-text); margin: 72px 0 16px;
   }
   .prose :global(h2:first-child) { margin-top: 0; }
+  .prose :global(blockquote) { margin: 32px 0; padding: 4px 0 4px 22px; border-left: 2px solid var(--color-border-strong); font-size: clamp(19px, 1.7vw, 23px); line-height: 1.45; color: var(--color-text); }
+  .prose :global(blockquote p) { margin: 0; }
+  .prose :global(a) { text-decoration: underline; text-underline-offset: 3px; }
   .prose :global(strong) { font-weight: 600; color: var(--color-text); }
   .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
   .prose :global(li) { margin-bottom: 8px; }
