@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 title: Un producto de IA, dos usuarios
 cardTitle: "SUPER EDU y AGC"
 cardSub: "Inteligencia artificial para profesores y estudiantes."

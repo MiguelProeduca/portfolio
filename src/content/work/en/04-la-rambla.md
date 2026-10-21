@@ -6,10 +6,10 @@ cardSub: "An app that helps women organise to climb together."
 kicker: Product · Bootcamp project
 tag: Product · La Rambla
 summary: An app that helps women climbers organise and climb together.
-lead: Final project of my UX/UI bootcamp. I started from a hypothesis about how women who climb connect; research disproved it, and I designed the app around what they actually needed.
+lead: Final project of my UX/UI bootcamp at Upgrade Hub. I started from a hypothesis about how women who climb connect; research disproved it, and I designed the app around what they actually needed.
 meta:
   - { label: "Role", value: "Research, analysis and design" }
-  - { label: "Type", value: "UX/UI bootcamp final project" }
+  - { label: "Type", value: "Final project, Upgrade Hub UX/UI bootcamp" }
   - { label: "Platform", value: "Mobile" }
   - { label: "Year", value: "2023" }
 company: "La Rambla"

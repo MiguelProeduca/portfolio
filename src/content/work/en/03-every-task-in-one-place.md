@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 2
 title: A student's day-to-day, in one app
 cardTitle: "Student app · UNIR"
 cardSub: "A space to organise everyday academic life."

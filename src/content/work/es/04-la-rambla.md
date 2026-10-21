@@ -6,10 +6,10 @@ cardSub: "Una app para que las mujeres se organicen para escalar juntas."
 kicker: Producto · Proyecto de bootcamp
 tag: Producto · La Rambla
 summary: Una app para que las escaladoras se organicen y escalen juntas.
-lead: Proyecto final de mi bootcamp de UX/UI. Partí de una hipótesis sobre cómo se conectan las mujeres que escalan, la investigación la desmontó y diseñé la app a partir de lo que de verdad necesitaban.
+lead: Proyecto final de mi bootcamp de UX/UI en Upgrade Hub. Partí de una hipótesis sobre cómo se conectan las mujeres que escalan, la investigación la desmontó y diseñé la app a partir de lo que de verdad necesitaban.
 meta:
   - { label: "Rol", value: "Investigación, análisis y diseño" }
-  - { label: "Tipo", value: "Proyecto final de bootcamp UX/UI" }
+  - { label: "Tipo", value: "Proyecto final del bootcamp de UX/UI de Upgrade Hub" }
   - { label: "Plataforma", value: "Mobile" }
   - { label: "Año", value: "2023" }
 company: "La Rambla"
