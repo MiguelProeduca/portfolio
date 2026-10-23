@@ -106,5 +106,5 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
   transition: background-color .6s ease, color .6s ease, border-color .6s ease, fill .6s ease, opacity .6s ease !important;
 }
 
-/* display face for big titles (Adobe Fonts kit, single light weight); body stays Inter */
-:root { --font-display: 'cofo-cinema1909', 'Inter', serif; }
+/* display face for big titles (Adobe Fonts kit), set in capitals; body stays Inter */
+:root { --font-display: 'erbaum', 'Inter', sans-serif; }
