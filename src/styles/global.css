@@ -107,4 +107,7 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
 }
 
 /* display face for big titles (Adobe Fonts kit), set in capitals; body stays Inter */
-:root { --font-display: 'erbaum', 'Inter', sans-serif; }
+:root { --font-display: 'Inter Tight', 'Inter', sans-serif; }
+
+/* black-and-white direction: pure white page */
+body { background: #fff; }

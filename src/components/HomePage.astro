@@ -9,203 +9,145 @@ const { lang } = Astro.props;
 const s = t[lang];
 const cases = await getCases(lang);
 const base = prefix(lang);
-const projectLinks = cases.flatMap((c) =>
-  (c.data.heroLinks ?? [{ label: c.data.cardTitle ?? c.data.title, type: c.data.kicker }]).map((l) => ({
-    ...l,
-    href: `${base}/work/${slugOf(c.id)}/${l.hash ? '#' + l.hash : ''}`,
-    cover: c.data.cover,
-  })),
-);
 ---
-<Base lang={lang} overlay>
-  <section class="hero" slot="hero" data-hero>
-    <div class="hero-bg-wrap" data-hero-bg><img class="hero-bg" src="/collage.jpg" alt={s.photoAlt} fetchpriority="high" /></div>
-    <div class="hero-sheet" data-hero-sheet>
-      <p class="hero-name" data-hero-name>{site.name}</p>
-      <h1>{s.h1a}</h1>
-      <p class="hero-soft">{s.h1b}</p>
+<Base lang={lang} wide>
+  <section class="hero" slot="hero">
+    <div class="hero-text">
+      <div class="hero-titles">
+        <p class="hero-name">{site.name}</p>
+        <h1>{s.role}</h1>
+      </div>
+      <p class="hero-sub">{s.heroSub}</p>
+    </div>
+    <div class="hero-media">
+      <img src="/hero-collage.webp" alt={s.heroAlt} fetchpriority="high" />
     </div>
   </section>
 
-  <section id="work" class="block" aria-labelledby="work-title">
-    <h2 id="work-title" class="eyebrow">{s.recentWork}</h2>
+  <section id="work" class="dark" slot="hero" aria-labelledby="work-title">
+    <h2 id="work-title" class="band">{s.workBand}</h2>
     <ul class="grid">
       {cases.map((c, i) => (
         <li>
           <a href={`${base}/work/${slugOf(c.id)}/`} class="item">
-            <span class="item-media">
-              {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 2 ? 'eager' : 'lazy'} />}
+            {c.data.cover && <img src={c.data.cover} style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} alt="" loading={i < 2 ? 'eager' : 'lazy'} />}
+            <span class="item-caption">
+              <span class="item-co">{c.data.company ?? c.data.kicker} <span class="item-year">{c.data.year}</span></span>
+              <span class="item-sub">{c.data.cardTitle ?? c.data.title}</span>
             </span>
-            <span class="item-row">
-              <span class="item-co">{c.data.company ?? c.data.kicker}</span>
-              <span class="item-year">{c.data.year}</span>
-            </span>
-            <span class="item-sub">{c.data.cardTitle ?? c.data.title}</span>
           </a>
         </li>
       ))}
     </ul>
   </section>
 
-  <section id="about" class="block" aria-labelledby="about-title">
-    <h2 id="about-title" class="eyebrow">{s.aboutTag}</h2>
+  <section id="about" slot="hero" aria-labelledby="about-title">
+    <h2 id="about-title" class="band">{s.aboutTag}</h2>
     <div class="about">
-    <img class="about-photo" src={site.portrait} alt={s.portraitAlt} loading="lazy" />
-    <div class="about-text">
-      <p class="bio-title" set:html={s.bioTitle} />
-      {s.bio.map((p) => <p>{p}</p>)}
-    </div>
+      <div class="about-photo"><img src="/portrait-tall.webp" alt={s.portraitAlt} loading="lazy" /></div>
+      <div class="about-text">
+        <h3>{s.aboutTitle}</h3>
+        {s.bio.map((p) => <p>{p}</p>)}
+      </div>
     </div>
   </section>
 
-  <section id="experience" class="block" aria-labelledby="exp-title">
-    <h2 id="exp-title" class="eyebrow">{s.whereWorked}</h2>
-    <ul class="jobs">
-      {s.experience.map((e) => (
-        <li>
-          <span class="job-dates">{e.dates}</span>
-          <span class="job-role">{e.role}</span>
-          <span class="job-co">{e.company}</span>
-        </li>
-      ))}
-    </ul>
-    <p class="edu">{s.education}</p>
+  <section id="experience" slot="hero" aria-labelledby="exp-title">
+    <h2 id="exp-title" class="band">{s.experienceLabel}</h2>
+    <div class="exp">
+      <ul class="jobs">
+        {s.experience.map((e) => (
+          <li>
+            <span class="job-dates">{e.dates}</span>
+            <span class="job-role">{e.role}</span>
+            <span class="job-co">{e.company}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="edu">{s.education}</p>
+    </div>
   </section>
 
-  <section id="contact" class="cta" aria-labelledby="contact-title">
-    <h2 id="contact-title">{s.contactTitle}</h2>
-    <a class="cta-mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
-    <p class="cta-note">{s.availability}</p>
+  <section id="contact" slot="hero" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="band">{s.contactBand}</h2>
+    <div class="contact">
+      <p class="contact-title">{s.contactTitle}</p>
+      <a class="contact-mail" href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">→</span></a>
+      <p class="contact-note">{s.availability}</p>
+    </div>
   </section>
 </Base>
 
-<script>
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hero = document.querySelector<HTMLElement>('[data-hero]');
-  const bg = document.querySelector<HTMLElement>('[data-hero-bg]');
-  const sheet = document.querySelector<HTMLElement>('[data-hero-sheet]');
-  const name = document.querySelector<HTMLElement>('[data-hero-name]');
-  const brand = document.querySelector<HTMLElement>('.brand-full');
-  const header = document.querySelector<HTMLElement>('.header-wrap--overlay');
-
-  if (!reduce && hero && bg && sheet && name && brand && header) {
-    document.documentElement.classList.add('js-motion');
-    header.classList.add('is-home');
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const y = window.scrollY;
-      const h = hero.offsetHeight;
-      const p = Math.min(Math.max(y / (h * 0.9), 0), 1);
-      // clouds slower than the page, sheet slightly faster: layers separate
-      bg.style.transform = `translate3d(0, ${y * 0.35}px, 0) scale(${1 + p * 0.06})`;
-      sheet.style.transform = `translate3d(0, ${-y * 0.12}px, 0)`;
-      // the name travels from the sheet into the header
-      name.style.transform = '';
-      const from = name.getBoundingClientRect();
-      const to = brand.getBoundingClientRect();
-      // the sheet itself moves up at 1.12x, so the label closes the gap at that rate
-      const gap = Math.max((from.top - to.top) / 1.12 + y, 1);
-      const nameP = Math.min(Math.max(y / gap, 0), 1);
-      if (to.width) {
-        const dx = (to.left - from.left) * nameP;
-        const dy = (to.top - from.top) * nameP;
-        name.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
-        name.style.opacity = nameP >= 1 ? '0' : '1';
-      } else {
-        name.style.opacity = String(1 - nameP);
-      }
-      header.classList.toggle('show-brand', nameP >= 1);
-      header.classList.toggle("is-solid", nameP >= 1);
-    };
-    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    addEventListener('resize', update);
-    update();
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -10% 0px' });
-    document.querySelectorAll('.item').forEach((el) => io.observe(el));
-  }
-</script>
-
 <style>
-  /* accent colour taken from the collage (AA on the light background) */
-  :global(main) { --accent: #4B6A7E; }
-  /* hero: a sheet of the page laid over the collage; the clouds dissolve into the page below */
-  .hero {
-    position: relative; isolation: isolate; overflow: hidden;
-    height: min(100svh, 1080px); min-height: 600px;
-    display: grid; justify-items: center; align-content: start; padding: clamp(96px, 12vh, 128px) var(--gutter) 0;
+  /* Black and white, big tight grotesk in capitals: the hero splits text and collage,
+     black bands carry each section title. */
+  .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.81fr); min-height: calc(100svh - 72px); background: #fff; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; min-height: 0; } }
+  .hero-text {
+    display: flex; flex-direction: column; justify-content: center; gap: clamp(32px, 3.4vw, 58px);
+    padding: 48px var(--gutter); color: #000; text-transform: uppercase;
+    font-family: var(--font-display); font-weight: 600;
   }
-  .hero-bg-wrap { position: absolute; inset: 0; z-index: -2; will-change: transform; }
-  .hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
-  .hero::after {
-    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; z-index: -1; pointer-events: none;
-    background: linear-gradient(to bottom, transparent, var(--color-bg) 92%);
-  }
-  .hero-sheet {
-    width: min(100%, 940px); background: var(--color-bg); text-align: center;
-    padding: clamp(36px, 5vw, 64px) clamp(24px, 5vw, 80px);
-    box-shadow: 0 30px 80px -40px rgba(24, 28, 38, .35);
-    will-change: transform;
-  }
-  .hero-name { display: inline-block; margin: 0 0 22px; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: #181C26; }
-  .hero h1 {
-    margin: 0 auto; max-width: 22ch; color: #181C26; text-wrap: balance;
-    font-size: clamp(38px, 5.6vw, 84px); line-height: 1; font-weight: 800; letter-spacing: -0.045em;
-  }
-  .hero h1, .eyebrow, .cta h2 { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: -0.005em; }
-  .hero h1 { font-size: clamp(32px, 4.6vw, 72px); line-height: 1.14; max-width: 20ch; }
-  .eyebrow { font-size: clamp(26px, 2.8vw, 40px); line-height: 1.05; }
-  .cta h2 { font-size: clamp(28px, 3.6vw, 52px); line-height: 1.14; }
-  .hero-soft { margin: 22px auto 0; max-width: 34ch; color: #5A6481; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.4; font-weight: 500; letter-spacing: -0.01em; }
+  .hero-titles { display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 42px); }
+  .hero-name { margin: 0; font-size: clamp(30px, 4.6vw, 79px); line-height: 1.04; letter-spacing: -0.04em; }
+  .hero h1 { margin: 0; font-size: clamp(46px, 7.4vw, 128px); line-height: .86; letter-spacing: -0.06em; font-weight: 600; }
+  .hero-sub { margin: 0; max-width: 34ch; font-size: clamp(17px, 2.08vw, 36px); line-height: 1.06; letter-spacing: -0.01em; }
+  .hero-media { position: relative; min-height: 420px; }
+  .hero-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 860px) { .hero-media { aspect-ratio: 4 / 5; min-height: 0; } }
 
-  /* work images ease in as they arrive (only with JS and motion allowed) */
-  :global(html.js-motion) .item { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
-  :global(html.js-motion) .item.is-in { opacity: 1; transform: none; }
-
-  .block { padding-top: clamp(72px, 9vw, 120px); }
-  /* section titles speak with the hero's voice: same family, weight and tracking, smaller */
-  .eyebrow {
-    margin: 0 0 32px; color: #181C26;
-    font-size: clamp(28px, 3vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.04em;
+  .band {
+    margin: 0; padding: clamp(24px, 2.8vw, 48px) var(--gutter); background: #000; color: #F6F6F6; text-align: center;
+    font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em;
+    font-size: clamp(56px, 9.5vw, 164px); line-height: 1.1;
   }
-  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 32px; }
-  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; gap: 40px; } }
-  .item { display: flex; flex-direction: column; }
-  .item:hover { color: inherit; }
-  .item-media { display: block; aspect-ratio: 16 / 10; overflow: hidden; background: var(--color-surface-muted); margin-bottom: 18px; }
-  .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .item:hover .item-media img { transform: scale(1.03); }
-  .item-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .item-co { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--color-heading); }
-  .item-year { font-size: 15px; color: var(--accent); }
-  .item-sub { margin-top: 2px; font-size: 15px; color: var(--color-text-muted); }
 
-  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; }
-  #about, #experience { padding-top: clamp(72px, 9vw, 120px); }
-  @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
-  .about-photo { width: 100%; aspect-ratio: 0.92; object-fit: cover; display: block; }
-  .bio-title { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.22; font-weight: 400; letter-spacing: -0.025em; color: #4A5268; max-width: 26ch; }
-  .bio-title :global(strong) { font-weight: 800; color: #181C26; }
-  .bio-title ~ p { margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-text-muted); max-width: 52ch; }
+  .dark { background: #000; color: #fff; }
+  .grid { list-style: none; margin: 0; padding: 0 var(--gutter) var(--gutter); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; gap: 16px; } }
+  .item { position: relative; display: block; aspect-ratio: 1.03; overflow: hidden; background: #1a1a1a; color: #fff; }
+  .item:hover { color: #fff; }
+  .item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2, .7, .2, 1); }
+  .item:hover img { transform: scale(1.03); }
+  /* caption sits on the image: always on touch, on hover with a mouse */
+  .item-caption {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 64px 24px 22px;
+    display: flex; flex-direction: column; gap: 4px;
+    background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+  }
+  @media (hover: hover) {
+    .item-caption { opacity: 0; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease; }
+    .item:hover .item-caption, .item:focus-visible .item-caption { opacity: 1; transform: none; }
+  }
+  .item-co { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: -0.03em; font-size: clamp(22px, 2.2vw, 36px); line-height: 1; }
+  .item-year { opacity: .6; }
+  .item-sub { font-size: 16px; opacity: .85; }
 
-  .jobs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-border); }
-  .jobs li { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; align-items: baseline; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--color-border); }
-  .job-dates { font-size: 15px; color: var(--accent); }
-  .job-role { font-size: clamp(18px, 1.7vw, 24px); font-weight: 600; letter-spacing: -0.015em; color: var(--color-heading); }
-  .job-co { font-size: 15px; color: var(--color-text-subtle); text-align: right; }
+  .about { display: grid; grid-template-columns: minmax(0, 0.93fr) minmax(0, 1fr); gap: clamp(32px, 4.2vw, 72px); align-items: center; background: #fff; }
+  @media (max-width: 860px) { .about { grid-template-columns: 1fr; } }
+  .about-photo { position: relative; aspect-ratio: 832 / 911; overflow: hidden; }
+  .about-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; }
+  .about-text { padding: 32px var(--gutter) 48px 0; color: #000; }
+  @media (max-width: 860px) { .about-text { padding: 0 var(--gutter) 48px; } }
+  .about-text h3 {
+    margin: 0 0 clamp(24px, 2.8vw, 48px); font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+    font-size: clamp(32px, 4.6vw, 79px); line-height: 1.02; letter-spacing: -0.04em;
+  }
+  .about-text p { margin: 0 0 16px; max-width: 46ch; font-size: clamp(17px, 1.62vw, 28px); line-height: 1.25; }
+
+  .exp { padding: clamp(48px, 7vw, 120px) clamp(var(--gutter), 5vw, 88px); background: #fff; }
+  .jobs { list-style: none; margin: 0; padding: 0; }
+  .jobs li { display: grid; grid-template-columns: minmax(110px, 160px) minmax(0, 1fr) auto; align-items: center; gap: 8px 32px; padding: clamp(22px, 2.3vw, 40px) 0; border-bottom: 1px solid #D6DCF5; }
+  .jobs li:first-child { border-top: 1px solid #D6DCF5; }
+  .job-dates { font-size: clamp(15px, 1.4vw, 24px); letter-spacing: -0.04em; color: #5A6481; }
+  .job-role { font-size: clamp(20px, 2.3vw, 40px); font-weight: 500; letter-spacing: -0.025em; color: #000; }
+  .job-co { font-size: clamp(15px, 1.4vw, 24px); color: #5A6481; text-align: right; }
   @media (max-width: 720px) { .jobs li { grid-template-columns: 1fr auto; } .job-dates { grid-column: 1 / -1; } }
-  .edu { margin: 22px 0 0; font-size: 14px; line-height: 1.6; color: var(--color-text-muted); max-width: 90ch; }
+  .edu { margin: 34px 0 0; font-size: clamp(15px, 1.4vw, 24px); line-height: 1.4; font-weight: 500; letter-spacing: -0.02em; color: #4A5268; }
 
-  .cta {
-    margin-top: clamp(64px, 8vw, 96px); padding: clamp(48px, 7vw, 88px) 24px;
-    background: #D3DDE1;
-    display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;
-  }
-  .cta h2 { margin: 0; max-width: 16ch; font-size: clamp(30px, 4vw, 52px); line-height: 1.04; font-weight: 800; letter-spacing: -0.04em; color: #181C26; }
-  .cta-mail { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.01em; color: var(--color-heading); overflow-wrap: anywhere; }
-  .cta-mail:hover { color: var(--accent); }
-  .cta-note { margin: 0; font-size: 14px; color: #3E5F74; }
+  .contact { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: clamp(56px, 8vw, 120px) var(--gutter); text-align: center; background: #fff; }
+  .contact-title { margin: 0; max-width: 20ch; color: #000; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em; font-size: clamp(30px, 4.6vw, 79px); line-height: 1.02; }
+  .contact-mail { font-size: clamp(20px, 2.3vw, 40px); font-weight: 500; letter-spacing: -0.025em; color: #000; overflow-wrap: anywhere; }
+  .contact-mail:hover { color: #5A6481; }
+  .contact-note { margin: 0; font-size: 15px; color: #5A6481; }
 </style>

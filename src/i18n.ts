@@ -83,6 +83,13 @@ export const t = {
     photoAlt: 'Collage by Miguel: a tiny figure standing on a sea of clouds',
     caseWord: 'Case',
     nextCase: 'Next case',
+    role: 'Product designer',
+    workBand: 'Work',
+    aboutTitle: 'From advertising campaigns to building digital products',
+    contactBand: 'Contact',
+    menu: 'Menu',
+    closeMenu: 'Close menu',
+    heroAlt: 'Collage by Miguel: a man whose head is a red rose, leaning back on a snowy mountain',
   },
 
   es: {
@@ -156,5 +163,12 @@ export const t = {
     photoAlt: 'Collage de Miguel: una figura diminuta de pie sobre un mar de nubes',
     caseWord: 'Caso',
     nextCase: 'Siguiente caso',
+    role: 'Diseñador de producto',
+    workBand: 'Work',
+    aboutTitle: 'De las campañas publicitarias a la creación de productos digitales',
+    contactBand: 'Contacto',
+    menu: 'Menú',
+    closeMenu: 'Cerrar menú',
+    heroAlt: 'Collage de Miguel: un hombre con una rosa roja por cabeza, inclinado hacia atrás sobre una montaña nevada',
   },
 } as const;

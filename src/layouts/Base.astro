@@ -40,36 +40,39 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
-    <link rel="stylesheet" href="https://use.typekit.net/urj6tjc.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <a class="skip-link" href="#main">{s.skip}</a>
-    <div class:list={["header-wrap", { "header-wrap--overlay": overlay, "header-wrap--wide": wide }]}>
-      <header class="site-header">
-        <a href={home} class="brand" aria-label={site.name}><span class="brand-full" aria-hidden="true">{site.name}</span><span class="brand-short" aria-hidden="true">MA</span></a>
-        <div class="header-right">
-          <nav aria-label="Main">
-            <ul>
-              {s.nav.map((item) => (
-                <li><a href={`${home}#${item.hash}`}>{item.label}</a></li>
-              ))}
-            </ul>
-          </nav>
-          <div class="lang" role="group" aria-label={s.langLabel}>
-            {langs.map((l) =>
-              l === lang ? (
-                <span aria-current="true">{l.toUpperCase()}</span>
-              ) : (
-                <a href={switchPath(path, l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
-              ),
-            )}
-          </div>
+    <header class="topbar">
+      <a href={home} class="brand" aria-label={site.name}>
+        <img class="brand-logo" src="/logo.svg" alt="" width="45" height="29" />
+        <span class="brand-text" aria-hidden="true">{site.name}<i class="brand-sep"></i><span class="brand-role">{t.en.role}</span></span>
+      </a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="site-menu" aria-label={s.menu} data-open-label={s.menu} data-close-label={s.closeMenu}>
+        <span></span><span></span><span></span>
+      </button>
+      <div class="menu" id="site-menu" hidden>
+        <nav aria-label="Main">
+          <ul>
+            {s.nav.map((item) => (
+              <li><a href={`${home}#${item.hash}`}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <div class="lang" role="group" aria-label={s.langLabel}>
+          {langs.map((l) =>
+            l === lang ? (
+              <span aria-current="true">{l.toUpperCase()}</span>
+            ) : (
+              <a href={switchPath(path, l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
+            ),
+          )}
         </div>
-      </header>
-    </div>
+      </div>
+    </header>
     <main id="main">
       <slot name="hero" />
       <div class:list={["container", { "container--wide": wide }]}>
@@ -89,46 +92,63 @@ const year = new Date().getFullYear();
         </div>
       </footer>
     </div>
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>('.burger');
+      const menu = document.getElementById('site-menu');
+      if (btn && menu) {
+        const set = (open: boolean) => {
+          btn.setAttribute('aria-expanded', String(open));
+          btn.setAttribute('aria-label', (open ? btn.dataset.closeLabel : btn.dataset.openLabel) ?? '');
+          menu.hidden = !open;
+        };
+        btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
+        menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
+        addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
+      }
+    </script>
   </body>
 </html>
 
 <style>
-  /* Full-width nav: name left, light/dark switch centred, links right */
-  .header-wrap { padding: 0 clamp(20px, 2.6vw, 40px); }
-  .header-wrap--wide { padding: 0 var(--gutter); }
-  .header-wrap--overlay { color: #181C26; }
-  .header-wrap--overlay .lang a { color: #5A6481; }
-  .header-wrap--overlay .lang a:hover { color: #181C26; }
-  .header-wrap--overlay a:hover { color: #5A6481; }
-  .header-wrap--overlay { position: absolute; top: 8px; left: 8px; right: 8px; z-index: 2; padding: 0 clamp(12px, 2.2vw, 32px); }
-  /* home with motion: header stays, the name arrives into it, it turns solid past the hero */
-  .header-wrap--overlay.is-home { position: fixed; top: 0; left: 0; right: 0; padding: 0 var(--gutter); transition: background-color .4s ease, box-shadow .4s ease; }
-  .header-wrap--overlay.is-home .site-header { padding: 18px 0; }
-  .header-wrap--overlay.is-home.is-solid { background: color-mix(in srgb, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--color-border); }
-  .header-wrap--overlay.is-home .brand { opacity: 0; transition: opacity .2s ease; }
-  .header-wrap--overlay.is-home.show-brand .brand { opacity: 1; }
-  .site-header {
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
-    gap: 8px 24px; padding: 20px 0;
+  /* Black top bar: logo + name | role on the left, a menu button on the right */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    min-height: 72px; padding: 0 var(--gutter); background: #131313; color: #fff;
   }
-  .brand { justify-self: start; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
-  .brand-short { display: none; }
-  @media (max-width: 760px) { .brand-full { display: none; } .brand-short { display: inline; } }
-  .header-right { justify-self: end; display: flex; align-items: center; gap: 4px 24px; }
-  nav ul { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; }
-  nav li { display: flex; align-items: center; }
-  nav li + li::before { content: ''; width: 1px; height: 14px; margin: 0 18px; background: currentColor; opacity: .55; }
-  nav a { display: inline-block; padding: 12px 0; font-size: 15px; font-weight: 600; }
-  .lang { display: flex; gap: 10px; font-size: 13px; font-weight: 600; }
-  .lang > * { display: inline-block; padding: 12px 0; }
-  .lang a { color: var(--color-text-subtle); }
-  .lang a:hover { color: var(--color-text); }
+  .brand { display: inline-flex; align-items: center; gap: 20px; color: #fff; }
+  .brand:hover { color: #fff; opacity: .85; }
+  .brand-logo { width: 45px; height: auto; flex: none; }
+  .brand-text { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0; text-transform: uppercase; white-space: nowrap; }
+  .brand-sep { display: inline-block; width: 1px; height: 8px; background: currentColor; }
+  @media (max-width: 560px) { .brand-text { font-size: 13px; gap: 8px; } .brand { gap: 14px; } .brand-logo { width: 36px; } }
+  @media (max-width: 400px) { .brand-sep, .brand-role { display: none; } }
 
+  .burger { display: grid; gap: 6px; padding: 16px; margin-right: -16px; background: none; border: 0; cursor: pointer; }
+  .burger span { display: block; width: 27px; height: 2px; border-radius: 8px; background: #fff; transition: transform .25s ease, opacity .2s ease; }
+  .burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  .burger:focus-visible { outline-color: #fff; }
 
-  @media (max-width: 760px) {
-    .header-right { gap: 4px 16px; }
-    nav li + li::before { margin: 0 12px; }
+  .menu {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: #131313; color: #fff; padding: 24px var(--gutter) 40px;
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;
   }
+  .menu[hidden] { display: none; }
+  .menu ul { list-style: none; margin: 0; padding: 0; }
+  .menu nav a {
+    display: block; padding: 4px 0; color: #fff;
+    font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em;
+    font-size: clamp(40px, 6vw, 88px); line-height: 1;
+  }
+  .menu nav a:hover { color: #9AA3BD; }
+  .lang { display: flex; gap: 16px; font-size: 15px; font-weight: 600; }
+  .lang > * { display: inline-block; padding: 8px 0; }
+  .lang span { color: #fff; }
+  .lang a { color: #8A93AD; }
+  .lang a:hover { color: #fff; }
 
   .site-footer {
     display: flex;
