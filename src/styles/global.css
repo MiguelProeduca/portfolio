@@ -45,6 +45,9 @@ img { max-width: 100%; height: auto; display: block; }
   margin: 0 auto;
   padding: 0 clamp(20px, 5.5vw, 80px);
 }
+/* home: full width, same side gutter as the nav and the hero text */
+:root { --gutter: calc(8px + clamp(12px, 2.2vw, 32px)); }
+.container--wide { max-width: none; padding: 0 var(--gutter); }
 
 .muted { color: var(--color-text-muted); }
 .subtle { color: var(--color-text-subtle); }

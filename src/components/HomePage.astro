@@ -78,6 +78,8 @@ const projectLinks = cases.flatMap((c) =>
 </Base>
 
 <style>
+  /* accent colour taken from the collage (AA on the light background) */
+  :global(main) { --accent: #4B6A7E; }
   .hero {
     position: relative; overflow: hidden; isolation: isolate;
     height: min(100svh, 1080px); min-height: 560px; background: #E8E9E6;
@@ -86,7 +88,7 @@ const projectLinks = cases.flatMap((c) =>
   .hero-bg--dark { opacity: 0; }
   .hero-bg--dimmed { filter: brightness(.38) saturate(.75); }
   /* text lines up with the nav (MA) */
-  .hero-text { padding: clamp(120px, 15vh, 176px) calc(8px + clamp(12px, 2.2vw, 32px)) 40px; }
+  .hero-text { padding: clamp(120px, 15vh, 176px) var(--gutter) 40px; }
   @media (max-width: 760px) { .hero-text { padding-top: 150px; } }
   .hero h1 {
     margin: 0; max-width: 24ch; color: #181C26;
@@ -99,11 +101,13 @@ const projectLinks = cases.flatMap((c) =>
   }
 
   .block { padding-top: clamp(40px, 5vw, 64px); }
-  .eyebrow {
+  /* one label style for every section */
+  .eyebrow, .tag {
     margin: 0 0 24px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--color-text-subtle);
+    font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--accent);
   }
-  .eyebrow::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+  .tag { margin-bottom: 18px; }
+  .eyebrow::before, .tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
 
   .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 32px; }
   @media (max-width: 720px) { .grid { grid-template-columns: 1fr; gap: 40px; } }
@@ -113,32 +117,31 @@ const projectLinks = cases.flatMap((c) =>
   .item-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
   .item:hover .item-media img { transform: scale(1.03); }
   .item-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .item-co { font-size: 20px; font-weight: 500; text-transform: uppercase; letter-spacing: -0.01em; color: var(--color-heading); }
-  .item-year { font-size: 15px; color: var(--color-text-subtle); }
+  .item-co { font-size: 20px; font-weight: 600; letter-spacing: -0.015em; color: var(--color-heading); }
+  .item-year { font-size: 15px; color: var(--accent); }
   .item-sub { margin-top: 2px; font-size: 15px; color: var(--color-text-muted); }
 
   .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; padding-top: clamp(72px, 9vw, 120px); }
   @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
   .about-photo { width: 100%; aspect-ratio: 0.92; object-fit: cover; display: block; }
-  .tag { margin: 0 0 18px; font-size: 13px; text-transform: uppercase; letter-spacing: .02em; color: var(--color-text-subtle); }
-  .about-text h2 { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.2; font-weight: 500; letter-spacing: -0.025em; color: var(--color-heading); max-width: 24ch; }
+  .about-text h2 { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.2; font-weight: 600; letter-spacing: -0.025em; color: var(--color-heading); max-width: 24ch; }
   .about-text h2 ~ p { margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-text-muted); max-width: 52ch; }
 
   .jobs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-border); }
   .jobs li { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; align-items: baseline; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--color-border); }
-  .job-dates { font-size: 15px; color: var(--color-text-subtle); }
-  .job-role { font-size: clamp(18px, 1.7vw, 24px); font-weight: 500; letter-spacing: -0.015em; color: var(--color-heading); }
+  .job-dates { font-size: 15px; color: var(--accent); }
+  .job-role { font-size: clamp(18px, 1.7vw, 24px); font-weight: 600; letter-spacing: -0.015em; color: var(--color-heading); }
   .job-co { font-size: 15px; color: var(--color-text-subtle); text-align: right; }
   @media (max-width: 720px) { .jobs li { grid-template-columns: 1fr auto; } .job-dates { grid-column: 1 / -1; } }
   .edu { margin: 22px 0 0; font-size: 14px; line-height: 1.6; color: var(--color-text-muted); max-width: 90ch; }
 
   .cta {
     margin-top: clamp(64px, 8vw, 96px); padding: clamp(48px, 7vw, 88px) 24px;
-    background: var(--color-surface-strong); border-radius: 20px;
+    background: #D3DDE1;
     display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;
   }
   .cta h2 { margin: 0; max-width: 16ch; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; font-weight: 600; letter-spacing: -0.035em; color: var(--color-heading); }
   .cta-mail { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.01em; color: var(--color-heading); overflow-wrap: anywhere; }
-  .cta-mail:hover { color: var(--color-heading-soft); }
-  .cta-note { margin: 0; font-size: 14px; color: var(--color-text-subtle); }
+  .cta-mail:hover { color: var(--accent); }
+  .cta-note { margin: 0; font-size: 14px; color: #3E5F74; }
 </style>

@@ -68,11 +68,11 @@ const year = new Date().getFullYear();
     </div>
     <main id="main">
       <slot name="hero" />
-      <div class="container">
+      <div class:list={["container", { "container--wide": overlay }]}>
         <slot />
       </div>
     </main>
-    <div class="container">
+    <div class:list={["container", { "container--wide": overlay }]}>
       <footer class="site-footer">
         <nav aria-label="Footer">
           <a href={home}>{s.home}</a>
