@@ -45,7 +45,7 @@ const year = new Date().getFullYear();
     <a class="skip-link" href="#main">{s.skip}</a>
     <div class:list={["header-wrap", { "header-wrap--overlay": overlay }]}>
       <header class="site-header">
-        <a href={home} class="brand" aria-label={site.name}>MA</a>
+        <a href={home} class="brand" aria-label={site.name}><span class="brand-full" aria-hidden="true">{site.name}</span><span class="brand-short" aria-hidden="true">MA</span></a>
         <div class="header-right">
           <nav aria-label="Main">
             <ul>
@@ -96,11 +96,19 @@ const year = new Date().getFullYear();
   .header-wrap--overlay .lang a:hover { color: #181C26; }
   .header-wrap--overlay a:hover { color: #5A6481; }
   .header-wrap--overlay { position: absolute; top: 8px; left: 8px; right: 8px; z-index: 2; padding: 0 clamp(12px, 2.2vw, 32px); }
+  /* home with motion: header stays, the name arrives into it, it turns solid past the hero */
+  .header-wrap--overlay.is-home { position: fixed; top: 0; left: 0; right: 0; padding: 0 var(--gutter); transition: background-color .4s ease, box-shadow .4s ease; }
+  .header-wrap--overlay.is-home .site-header { padding: 18px 0; }
+  .header-wrap--overlay.is-home.is-solid { background: color-mix(in srgb, var(--color-bg) 88%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--color-border); }
+  .header-wrap--overlay.is-home .brand { opacity: 0; transition: opacity .2s ease; }
+  .header-wrap--overlay.is-home.show-brand .brand { opacity: 1; }
   .site-header {
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
     gap: 8px 24px; padding: 20px 0;
   }
   .brand { justify-self: start; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand-short { display: none; }
+  @media (max-width: 760px) { .brand-full { display: none; } .brand-short { display: inline; } }
   .header-right { justify-self: end; display: flex; align-items: center; gap: 4px 24px; }
   nav ul { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; }
   nav li { display: flex; align-items: center; }
