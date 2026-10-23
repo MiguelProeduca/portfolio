@@ -136,7 +136,7 @@ const projectLinks = cases.flatMap((c) =>
   .hero {
     position: relative; isolation: isolate; overflow: hidden;
     height: min(100svh, 1080px); min-height: 600px;
-    display: grid; place-items: center; padding: 96px var(--gutter) 0;
+    display: grid; justify-items: center; align-content: start; padding: clamp(96px, 12vh, 128px) var(--gutter) 0;
   }
   .hero-bg-wrap { position: absolute; inset: 0; z-index: -2; will-change: transform; }
   .hero-bg { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
