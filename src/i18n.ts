@@ -35,7 +35,7 @@ export const t = {
     h1b: 'I like making sense of the complex to design the everyday.',
     heroSub: 'I come from advertising creativity and bring that eye to product design. I like connecting ideas, exploring other ways to solve a problem and shaping them into digital products, caring for everything from the logic of the whole to the last visual detail.',
     skills: ['Design systems', 'Applied AI', 'Product design', 'UI design', 'Tokens & Figma variables'],
-    bioTitle: 'I like observing how we behave, questioning what we take for granted and finding connections between ideas that seemed far apart.',
+    bioTitle: 'I like <strong>observing</strong> how we behave, <strong>questioning</strong> what we take for granted and <strong>finding connections</strong> between ideas that seemed far apart.',
     bio: [
       "I come from advertising creativity, where I learned to look for a concept and find how to tell it. In product design, that eye meets my more analytical side: I enjoy giving structure to complex problems and turning them into clear, carefully crafted experiences. I'm as interested in how everything fits together as in what happens in an interaction, a word or a visual detail.",
       "Outside work, I make collages and take part in collective communication projects. They're spaces to experiment with beauty, humour, strangeness and critique. I also climb: I like solving problems, but sometimes I need to do it with my whole body.",
@@ -108,7 +108,7 @@ export const t = {
     h1b: 'Me gusta entender lo complejo para diseñar lo cotidiano.',
     heroSub: 'Vengo de la creatividad publicitaria y llevo esa mirada al diseño de producto. Me gusta conectar ideas, explorar otras formas de resolver un problema y darles forma en productos digitales, cuidando desde la lógica del conjunto hasta el último detalle visual.',
     skills: ['Sistemas de diseño', 'IA aplicada', 'Diseño de producto', 'Diseño de UI', 'Tokens y variables en Figma'],
-    bioTitle: 'Me gusta observar cómo nos comportamos, cuestionar lo que damos por hecho y encontrar conexiones entre ideas que parecían lejanas.',
+    bioTitle: 'Me gusta <strong>observar</strong> cómo nos comportamos, <strong>cuestionar</strong> lo que damos por hecho y <strong>encontrar conexiones</strong> entre ideas que parecían lejanas.',
     bio: [
       'Vengo de la creatividad publicitaria, donde aprendí a buscar un concepto y encontrar cómo contarlo. En el diseño de producto, esa mirada se une a mi lado más analítico: disfruto dando estructura a problemas complejos y convirtiéndolos en experiencias claras y cuidadas. Me interesa tanto cómo encaja todo como lo que ocurre en una interacción, una palabra o un detalle visual.',
       'Fuera del trabajo, hago collage y participo en proyectos de comunicación colectiva. Son espacios donde experimentar con lo bonito, el humor, la extrañeza y la crítica. También escalo: me gusta resolver problemas, pero a veces necesito hacerlo con todo el cuerpo.',

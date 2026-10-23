@@ -47,12 +47,14 @@ const projectLinks = cases.flatMap((c) =>
     </ul>
   </section>
 
-  <section id="about" class="block about" aria-labelledby="about-title">
+  <section id="about" class="block" aria-labelledby="about-title">
+    <h2 id="about-title" class="eyebrow">{s.aboutTag}</h2>
+    <div class="about">
     <img class="about-photo" src={site.portrait} alt={s.portraitAlt} loading="lazy" />
     <div class="about-text">
-      <p class="tag">{s.aboutTag}</p>
-      <h2 id="about-title">{s.bioTitle}</h2>
+      <p class="bio-title" set:html={s.bioTitle} />
       {s.bio.map((p) => <p>{p}</p>)}
+    </div>
     </div>
   </section>
 
@@ -101,14 +103,11 @@ const projectLinks = cases.flatMap((c) =>
   }
 
   .block { padding-top: clamp(40px, 5vw, 64px); }
-  /* one label style for every section */
-  .eyebrow, .tag {
-    margin: 0 0 24px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--accent);
+  /* section titles speak with the hero's voice: same family, weight and tracking, smaller */
+  .eyebrow {
+    margin: 0 0 32px; color: #181C26;
+    font-size: clamp(28px, 3vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.04em;
   }
-  .tag { margin-bottom: 18px; }
-  .eyebrow::before, .tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
-
   .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px 32px; }
   @media (max-width: 720px) { .grid { grid-template-columns: 1fr; gap: 40px; } }
   .item { display: flex; flex-direction: column; }
@@ -121,11 +120,13 @@ const projectLinks = cases.flatMap((c) =>
   .item-year { font-size: 15px; color: var(--accent); }
   .item-sub { margin-top: 2px; font-size: 15px; color: var(--color-text-muted); }
 
-  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; padding-top: clamp(72px, 9vw, 120px); }
+  .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 56px; align-items: center; }
+  #about, #experience { padding-top: clamp(72px, 9vw, 120px); }
   @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
   .about-photo { width: 100%; aspect-ratio: 0.92; object-fit: cover; display: block; }
-  .about-text h2 { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.2; font-weight: 600; letter-spacing: -0.025em; color: var(--color-heading); max-width: 24ch; }
-  .about-text h2 ~ p { margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-text-muted); max-width: 52ch; }
+  .bio-title { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.22; font-weight: 400; letter-spacing: -0.025em; color: #4A5268; max-width: 26ch; }
+  .bio-title :global(strong) { font-weight: 800; color: #181C26; }
+  .bio-title ~ p { margin: 16px 0 0; font-size: 16px; line-height: 1.6; color: var(--color-text-muted); max-width: 52ch; }
 
   .jobs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-border); }
   .jobs li { display: grid; grid-template-columns: 140px minmax(0, 1fr) auto; align-items: baseline; gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--color-border); }
@@ -140,7 +141,7 @@ const projectLinks = cases.flatMap((c) =>
     background: #D3DDE1;
     display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center;
   }
-  .cta h2 { margin: 0; max-width: 16ch; font-size: clamp(30px, 4vw, 52px); line-height: 1.08; font-weight: 600; letter-spacing: -0.035em; color: var(--color-heading); }
+  .cta h2 { margin: 0; max-width: 16ch; font-size: clamp(30px, 4vw, 52px); line-height: 1.04; font-weight: 800; letter-spacing: -0.04em; color: #181C26; }
   .cta-mail { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.01em; color: var(--color-heading); overflow-wrap: anywhere; }
   .cta-mail:hover { color: var(--accent); }
   .cta-note { margin: 0; font-size: 14px; color: #3E5F74; }
