@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../site';
+import Logo from '../components/Logo.astro';
 import { t, prefix, switchPath, langs, type Lang } from '../i18n';
 
 interface Props {
@@ -45,7 +46,7 @@ const year = new Date().getFullYear();
     <a class="skip-link" href="#main">{s.skip}</a>
     <div class:list={["header-wrap", { "header-wrap--overlay": overlay }]}>
       <header class="site-header">
-        <a href={home} class="brand" aria-label={site.name}>MA</a>
+        <a href={home} class="brand" aria-label={site.name}><Logo /><span class="brand-name">{site.name}</span></a>
         <div class="header-right">
           <nav aria-label="Main">
             <ul>
@@ -100,7 +101,11 @@ const year = new Date().getFullYear();
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
     gap: 8px 24px; padding: 20px 0;
   }
-  .brand { justify-self: start; font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand { justify-self: start; display: inline-flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; --logo-bg: var(--color-bg); }
+  .header-wrap--overlay .brand { --logo-bg: #E8E9E6; }
+  .brand :global(.logo) { flex: none; transition: transform .3s cubic-bezier(.2,.7,.2,1); }
+  .brand:hover :global(.logo) { transform: rotate(-8deg) scale(1.08); }
+  @media (max-width: 760px) { .brand-name { display: none; } }
   .header-right { justify-self: end; display: flex; align-items: center; gap: 4px 24px; }
   nav ul { display: flex; align-items: center; list-style: none; margin: 0; padding: 0; }
   nav li { display: flex; align-items: center; }
