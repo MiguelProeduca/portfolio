@@ -24,7 +24,7 @@ const base = prefix(lang);
     </div>
   </section>
 
-  <section id="work" class="dark stack" slot="hero" aria-labelledby="work-title">
+  <section id="work" class="dark cover" slot="hero" aria-labelledby="work-title">
     <h2 id="work-title" class="band">{s.workBand}</h2>
     <ul class="grid">
       {cases.map((c, i) => (
@@ -41,7 +41,7 @@ const base = prefix(lang);
     </ul>
   </section>
 
-  <section id="about" class="stack" slot="hero" aria-labelledby="about-title">
+  <section id="about" class="cover" slot="hero" aria-labelledby="about-title">
     <h2 id="about-title" class="band">{s.aboutTag}</h2>
     <div class="about">
       <div class="about-photo"><img src="/portrait-tall.webp" alt={s.portraitAlt} loading="lazy" /></div>
@@ -52,7 +52,7 @@ const base = prefix(lang);
     </div>
   </section>
 
-  <section id="experience" class="stack" slot="hero" aria-labelledby="exp-title">
+  <section id="experience" class="cover" slot="hero" aria-labelledby="exp-title">
     <h2 id="exp-title" class="band">{s.experienceLabel}</h2>
     <div class="exp">
       <ul class="jobs">
@@ -68,7 +68,7 @@ const base = prefix(lang);
     </div>
   </section>
 
-  <section id="contact" class="stack" slot="hero" aria-labelledby="contact-title">
+  <section id="contact" class="cover" slot="hero" aria-labelledby="contact-title">
     <h2 id="contact-title" class="band">{s.contactBand}</h2>
     <div class="contact">
       <p class="contact-title">{s.contactTitle}</p>
@@ -79,8 +79,8 @@ const base = prefix(lang);
 </Base>
 
 <script>
-  // Each section pins once its bottom reaches the bottom of the screen (or at the top bar
-  // if it is shorter than the screen), so the next one slides up from below and covers it.
+  // The hero pins below the top bar (or by its bottom edge if taller than the screen)
+  // so the work section slides up from below and covers it.
   const sections = [...document.querySelectorAll<HTMLElement>('.stack')];
   const bar = 72;
   const place = () => {
@@ -127,15 +127,11 @@ const base = prefix(lang);
   @keyframes settle { from { transform: scale(1.15); } }
   @keyframes rise { from { opacity: 0; transform: translateY(32px); } }
 
-  /* stacking: sections pin and the next one slides over them */
-  .stack { position: sticky; top: var(--stick, 72px); background: #fff; }
-  .stack.dark { background: #000; }
-  .stack + .stack { box-shadow: 0 -24px 60px -20px rgba(0, 0, 0, .35); }
-  .hero.stack { z-index: 1; }
-  #work.stack { z-index: 2; }
-  #about.stack { z-index: 3; }
-  #experience.stack { z-index: 4; }
-  #contact.stack { z-index: 5; }
+  /* the hero stays pinned and WORK slides up over it; after that the page scrolls normally */
+  .stack { position: sticky; top: var(--stick, 72px); z-index: 1; }
+  .cover { position: relative; z-index: 2; background: #fff; }
+  .cover.dark { background: #000; }
+  #work { box-shadow: 0 -24px 60px -20px rgba(0, 0, 0, .35); }
 
   .band {
     margin: 0; padding: clamp(24px, 2.8vw, 48px) var(--gutter); background: #000; color: #F6F6F6; text-align: center;
