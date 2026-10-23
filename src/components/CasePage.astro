@@ -13,104 +13,115 @@ interface Props {
 const { lang, entry, next } = Astro.props;
 const s = t[lang];
 const { Content } = await render(entry);
+const d = entry.data;
 ---
-<Base lang={lang} title={`${entry.data.title} · ${site.name}`} description={entry.data.summary}>
-  <div class="case">
-    <aside class="panel grain">
-      <span class="kicker">{entry.data.kicker}</span>
-      <h1>{entry.data.title}</h1>
-      <p class="lead">{entry.data.lead}</p>
-      <dl class="meta">
-        {entry.data.meta.map((m) => (
-          <div>
-            <dt>{m.label}</dt>
-            <dd>{m.value}</dd>
-          </div>
-        ))}
-      </dl>
-    </aside>
+<Base lang={lang} title={`${d.title} · ${site.name}`} description={d.summary} wide>
+  <article class="case">
+    <header class="case-head">
+      <p class="label">{d.company ?? d.kicker}{d.year && <span> · {d.year}</span>}</p>
+      <h1>{d.title}</h1>
+      <div class="intro">
+        <p class="lead">{d.lead}</p>
+        <dl class="meta">
+          {d.meta.map((m) => (
+            <div>
+              <dt>{m.label}</dt>
+              <dd>{m.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </header>
 
-    <div class="body">
-      {entry.data.cover ? (
-        <img class="hero-img" src={entry.data.cover} alt={entry.data.hero.replace(/^\[|\]$/g, '')} />
-      ) : (
-        <div class="placeholder hero-img">{entry.data.hero}</div>
-      )}
+    {d.cover ? (
+      <img class="cover" src={d.cover} alt={d.hero.replace(/^\[|\]$/g, '')} />
+    ) : (
+      <div class="placeholder cover">{d.hero}</div>
+    )}
 
-      <article class="prose">
-        <Content />
-      </article>
-
-      <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
-        <span class="subtle">{s.nextCase}</span>
-        <span class="next-title">{next.data.title} <span aria-hidden="true">→</span></span>
-      </a>
+    <div class="prose">
+      <Content />
     </div>
-  </div>
+  </article>
+
+  <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
+    <span class="label">{s.nextCase}</span>
+    <span class="next-title">{next.data.cardTitle ?? next.data.title} <span aria-hidden="true">→</span></span>
+  </a>
 </Base>
 
 <style>
-  /* Collage version: a tinted, grainy title panel that stays put while the work scrolls. */
-  .case { --panel-bg: #D3DDE1; --panel-text: #2B2F33; --panel-soft: #3E5F74; --panel-line: rgba(43, 47, 51, .14); }
-  :global([data-theme="dark"]) .case { --panel-bg: #171B2B; --panel-text: #C9CEDB; --panel-soft: #9097AA; --panel-line: rgba(255, 255, 255, .1); }
-  .case { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 8px; }
-  @media (min-width: 1000px) {
-    .case { grid-template-columns: minmax(320px, 400px) minmax(0, 1fr); gap: 56px; align-items: start; }
-    .panel { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow: auto; }
-  }
-  .panel {
-    background: var(--panel-bg);
-    border-radius: var(--p-radius-lg);
-    padding: clamp(28px, 3vw, 40px);
-    display: flex; flex-direction: column; gap: 18px;
-  }
-  .kicker { font-size: 14px; color: var(--panel-soft); }
+  /* Case pages share the home's voice: full width, big tight type, square corners, nothing extra. */
+  .case { --accent: #4B6A7E; padding-top: clamp(48px, 7vw, 104px); }
+  .label { margin: 0 0 20px; font-size: 15px; color: var(--accent); }
+
   h1 {
-    margin: 0;
-    font-size: clamp(36px, 4vw, 54px);
-    line-height: 1.02;
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    margin: 0; max-width: 18ch; color: #181C26; text-wrap: balance;
+    font-size: clamp(40px, 6.4vw, 104px); line-height: .98; font-weight: 800; letter-spacing: -0.045em;
   }
-  .lead { margin: 0; font-size: 16px; line-height: 1.6; color: var(--panel-text); }
-  .meta { margin: 8px 0 0; display: flex; flex-direction: column; }
-  .meta div { padding: 12px 0; border-top: 1px solid var(--panel-line); }
-  .meta dt { font-size: 12px; color: var(--panel-soft); margin-bottom: 2px; }
-  .meta dd { margin: 0; font-size: 14px; font-weight: 500; }
 
-  .hero-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--p-radius-md); margin-bottom: 72px; }
-
-  .next {
-    display: flex; flex-direction: column; gap: 8px;
-    padding: 40px 0 0; border-top: 1px solid var(--color-border);
+  .intro {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px;
+    margin-top: clamp(36px, 5vw, 64px);
   }
-  .next:hover { color: inherit; }
-  .next:hover .next-title { color: var(--color-text-subtle); }
-  .next-title { font-size: clamp(26px, 3vw, 36px); font-weight: 700; letter-spacing: -0.03em; transition: color .15s; }
+  @media (min-width: 960px) { .intro { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; } }
+  .lead { margin: 0; max-width: 36ch; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.35; font-weight: 500; letter-spacing: -0.015em; color: #5A6481; }
+  .meta { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; align-content: start; }
+  .meta div { padding: 14px 0; border-top: 1px solid var(--color-border); }
+  .meta dt { font-size: 13px; color: var(--color-text-subtle); margin-bottom: 4px; }
+  .meta dd { margin: 0; font-size: 15px; font-weight: 500; color: var(--color-heading); }
 
-  .prose { padding-bottom: 96px; font-size: 17px; line-height: 1.65; color: var(--color-text-muted); max-width: 720px; }
-  .prose :global(> *) { margin: 0 0 16px; }
+  .cover {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+    margin: clamp(48px, 6vw, 88px) 0 0; background: var(--color-surface-muted); border-radius: 0;
+  }
+
+  /* Body: big section titles on the left, reading column on the right; figures run full width. */
+  .prose { --indent: 0px; padding-top: clamp(64px, 8vw, 120px); font-size: 18px; line-height: 1.65; color: var(--color-text-muted); }
+  @media (min-width: 960px) { .prose { --indent: calc((100% - 64px) * 7 / 12 + 64px); } }
+  .prose::after { content: ''; display: block; clear: both; }
+  .prose :global(> *) { margin: 0 0 18px var(--indent); max-width: 680px; }
   .prose :global(h2) {
-    font-size: clamp(22px, 2vw, 28px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.25;
-    color: var(--color-text); margin: 72px 0 16px;
+    clear: both; margin: clamp(56px, 7vw, 104px) 0 24px; max-width: none;
+    color: #181C26; font-size: clamp(28px, 3vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.04em;
+  }
+  @media (min-width: 960px) {
+    .prose :global(h2) { float: left; width: calc((100% - 64px) * 7 / 12); padding-right: 32px; margin: 0; }
+    /* title and first block start on the same line: both get the section gap as padding */
+    .prose :global(h2 + *) { margin-top: 0; }
+    .prose :global(h2:not(:first-child)), .prose :global(h2:not(:first-child) + *) { padding-top: clamp(80px, 8vw, 120px); }
   }
   .prose :global(h2:first-child) { margin-top: 0; }
-  .prose :global(blockquote) { margin: 32px 0; padding: 4px 0 4px 22px; border-left: 2px solid var(--color-border-strong); font-size: clamp(19px, 1.7vw, 23px); line-height: 1.45; color: var(--color-text); }
-  .prose :global(blockquote p) { margin: 0; }
-  .prose :global(a) { text-decoration: underline; text-underline-offset: 3px; }
-  .prose :global(strong) { font-weight: 600; color: var(--color-text); }
+  .prose :global(strong) { font-weight: 600; color: var(--color-heading); }
+  .prose :global(a) { color: var(--color-heading); text-decoration: underline; text-underline-offset: 3px; }
   .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
   .prose :global(li) { margin-bottom: 8px; }
   .prose :global(li::marker) { color: var(--color-text-subtle); }
-  .prose :global(figure) { margin: 48px 0; display: flex; flex-direction: column; gap: 12px; }
-  .prose :global(figcaption) { font-size: 13px; color: var(--color-text-subtle); }
-  .prose :global(figure .placeholder) { aspect-ratio: 16 / 8; }
-  .prose :global(figure img) { width: 100%; height: auto; border-radius: var(--p-radius-md); border: 1px solid var(--color-border); }
-  .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .prose :global(th) {
-    text-align: left; font-size: 13px; font-weight: 500; color: var(--color-text-subtle);
-    padding: 10px 12px 10px 0; border-bottom: 1px solid var(--color-border-strong);
+  .prose :global(blockquote) {
+    margin-top: 40px; margin-bottom: 40px; padding: 0;
+    color: #181C26; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -0.03em;
   }
+  .prose :global(blockquote p) { margin: 0; }
+
+  /* figures break out of the column to the full width */
+  .prose :global(figure) { clear: both; margin: clamp(56px, 7vw, 96px) 0; max-width: none; display: flex; flex-direction: column; gap: 14px; }
+  .prose :global(figure img) { width: 100%; height: auto; background: var(--color-surface-muted); }
+  .prose :global(figure .placeholder) { aspect-ratio: 16 / 7; border-radius: 0; }
+  .prose :global(figcaption) { font-size: 14px; color: var(--color-text-subtle); }
+
+  .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .prose :global(th) { text-align: left; font-size: 13px; font-weight: 500; color: var(--color-text-subtle); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--color-border-strong); }
   .prose :global(td) { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--color-border); vertical-align: top; }
-  .prose :global(td:first-child) { color: var(--color-text); font-weight: 500; }
+  .prose :global(td:first-child) { color: var(--color-heading); font-weight: 500; }
+
+  .next {
+    display: block; margin-top: clamp(80px, 10vw, 144px); padding-top: 32px; border-top: 1px solid var(--color-border);
+    --accent: #4B6A7E;
+  }
+  .next:hover { color: inherit; }
+  .next-title {
+    display: block; color: #181C26; transition: color .2s;
+    font-size: clamp(36px, 5.6vw, 88px); line-height: 1; font-weight: 800; letter-spacing: -0.045em;
+  }
+  .next:hover .next-title { color: var(--accent); }
 </style>

@@ -9,8 +9,11 @@ interface Props {
   description?: string;
   /** home: the header floats over a full-screen hero passed in the "hero" slot */
   overlay?: boolean;
+  /** full-width layout with the home gutter (no overlay) */
+  wide?: boolean;
 }
 const { lang, overlay = false } = Astro.props;
+const wide = overlay || (Astro.props.wide ?? false);
 const s = t[lang];
 const title = Astro.props.title ?? s.siteTitle;
 const description = Astro.props.description ?? s.description;
@@ -43,7 +46,7 @@ const year = new Date().getFullYear();
   </head>
   <body>
     <a class="skip-link" href="#main">{s.skip}</a>
-    <div class:list={["header-wrap", { "header-wrap--overlay": overlay }]}>
+    <div class:list={["header-wrap", { "header-wrap--overlay": overlay, "header-wrap--wide": wide }]}>
       <header class="site-header">
         <a href={home} class="brand" aria-label={site.name}><span class="brand-full" aria-hidden="true">{site.name}</span><span class="brand-short" aria-hidden="true">MA</span></a>
         <div class="header-right">
@@ -68,11 +71,11 @@ const year = new Date().getFullYear();
     </div>
     <main id="main">
       <slot name="hero" />
-      <div class:list={["container", { "container--wide": overlay }]}>
+      <div class:list={["container", { "container--wide": wide }]}>
         <slot />
       </div>
     </main>
-    <div class:list={["container", { "container--wide": overlay }]}>
+    <div class:list={["container", { "container--wide": wide }]}>
       <footer class="site-footer">
         <nav aria-label="Footer">
           <a href={home}>{s.home}</a>
@@ -91,6 +94,7 @@ const year = new Date().getFullYear();
 <style>
   /* Full-width nav: name left, light/dark switch centred, links right */
   .header-wrap { padding: 0 clamp(20px, 2.6vw, 40px); }
+  .header-wrap--wide { padding: 0 var(--gutter); }
   .header-wrap--overlay { color: #181C26; }
   .header-wrap--overlay .lang a { color: #5A6481; }
   .header-wrap--overlay .lang a:hover { color: #181C26; }
