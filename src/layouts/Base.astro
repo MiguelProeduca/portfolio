@@ -48,7 +48,7 @@ const year = new Date().getFullYear();
     <a class="skip-link" href="#main">{s.skip}</a>
     <header class="topbar">
       <a href={home} class="brand" aria-label={site.name}>
-        <img class="brand-logo" src="/logo.svg" alt="" width="45" height="29" />
+        <img class="brand-logo" src="/logo.svg" alt="" width="56" height="56" />
         <span class="brand-text" aria-hidden="true">{site.name}<i class="brand-sep"></i><span class="brand-role">{t.en.role}</span></span>
       </a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="site-menu" aria-label={s.menu} data-open-label={s.menu} data-close-label={s.closeMenu}>
@@ -118,10 +118,11 @@ const year = new Date().getFullYear();
   }
   .brand { display: inline-flex; align-items: center; gap: 20px; color: #fff; }
   .brand:hover { color: #fff; opacity: .85; }
-  .brand-logo { width: 45px; height: auto; flex: none; }
+  /* the animated logo has ~6px of air on each side inside its 56px box */
+  .brand-logo { width: 56px; height: 56px; flex: none; margin: 0 -6px; }
   .brand-text { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0; text-transform: uppercase; white-space: nowrap; }
   .brand-sep { display: inline-block; width: 1px; height: 8px; background: currentColor; }
-  @media (max-width: 560px) { .brand-text { font-size: 13px; gap: 8px; } .brand { gap: 14px; } .brand-logo { width: 36px; } }
+  @media (max-width: 560px) { .brand-text { font-size: 13px; gap: 8px; } .brand { gap: 14px; } .brand-logo { width: 45px; height: 45px; margin: 0 -5px; } }
   @media (max-width: 400px) { .brand-sep, .brand-role { display: none; } }
 
   .burger { display: grid; gap: 6px; padding: 16px; margin-right: -16px; background: none; border: 0; cursor: pointer; }
