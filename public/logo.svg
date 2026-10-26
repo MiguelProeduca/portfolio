@@ -1,14 +1,33 @@
 <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
 <style>
-.eye { transform-box: fill-box; transform-origin: center; animation: blink 5.4s ease-in-out infinite; }
-@keyframes blink { 0%, 44%, 48%, 100% { transform: scaleY(1); } 46% { transform: scaleY(.08); } }
-@media (prefers-reduced-motion: reduce) { .eye { animation: none; } }
+.eye { transform-box: fill-box; transform-origin: center; animation: expression 12s ease-in-out infinite; }
+.mouth { transform-box: fill-box; transform-origin: center; animation: laugh 12s ease-in-out infinite; }
+.face { transform-origin: 28px 28px; animation: chuckle 12s ease-in-out infinite; }
+@keyframes expression {
+  0%,15%,18%,36%,39%,41%,44%,57%,60%,69%,81%,91%,94%,100% { transform: scaleY(1); }
+  16.5%,37.5%,42.5%,58.5%,92.5% { transform: scaleY(.08); }
+  71%,79% { transform: scaleY(.22); }
+}
+@keyframes laugh {
+  0%,69%,81%,100% { transform: scale(1); }
+  71%,75%,79% { transform: scale(1.065,1.13); }
+  73%,77% { transform: scale(1.035,.95); }
+}
+@keyframes chuckle {
+  0%,69%,81%,100% { transform: translateY(0); }
+  71%,75%,79% { transform: translateY(-1.1px); }
+  73%,77% { transform: translateY(.4px); }
+}
+@media (prefers-reduced-motion: reduce) { .eye,.mouth,.face { animation: none; } }
 </style>
-<title>Logo de Miguel con parpadeo</title>
+<title>Logo de Miguel con parpadeos y risa</title>
+<g class="face"><g class="mouth">
 <path d="M27.9073 27.1474C33.5408 27.9627 45.1415 23.4102 50.2376 21.032C49.9905 28.1357 45.1786 42.3431 27.9073 42.3431C10.636 42.3431 5.94752 28.1357 5.76221 21.032C10.7966 22.7307 22.2737 26.332 27.9073 27.1474Z" fill="white" stroke="black"/>
 <path d="M12.5261 36.5984L19.2621 26.1569L24.7621 40.6569L29.7621 28.6569L37.2621 39.1569L38.4432 32.2435M38.4432 32.2435L39.2621 26.1569L45.7621 31.6569L38.4432 32.2435Z" stroke="black"/>
+</g>
 <circle class="eye" cx="26.0542" cy="19.2716" r="1.76049" fill="white"/>
 <circle class="eye" cx="33.6521" cy="19.2716" r="1.76049" fill="white"/>
 <rect x="23.8022" y="13.9991" width="3.54428" height="1" rx="0.5" transform="rotate(27.3461 23.8022 13.9991)" fill="white"/>
 <rect x="31.7063" y="15.8914" width="4.11588" height="1" rx="0.5" transform="rotate(-32.8812 31.7063 15.8914)" fill="white"/>
+</g>
 </svg>
