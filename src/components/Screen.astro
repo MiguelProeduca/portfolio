@@ -17,13 +17,13 @@ interface Props {
   split?: 'even' | 'wide';
   /** tab bar across both halves (work page), with the social icons at its end */
   fullBar?: boolean;
-  /** where the split starts: 'half', 'nav' (as narrow as the tab bar allows), or the text column's % */
-  start?: 'half' | 'nav' | number;
+  /** where the split starts: 'half', 'nav' (as narrow as the tab bar allows), 'image' (the collage shown whole), or the text column's % */
+  start?: 'half' | 'nav' | 'image' | number;
 }
 const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even', fullBar = false, start = 'half' } = Astro.props;
 ---
 <Base lang={lang} title={title} screen>
-  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default={start === 'nav' ? 'nav' : start === 'half' ? '50' : String(start)}>
+  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default={start === 'half' ? '50' : String(start)}>
     {fullBar && (
       <div class="screen-topbar">
         <TabBar lang={lang} active={active} />
@@ -74,7 +74,15 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     };
     const clamp = (v: number) => Math.min(75, Math.max(minLeft(), v));
     const startAtNav = screen.dataset.default === 'nav';
-    let def = startAtNav ? minLeft() : Number(screen.dataset.default) || 50;
+    // 'image': leave the collage column just wide enough to show the whole picture at full height
+    const media = screen.querySelector<HTMLImageElement>('.screen-media img');
+    const imageStart = () => {
+      const ratio = media && media.naturalWidth ? media.naturalWidth / media.naturalHeight : 0.8;
+      const box = screen.getBoundingClientRect();
+      return 100 - ((box.height * ratio) / box.width) * 100;
+    };
+    const computeDef = () => screen.dataset.default === 'nav' ? minLeft() : screen.dataset.default === 'image' ? imageStart() : Number(screen.dataset.default) || 50;
+    let def = computeDef();
     const set = (v: number) => {
       v = clamp(v);
       screen.style.setProperty('--split', `${v}%`);
@@ -100,11 +108,12 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     const settle = () => {
       const now = Number(handle.getAttribute('aria-valuenow')) || def;
       const atStart = Math.abs(now - def) < 0.5;
-      if (startAtNav) def = minLeft();
+      def = computeDef();
       set(atStart ? def : now);
     };
     addEventListener('resize', settle);
     document.fonts?.ready.then(settle);
+    if (media && !media.complete) media.addEventListener('load', settle, { once: true });
 
     handle.addEventListener('pointerdown', (e) => {
       e.preventDefault();

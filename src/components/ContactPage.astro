@@ -7,7 +7,7 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const s = t[lang];
 ---
-<Screen lang={lang} active="contact" start={65} title={`${s.contactBand} · ${site.name}`} image="/collage-contact.webp" imageAlt={s.contactAlt}>
+<Screen lang={lang} active="contact" start="image" title={`${s.contactBand} · ${site.name}`} image="/collage-contact.webp" imageAlt={s.contactAlt}>
   <h1 class="t-title">{s.contactBig}</h1>
   <div class="mail-wrap">
     <a class="mail" href={`mailto:${site.email}`}><span aria-hidden="true">→</span> {site.email}</a>
