@@ -62,16 +62,25 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     const handle = screen?.querySelector<HTMLElement>('[data-split-handle]');
     if (!screen || !handle) return;
     const def = Number(screen.dataset.default) || 50;
-    const clamp = (v: number) => Math.min(75, Math.max(25, v));
+    // the left half never gets narrower than its tab bar
+    const tabs = screen.querySelector<HTMLElement>('.screen-left .tabs ul');
+    const minLeft = () => {
+      const px = tabs ? tabs.scrollWidth : 0;
+      screen.style.setProperty('--min-left', `${px}px`);
+      return (px / screen.getBoundingClientRect().width) * 100;
+    };
+    const clamp = (v: number) => Math.min(75, Math.max(25, minLeft(), v));
     const set = (v: number, save = true) => {
       v = clamp(v);
       screen.style.setProperty('--split', `${v}%`);
-      handle.setAttribute('aria-valuenow', String(Math.round(v)));
+      handle.setAttribute('aria-valuenow', String(v));
       if (save) { try { localStorage.setItem(KEY, String(v)); } catch {} }
     };
     let stored: number | null = null;
     try { const v = localStorage.getItem(KEY); stored = v ? Number(v) : null; } catch {}
     set(stored ?? def, false);
+    addEventListener('resize', () => set(Number(handle.getAttribute('aria-valuenow')) || def, false));
+    document.fonts?.ready.then(() => set(Number(handle.getAttribute('aria-valuenow')) || def, false));
 
     handle.addEventListener('pointerdown', (e) => {
       e.preventDefault();
@@ -98,7 +107,7 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
 </script>
 
 <style>
-  .screen { --split: 50%; position: relative; display: grid; grid-template-columns: minmax(0, var(--split)) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #000; }
+  .screen { --split: 50%; position: relative; display: grid; grid-template-columns: minmax(var(--min-left, 0px), var(--split)) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #000; }
   .screen--fullbar { grid-template-rows: auto 1fr; }
   .screen-topbar { grid-column: 1 / -1; min-width: 0; display: flex; align-items: stretch; justify-content: space-between; background: #111214; }
   .screen-topbar > :global(.tabs) { min-width: 0; }
@@ -110,7 +119,7 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
 
   /* the draggable line between the halves */
   .screen-handle {
-    position: absolute; top: 0; bottom: 0; left: var(--split); z-index: 5;
+    position: absolute; top: 0; bottom: 0; left: max(var(--split), var(--min-left, 0px)); z-index: 5;
     width: 24px; transform: translateX(-50%); cursor: col-resize; touch-action: none;
     display: flex; align-items: center; justify-content: center;
   }
