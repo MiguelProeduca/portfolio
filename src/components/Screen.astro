@@ -17,11 +17,13 @@ interface Props {
   split?: 'even' | 'wide';
   /** tab bar across both halves (work page), with the social icons at its end */
   fullBar?: boolean;
+  /** where the split starts: 'half', or 'nav' = as narrow as the tab bar allows (work page) */
+  start?: 'half' | 'nav';
 }
-const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even', fullBar = false } = Astro.props;
+const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even', fullBar = false, start = 'half' } = Astro.props;
 ---
 <Base lang={lang} title={title} screen>
-  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default="50">
+  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default={start === 'nav' ? 'nav' : '50'}>
     {fullBar && (
       <div class="screen-topbar">
         <TabBar lang={lang} active={active} />
@@ -63,7 +65,6 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     const screen = document.querySelector<HTMLElement>('[data-split]');
     const handle = screen?.querySelector<HTMLElement>('[data-split-handle]');
     if (!screen || !handle) { last = null; return; }
-    const def = Number(screen.dataset.default) || 50;
     // the left half never gets narrower than its tab bar
     const tabs = screen.querySelector<HTMLElement>('.screen-left .tabs ul');
     const minLeft = () => {
@@ -71,7 +72,9 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
       screen.style.setProperty('--min-left', `${px}px`);
       return (px / screen.getBoundingClientRect().width) * 100;
     };
-    const clamp = (v: number) => Math.min(75, Math.max(25, minLeft(), v));
+    const clamp = (v: number) => Math.min(75, Math.max(minLeft(), v));
+    const startAtNav = screen.dataset.default === 'nav';
+    let def = startAtNav ? minLeft() : Number(screen.dataset.default) || 50;
     const set = (v: number) => {
       v = clamp(v);
       screen.style.setProperty('--split', `${v}%`);
@@ -93,8 +96,15 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     } else {
       set(def);
     }
-    addEventListener('resize', () => set(Number(handle.getAttribute('aria-valuenow')) || def));
-    document.fonts?.ready.then(() => set(Number(handle.getAttribute('aria-valuenow')) || def));
+    // once the fonts are in, the tab bar's real width is known: re-measure the 'nav' start
+    const settle = () => {
+      const now = Number(handle.getAttribute('aria-valuenow')) || def;
+      const atStart = Math.abs(now - def) < 0.5;
+      if (startAtNav) def = minLeft();
+      set(atStart ? def : now);
+    };
+    addEventListener('resize', settle);
+    document.fonts?.ready.then(settle);
 
     handle.addEventListener('pointerdown', (e) => {
       e.preventDefault();
