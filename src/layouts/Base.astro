@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { site } from '../site';
+import { ClientRouter } from 'astro:transitions';
+import TabBar from '../components/TabBar.astro';
 import { t, prefix, switchPath, langs, type Lang } from '../i18n';
 
 interface Props {
@@ -11,8 +13,12 @@ interface Props {
   overlay?: boolean;
   /** full-width layout with the home gutter (no overlay) */
   wide?: boolean;
+  /** one-screen tab page: the page draws its own tab bar, no footer */
+  screen?: boolean;
+  /** which tab is current */
+  active?: string;
 }
-const { lang, overlay = false } = Astro.props;
+const { lang, overlay = false, screen = false, active = 'work' } = Astro.props;
 const wide = overlay || (Astro.props.wide ?? false);
 const s = t[lang];
 const title = Astro.props.title ?? s.siteTitle;
@@ -40,50 +46,26 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_GB'} />
+    <ClientRouter />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <a class="skip-link" href="#main">{s.skip}</a>
-    <header class="topbar">
-      <a href={home} class="brand" aria-label={site.name}>
-        <img class="brand-logo" src="/logo.svg" alt="" width="56" height="56" />
-        <span class="brand-text" aria-hidden="true">{site.name}<i class="brand-sep"></i><span class="brand-role">{t.en.role}</span></span>
-      </a>
-      <button class="burger" type="button" aria-expanded="false" aria-controls="site-menu" aria-label={s.menu} data-open-label={s.menu} data-close-label={s.closeMenu}>
-        <span></span><span></span><span></span>
-      </button>
-      <div class="menu" id="site-menu" hidden>
-        <nav aria-label="Main">
-          <ul>
-            {s.nav.map((item) => (
-              <li><a href={`${home}#${item.hash}`}>{item.label}</a></li>
-            ))}
-          </ul>
-        </nav>
-        <div class="lang" role="group" aria-label={s.langLabel}>
-          {langs.map((l) =>
-            l === lang ? (
-              <span aria-current="true">{l.toUpperCase()}</span>
-            ) : (
-              <a href={switchPath(path, l)} hreflang={l} lang={l}>{l.toUpperCase()}</a>
-            ),
-          )}
-        </div>
-      </div>
-    </header>
+    {!screen && <TabBar lang={lang} active={active} full />}
     <main id="main">
       <slot name="hero" />
       <div class:list={["container", { "container--wide": wide }]}>
         <slot />
       </div>
     </main>
+    {!screen && (
     <div class:list={["container", { "container--wide": wide }]}>
       <footer class="site-footer">
         <nav aria-label="Footer">
           <a href={home}>{s.home}</a>
-          {s.nav.map((item) => <a href={`${home}#${item.hash}`}>{item.label}</a>)}
+          {s.tabs.filter((tab) => tab.key !== 'home').map((tab) => <a href={`${home}${tab.path}`}>{tab.label}</a>)}
         </nav>
         <div class="footer-right">
           {site.linkedin && <a href={site.linkedin}>LinkedIn</a>}
@@ -92,65 +74,11 @@ const year = new Date().getFullYear();
         </div>
       </footer>
     </div>
-    <script>
-      const btn = document.querySelector<HTMLButtonElement>('.burger');
-      const menu = document.getElementById('site-menu');
-      if (btn && menu) {
-        const set = (open: boolean) => {
-          btn.setAttribute('aria-expanded', String(open));
-          btn.setAttribute('aria-label', (open ? btn.dataset.closeLabel : btn.dataset.openLabel) ?? '');
-          menu.hidden = !open;
-        };
-        btn.addEventListener('click', () => set(btn.getAttribute('aria-expanded') !== 'true'));
-        menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a')) set(false); });
-        addEventListener('keydown', (e) => { if (e.key === 'Escape') set(false); });
-      }
-    </script>
+    )}
   </body>
 </html>
 
 <style>
-  /* Black top bar: logo + name | role on the left, a menu button on the right */
-  .topbar {
-    position: sticky; top: 0; z-index: 20;
-    display: flex; align-items: center; justify-content: space-between;
-    min-height: 72px; padding: 0 var(--gutter); background: #131313; color: #fff;
-  }
-  .brand { display: inline-flex; align-items: center; gap: 20px; color: #fff; }
-  .brand:hover { color: #fff; opacity: .85; }
-  /* the animated logo has ~6px of air on each side inside its 56px box */
-  .brand-logo { width: 56px; height: 56px; flex: none; margin: 0 -6px; }
-  .brand-text { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 16px; letter-spacing: 0; text-transform: uppercase; white-space: nowrap; }
-  .brand-sep { display: inline-block; width: 1px; height: 8px; background: currentColor; }
-  @media (max-width: 560px) { .brand-text { font-size: 13px; gap: 8px; } .brand { gap: 14px; } .brand-logo { width: 45px; height: 45px; margin: 0 -5px; } }
-  @media (max-width: 400px) { .brand-sep, .brand-role { display: none; } }
-
-  .burger { display: grid; gap: 6px; padding: 16px; margin-right: -16px; background: none; border: 0; cursor: pointer; }
-  .burger span { display: block; width: 27px; height: 2px; border-radius: 8px; background: #fff; transition: transform .25s ease, opacity .2s ease; }
-  .burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-  .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-  .burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-  .burger:focus-visible { outline-color: #fff; }
-
-  .menu {
-    position: absolute; top: 100%; left: 0; right: 0;
-    background: #131313; color: #fff; padding: 24px var(--gutter) 40px;
-    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px;
-  }
-  .menu[hidden] { display: none; }
-  .menu ul { list-style: none; margin: 0; padding: 0; }
-  .menu nav a {
-    display: block; padding: 4px 0; color: #fff;
-    font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em;
-    font-size: clamp(40px, 6vw, 88px); line-height: 1;
-  }
-  .menu nav a:hover { color: #9AA3BD; }
-  .lang { display: flex; gap: 16px; font-size: 15px; font-weight: 600; }
-  .lang > * { display: inline-block; padding: 8px 0; }
-  .lang span { color: #fff; }
-  .lang a { color: #8A93AD; }
-  .lang a:hover { color: #fff; }
-
   .site-footer {
     display: flex;
     flex-wrap: wrap;

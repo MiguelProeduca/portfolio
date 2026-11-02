@@ -1,5 +1,6 @@
 ---
 order: 1
+tabLabel: "proeduca (DS)"
 title: One system, three brands
 cardTitle: "Multi-brand design system"
 cardSub: "One design system for three brands."

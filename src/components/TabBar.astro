@@ -1,0 +1,59 @@
+---
+// The site's only navigation: a dark strip of tabs, the current one in white.
+import { t, prefix, switchPath, langs, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  active: string;
+  /** stretch across the page (case pages) instead of sitting in the left column */
+  full?: boolean;
+}
+const { lang, active, full = false } = Astro.props;
+const s = t[lang];
+const base = `${prefix(lang)}/`;
+const path = Astro.url.pathname;
+---
+<nav class:list={["tabs", { "tabs--full": full }]} aria-label={s.tabsLabel}>
+  <ul>
+    {s.tabs.map((tab) => (
+      <li>
+        <a href={`${base}${tab.path}`} aria-current={tab.key === active ? 'page' : undefined}>{tab.label}</a>
+      </li>
+    ))}
+  </ul>
+  <div class="tabs-lang" role="group" aria-label={s.langLabel}>
+    {langs.map((l) =>
+      l === lang ? (
+        <span aria-current="true">{l}</span>
+      ) : (
+        <a href={switchPath(path, l)} hreflang={l} lang={l}>{l}</a>
+      ),
+    )}
+  </div>
+</nav>
+
+<style>
+  .tabs { display: flex; align-items: stretch; background: #181C26; min-height: 46px; }
+  .tabs ul { display: flex; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
+  .tabs ul::-webkit-scrollbar { display: none; }
+  .tabs li { display: flex; flex: none; }
+  .tabs ul a {
+    display: flex; align-items: center; justify-content: center;
+    min-width: clamp(64px, 6.6vw, 126px); padding: 8px clamp(10px, 1.25vw, 24px);
+    color: #fff; font-family: 'Inter', sans-serif; font-weight: 800;
+    font-size: clamp(14px, 1.25vw, 24px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap;
+    transition: background-color .2s ease, color .2s ease;
+  }
+  .tabs ul a:hover { background: #2B3142; color: #fff; }
+  .tabs ul a[aria-current="page"] { background: #fff; color: #181C26; }
+  .tabs ul a:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 0; }
+
+  .tabs-lang { margin-left: auto; display: flex; align-items: center; gap: 10px; padding: 0 clamp(10px, 1.25vw, 24px); font-size: 13px; font-weight: 700; text-transform: lowercase; }
+  .tabs-lang span { color: #fff; }
+  .tabs-lang a { color: #8A93AD; }
+  .tabs-lang a:hover { color: #fff; }
+  @media (max-width: 560px) {
+    .tabs ul a { min-width: 0; padding: 8px; font-size: 13px; }
+    .tabs-lang { padding: 0 10px; gap: 8px; }
+  }
+</style>

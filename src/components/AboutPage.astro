@@ -1,0 +1,15 @@
+---
+import Screen from './Screen.astro';
+import { site } from '../site';
+import { t, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang];
+---
+<Screen lang={lang} active="about" title={`${s.aboutTag} · ${site.name}`} image="/collage-about.webp" imageAlt={s.portraitAlt}>
+  <h1 class="t-title">{s.aboutTitle}</h1>
+  <div>
+    {s.bio.map((p) => <p class="t-body">{p}</p>)}
+  </div>
+</Screen>

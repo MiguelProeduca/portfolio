@@ -1,5 +1,6 @@
 ---
 order: 2
+tabLabel: "students (app)"
 title: A student's day-to-day, in one app
 cardTitle: "Student app · UNIR"
 cardSub: "A space to organise everyday academic life."

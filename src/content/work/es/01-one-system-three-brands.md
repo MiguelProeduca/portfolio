@@ -1,5 +1,6 @@
 ---
 order: 1
+tabLabel: "proeduca (DS)"
 title: Un sistema, tres marcas
 cardTitle: "Sistema de diseño multimarca"
 cardSub: "Un sistema de diseño para tres marcas."

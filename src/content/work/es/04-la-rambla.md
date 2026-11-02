@@ -1,5 +1,6 @@
 ---
 order: 4
+tabLabel: "la rambla (app)"
 title: La Rambla
 cardTitle: "App para escaladoras"
 cardSub: "Una app para que las mujeres se organicen para escalar juntas."

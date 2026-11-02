@@ -1,0 +1,92 @@
+---
+import Screen from './Screen.astro';
+import { site } from '../site';
+import { t, prefix, type Lang } from '../i18n';
+import { getCases, slugOf } from '../cases';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = t[lang];
+const cases = await getCases(lang);
+const base = prefix(lang);
+---
+<Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`}>
+  <h1 class="t-title t-caps">{s.workTitle}</h1>
+  <div>
+    {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
+  </div>
+
+  <div class="projects" slot="right" data-projects>
+    <div class="projects-bar">
+      <div class="projects-top" aria-hidden="true"></div>
+      <div class="projects-tabs" role="tablist" aria-label={s.projectsLabel}>
+        {cases.map((c, i) => (
+          <button type="button" role="tab" id={`tab-${slugOf(c.id)}`} aria-controls={`panel-${slugOf(c.id)}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+            {c.data.tabLabel ?? c.data.company}
+          </button>
+        ))}
+      </div>
+    </div>
+    {cases.map((c, i) => (
+      <section class="project" role="tabpanel" id={`panel-${slugOf(c.id)}`} aria-labelledby={`tab-${slugOf(c.id)}`} hidden={i !== 0}>
+        <h2 class="t-title">{c.data.cardTitle ?? c.data.title}</h2>
+        <p class="t-lead">{c.data.summary}</p>
+        <a class="project-media" href={`${base}/work/${slugOf(c.id)}/`} tabindex="-1" aria-hidden="true">
+          {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i === 0 ? 'eager' : 'lazy'} />}
+        </a>
+        <a class="project-link" href={`${base}/work/${slugOf(c.id)}/`}>{s.viewCase} <span aria-hidden="true">→</span></a>
+      </section>
+    ))}
+  </div>
+</Screen>
+
+<script>
+  function initProjects() {
+    const root = document.querySelector<HTMLElement>('[data-projects]');
+    if (!root) return;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement, focus = false) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls')!);
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (step) { e.preventDefault(); select(tabs[(i + step + tabs.length) % tabs.length], true); }
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', initProjects);
+</script>
+
+<style>
+  .projects { display: flex; flex-direction: column; gap: clamp(24px, 2.1vw, 40px); height: 100%; }
+  .projects-top { height: 46px; background: #181C26; }
+  .projects-tabs { display: flex; background: #181C26; min-height: clamp(32px, 2.45vw, 47px); overflow-x: auto; scrollbar-width: none; }
+  .projects-tabs::-webkit-scrollbar { display: none; }
+  .projects-tabs button {
+    flex: none; padding: 6px clamp(10px, .83vw, 16px); border: 0; background: #181C26; color: #fff; cursor: pointer;
+    font: 800 clamp(13px, 1.25vw, 24px)/1.27 'Inter', sans-serif; letter-spacing: -0.04em; white-space: nowrap;
+  }
+  .projects-tabs button:hover { background: #2B3142; }
+  .projects-tabs button[aria-selected="true"] { background: #fff; color: #181C26; }
+  .projects-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+  .project { display: flex; flex-direction: column; gap: clamp(16px, 1.6vw, 28px); flex: 1; padding: 0 clamp(20px, 1.25vw, 24px) 32px; min-height: 0; }
+  .project[hidden] { display: none; }
+  .project-media { position: relative; flex: 1; min-height: 220px; overflow: hidden; background: #fff; }
+  .project-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .project-media:hover img { transform: scale(1.03); }
+  .project-link { align-self: flex-start; font-weight: 600; font-size: clamp(16px, 1.25vw, 24px); letter-spacing: -0.03em; color: #000; border-bottom: 2px solid #000; }
+  .project-link:hover { color: #5A6481; border-color: #5A6481; }
+  @media (max-width: 860px) {
+    .projects-top { display: none; }
+    .project-media { flex: none; aspect-ratio: 4 / 3; min-height: 0; }
+  }
+</style>
