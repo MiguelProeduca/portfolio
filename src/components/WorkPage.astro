@@ -1,6 +1,8 @@
 ---
-// Work: an even grid of every project on the right (filterable); each card opens its case.
+// Work: intro on the left (with the tab bar, like every other screen); on the right,
+// on dark, the social icons and a grid of tall cards. Each card opens its case.
 import Screen from './Screen.astro';
+import Socials from './Socials.astro';
 import { site } from '../site';
 import { t, prefix, type Lang } from '../i18n';
 import { getCases, slugOf } from '../cases';
@@ -11,101 +13,47 @@ const s = t[lang];
 const cases = await getCases(lang);
 const base = prefix(lang);
 ---
-<Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`} fullBar>
-  <div class="work-left" data-work-left>
-    <div class="work-intro" data-intro>
-      <h1 class="t-title">{s.workTitle.toLowerCase()}</h1>
-      <div>
-        {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
-      </div>
-    </div>
+<Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`}>
+  <h1 class="t-title">{s.workTitle.toLowerCase()}</h1>
+  <div>
+    {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
   </div>
 
-  <div class="work-right" slot="right" data-work>
-    <div class="filters" role="toolbar" aria-label={s.filtersLabel}>
-      {s.filters.map((f, i) => (
-        <button type="button" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+  <div class="work-right" slot="right">
+    <div class="work-bar">
+      <Socials />
+    </div>
+    <ul class="cards">
+      {cases.map((c, i) => (
+        <li>
+          <a class="card" href={`${base}/work/${slugOf(c.id)}/`}>
+            {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i < 6 ? 'eager' : 'lazy'} />}
+            <span class="card-label">{c.data.cardTitle ?? c.data.title}</span>
+          </a>
+        </li>
       ))}
-    </div>
-
-    <div class="mosaic-wrap" data-mosaic>
-      <ul class="mosaic">
-        {cases.map((c, i) => (
-          <li data-cat={c.data.category}>
-            <a class="tile" href={`${base}/work/${slugOf(c.id)}/`}>
-              {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i < 4 ? 'eager' : 'lazy'} />}
-              <span class="tile-label">{c.data.cardTitle ?? c.data.title}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <p class="mosaic-empty" data-empty hidden>{s.emptyFilter}</p>
-    </div>
-
+    </ul>
   </div>
 </Screen>
 
-<script>
-  function initWork() {
-    const root = document.querySelector<HTMLElement>('[data-work]');
-    if (!root) return;
-    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
-    const tiles = [...root.querySelectorAll<HTMLLIElement>('.mosaic li')];
-    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
-    const filter = (key: string) => {
-      filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === key)));
-      let shown = 0;
-      tiles.forEach((li) => {
-        const on = key === 'all' || li.dataset.cat === key;
-        li.hidden = !on;
-        if (on) shown++;
-      });
-      empty.hidden = shown > 0;
-    };
-    filters.forEach((f) => f.addEventListener('click', () => filter(f.dataset.filter!)));
-  }
-  document.addEventListener('astro:page-load', initWork);
-</script>
-
 <style>
-  /* left column: white intro, or dark project detail once one is picked */
-  :global(.screen--fullbar .screen-left) { padding-top: clamp(40px, 5.5vw, 104px); }
-  .work-left { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 58px); }
-  .work-intro { display: flex; flex-direction: column; gap: clamp(24px, 2.6vw, 48px); }
-  .work-intro[hidden] { display: none; }
+  .work-right { display: flex; flex-direction: column; min-height: 100svh; background: #181C26; border-left: 1px solid #fff; }
+  .work-bar { display: flex; align-items: center; justify-content: flex-end; min-height: 46px; padding: 0 clamp(12px, 1.25vw, 24px); }
 
-  /* right column */
-  .work-right { display: flex; flex-direction: column; min-height: 100%; background: #111214; }
-  .filters { display: flex; flex-wrap: wrap; background: #111214; }
-  .filters button {
-    padding: 8px clamp(12px, 1.25vw, 24px); border: 0; background: transparent; color: #fff; cursor: pointer;
-    min-width: clamp(64px, 6.6vw, 126px); font: 300 clamp(14px, 1.04vw, 20px)/1.27 'Inter', sans-serif; letter-spacing: -0.04em; white-space: nowrap;
+  /* three tall cards per row, all the same size */
+  .cards { list-style: none; margin: 0; padding: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-content: start; }
+  .card { position: relative; display: block; aspect-ratio: 370 / 462; overflow: hidden; background: #fff; }
+  .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .card:hover img { transform: scale(1.04); }
+  .card-label {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 14px 12px;
+    color: #fff; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.2; letter-spacing: -0.04em;
+    background: linear-gradient(to top, rgba(0, 0, 0, .72), transparent); opacity: 0; transition: opacity .25s ease;
   }
-  .filters button:hover { background: #2B3142; }
-  .filters button[aria-pressed="true"] { background: #fff; color: #111214; }
-  .filters button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+  .card:hover .card-label, .card:focus-visible .card-label { opacity: 1; }
+  .card:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
-  .mosaic-wrap { flex: 1; display: flex; align-items: flex-start; padding: clamp(16px, 2vw, 40px) 0; }
-  .mosaic-wrap[hidden] { display: none; }
-  .mosaic { list-style: none; margin: 0; padding: 0 clamp(12px, 1.25vw, 24px); width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.25vw, 24px); }
-  .mosaic li[hidden] { display: none; }
-  .tile { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 0; overflow: hidden; background: #fff; cursor: pointer; }
-  .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .tile:hover img { transform: scale(1.04); }
-  .tile-label {
-    position: absolute; left: 0; right: 0; bottom: 0; padding: 32px 12px 10px; text-align: left;
-    color: #fff; font: 700 clamp(12px, .9vw, 16px)/1.2 'Inter', sans-serif; letter-spacing: -0.02em;
-    background: linear-gradient(to top, rgba(0, 0, 0, .7), transparent); opacity: 0; transition: opacity .25s ease;
-  }
-  .tile:hover .tile-label, .tile:focus-visible .tile-label { opacity: 1; }
-  .tile:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
-  .mosaic-empty { margin: 0 auto; padding: 0 24px; color: #9AA3BD; font-size: clamp(15px, 1.2vw, 20px); }
-  .mosaic-empty[hidden] { display: none; }
-
-
-  @media (hover: none) { .tile-label { opacity: 1; } }
-  @media (max-width: 860px) {
-    .mosaic { grid-template-columns: 1fr; }
-      .mosaic-wrap { padding-bottom: 48px; }
-    }
+  @media (hover: none) { .card-label { opacity: 1; } }
+  @media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+  @media (max-width: 860px) { .work-right { min-height: 0; border-left: 0; } .work-bar { display: none; } }
 </style>
