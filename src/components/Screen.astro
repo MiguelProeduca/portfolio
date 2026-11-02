@@ -17,13 +17,13 @@ interface Props {
   split?: 'even' | 'wide';
   /** tab bar across both halves (work page), with the social icons at its end */
   fullBar?: boolean;
-  /** where the split starts: 'half', or 'nav' = as narrow as the tab bar allows (work page) */
-  start?: 'half' | 'nav';
+  /** where the split starts: 'half', 'nav' (as narrow as the tab bar allows), or the text column's % */
+  start?: 'half' | 'nav' | number;
 }
 const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even', fullBar = false, start = 'half' } = Astro.props;
 ---
 <Base lang={lang} title={title} screen>
-  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default={start === 'nav' ? 'nav' : '50'}>
+  <div class:list={["screen", `screen--${split}`, { "screen--fullbar": fullBar }]} slot="hero" data-split data-default={start === 'nav' ? 'nav' : start === 'half' ? '50' : String(start)}>
     {fullBar && (
       <div class="screen-topbar">
         <TabBar lang={lang} active={active} />
@@ -57,7 +57,7 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
 
 <script>
   // Drag the line between the two halves to resize them, while you're on that screen.
-  // Every screen opens at its own default (half and half); when you change tab the line
+  // Every screen opens at its own default (half and half, or its own width); when you change tab the line
   // glides from where it was to the new screen's default instead of jumping. Double-click resets.
   let last: number | null = null; // split of the screen we're leaving (survives tab changes)
 
