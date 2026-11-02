@@ -1,5 +1,5 @@
 ---
-// The site's only navigation: a dark strip of tabs, the current one in white.
+// The site's only navigation: a white strip of tabs, the current one on a soft blue.
 import { t, prefix, type Lang } from '../i18n';
 
 interface Props {
@@ -23,20 +23,20 @@ const base = `${prefix(lang)}/`;
 </nav>
 
 <style>
-  .tabs { display: flex; align-items: stretch; background: #111214; min-height: 46px; }
+  .tabs { display: flex; align-items: stretch; background: #fff; min-height: 41px; }
   .tabs ul { display: flex; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
   .tabs ul::-webkit-scrollbar { display: none; }
   .tabs li { display: flex; flex: none; }
   .tabs ul a {
     display: flex; align-items: center; justify-content: center;
     min-width: clamp(64px, 6.6vw, 126px); padding: 8px clamp(10px, 1.25vw, 24px);
-    color: #fff; font-family: 'Inter', sans-serif; font-weight: 300;
+    color: #181C26; font-family: 'Inter', sans-serif; font-weight: 300;
     font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap;
     transition: background-color .2s ease, color .2s ease;
   }
-  .tabs ul a:hover { background: #2B3142; color: #fff; }
-  .tabs ul a[aria-current="page"] { background: #fff; color: #111214; }
-  .tabs ul a:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 0; }
+  .tabs ul a:hover { background: #F6F7FC; color: #181C26; }
+  .tabs ul a[aria-current="page"] { background: #EFF2FB; color: #181C26; }
+  .tabs ul a:focus-visible { outline: 2px solid #181C26; outline-offset: -4px; border-radius: 0; }
 
   @media (max-width: 560px) {
     .tabs ul a { min-width: 0; padding: 8px; font-size: 13px; }

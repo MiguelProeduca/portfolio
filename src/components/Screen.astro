@@ -141,9 +141,9 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
 </script>
 
 <style>
-  .screen { --split: 50%; position: relative; display: grid; grid-template-columns: minmax(var(--min-left, 0px), var(--split)) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #000; }
+  .screen { --split: 50%; position: relative; display: grid; grid-template-columns: minmax(var(--min-left, 0px), var(--split)) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #181C26; }
   .screen--fullbar { grid-template-rows: auto 1fr; }
-  .screen-topbar { grid-column: 1 / -1; min-width: 0; display: flex; align-items: stretch; justify-content: space-between; background: #111214; }
+  .screen-topbar { grid-column: 1 / -1; min-width: 0; display: flex; align-items: stretch; justify-content: space-between; background: #fff; }
   .screen-topbar > :global(.tabs) { min-width: 0; }
   .screen-topbar :global(.screen-socials-bar) { padding: 0 clamp(12px, 1.25vw, 24px); }
   .screen-media :global(.screen-socials) { position: absolute; top: clamp(10px, 1vw, 16px); right: clamp(12px, 1.25vw, 24px); z-index: 2; }

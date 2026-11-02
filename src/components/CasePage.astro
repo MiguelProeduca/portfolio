@@ -24,7 +24,7 @@ const current = slugOf(entry.id);
 <Base lang={lang} title={`${d.title} · ${site.name}`} description={d.summary} screen>
   <div class="project" slot="hero">
     <aside class="panel">
-      <a class="back" href={`${base}/work/`}><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M14 8a.5.5 0 0 1-.5.5H3.71l3.64 3.65a.5.5 0 0 1-.7.7l-4.5-4.5a.5.5 0 0 1 0-.7l4.5-4.5a.5.5 0 1 1 .7.7L3.71 7.5h9.79A.5.5 0 0 1 14 8Z" fill="currentColor"/></svg> {s.backToWork}</a>
+      <div class="back-bar"><a class="back" href={`${base}/work/`}><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M14 8a.5.5 0 0 1-.5.5H3.71l3.64 3.65a.5.5 0 0 1-.7.7l-4.5-4.5a.5.5 0 0 1 0-.7l4.5-4.5a.5.5 0 1 1 .7.7L3.71 7.5h9.79A.5.5 0 0 1 14 8Z" fill="currentColor"/></svg> {s.backToWork}</a></div>
       <div class="panel-body" transition:animate="fade">
         <p class="panel-meta">{d.company}{d.year && ` · ${d.year}`}</p>
         <h1 class="t-title">{d.title}</h1>
@@ -42,7 +42,7 @@ const current = slugOf(entry.id);
 
     <div class="main">
       <div class="main-bar">
-        <Socials class="main-socials" />
+        <Socials class="main-socials socials--dark" />
         <nav class="switch" aria-label={s.projectsLabel}>
           <a href={`${base}/work/`}>{s.allProjects}</a>
           {cases.map((c) => (
@@ -74,28 +74,30 @@ const current = slugOf(entry.id);
 <style>
   .project { display: grid; grid-template-columns: minmax(0, 35.5%) minmax(0, 1fr); min-height: 100svh; background: #fff; }
 
-  /* left: dark, stays in place while the case scrolls */
-  .panel { position: sticky; top: 0; height: 100svh; overflow-y: auto; display: flex; flex-direction: column; background: #111214; color: #fff; scrollbar-width: none; }
-  .back { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 clamp(20px, 1.25vw, 24px); background: #fff; color: #111214; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); letter-spacing: -0.04em; }
+  /* left: stays in place while the case scrolls */
+  .panel { position: sticky; top: 0; height: 100svh; overflow-y: auto; display: flex; flex-direction: column; background: #fff; color: #181C26; scrollbar-width: none; border-right: 1px solid #D6DCF5; }
+  .back { display: flex; align-items: center; gap: 8px; min-height: 41px; padding: 0 clamp(20px, 1.25vw, 24px); background: #fff; color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); letter-spacing: -0.04em; }
+  .back-bar { display: flex; background: #EFF2FB; }
+  .back { flex: none; }
   .back:hover { color: #5A6481; }
   .panel-body { container-type: inline-size; display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 44px); padding: clamp(40px, 5.5vw, 96px) clamp(20px, 1.25vw, 24px) 40px; }
-  .panel-meta { margin: 0 0 calc(-1 * clamp(8px, 1.4vw, 24px)); font-size: clamp(13px, 3cqi, 16px); color: #9AA3BD; }
+  .panel-meta { margin: 0 0 calc(-1 * clamp(8px, 1.4vw, 24px)); font-size: clamp(13px, 3cqi, 16px); color: #5A6481; }
   .panel .t-title { font-size: clamp(30px, 11.5cqi, 79px); }
   .panel .t-lead { font-size: clamp(16px, 5.3cqi, 36px); }
   .facts { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
-  .facts div { padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, .16); }
-  .facts dt { font-size: 12px; color: #9AA3BD; margin-bottom: 3px; }
+  .facts div { padding: 12px 0; border-top: 1px solid #D6DCF5; }
+  .facts dt { font-size: 12px; color: #5A6481; margin-bottom: 3px; }
   .facts dd { margin: 0; font-size: 14px; font-weight: 500; }
 
-  /* right: dark bar with socials, then the project switcher in white */
+  /* right: bar with socials, then the project switcher */
   .main { min-width: 0; display: flex; flex-direction: column; }
-  .main-bar { position: sticky; top: 0; z-index: 3; background: #111214; display: grid; grid-template-columns: minmax(0, 1fr); }
-  .main-bar :global(.main-socials) { justify-self: end; min-height: 50px; padding: 0 clamp(12px, 1.25vw, 24px); }
+  .main-bar { position: sticky; top: 0; z-index: 3; background: #fff; display: grid; grid-template-columns: minmax(0, 1fr); }
+  .main-bar :global(.main-socials) { justify-self: end; min-height: 41px; padding: 0 clamp(12px, 1.25vw, 24px); }
   .switch { display: flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; justify-self: start; background: #fff; }
   .switch::-webkit-scrollbar { display: none; }
-  .switch a { flex: none; min-width: clamp(64px, 6.6vw, 126px); text-align: center; padding: 8px clamp(12px, 1.25vw, 24px); color: #111214; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap; }
-  .switch a:hover { background: #EEF0F7; color: #181C26; }
-  .switch a[aria-current="page"] { background: #111214; color: #fff; }
+  .switch a { flex: none; min-width: clamp(64px, 6.6vw, 126px); text-align: center; padding: 8px clamp(12px, 1.25vw, 24px); color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap; }
+  .switch a:hover { background: #F6F7FC; color: #181C26; }
+  .switch a[aria-current="page"] { background: #EFF2FB; color: #181C26; }
 
   .main-body { display: flex; flex-direction: column; padding: 0 clamp(20px, 3.3vw, 64px) 64px; }
   .cover { display: block; width: 100%; height: calc(100svh - 88px); object-fit: contain; background: #fff; margin: 0 0 clamp(40px, 5vw, 80px); border-radius: 0; }
