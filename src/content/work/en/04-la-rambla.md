@@ -2,7 +2,7 @@
 order: 4
 tabLabel: "la rambla"
 title: La Rambla
-cardTitle: "App for women climbers"
+cardTitle: "app for women climbers"
 cardSub: "An app that helps women organise to climb together."
 kicker: Product · Bootcamp project
 tag: Product · La Rambla
@@ -19,13 +19,13 @@ cover: "/work/rambla/cover.webp"
 hero: "La Rambla's start screen on a phone"
 ---
 
-## Context
+## context
 
 Climbing has boomed since the pandemic, driven by interest in fitness and being outdoors. It has historically been a male-dominated sport, but more and more women are taking it up.
 
 The name, La Rambla, comes from the first 9a route ever climbed by a woman.
 
-## Hypothesis
+## hypothesis
 
 My starting point was that **women find it hard to meet other women to climb with.**
 
@@ -34,14 +34,14 @@ My starting point was that **women find it hard to meet other women to climb wit
   <figcaption>Fig. 02 · The starting hypothesis</figcaption>
 </figure>
 
-## Research
+## research
 
 - **Desk research:** studies from climbing gyms, sports educators and the mountaineering federation. Around 37% of indoor climbers and 34% of federation members are women.
 - **Surveys** on motivations, habits and views on women-only groups.
 - **Six in-depth interviews** with women climbers.
 - **Benchmark** of Telegram and Facebook meet-up groups, and of group-sport, meet-up and dating apps.
 
-## The hypothesis was wrong
+## the hypothesis was wrong
 
 Women did know other women to climb with. **The real problem was getting organised.** Also:
 
@@ -51,13 +51,13 @@ Women did know other women to climb with. **The real problem was getting organis
 
 > "When I go climbing with other women, I find more sisterhood, more companionship, more understanding."
 
-## Definition
+## definition
 
 From the surveys and interviews I defined six personas (four were taken forward), their Jobs To Be Done and user journeys, to spot where they might drop off. The Value Proposition Canvas turned their pain points into features.
 
 The focus was clear: **ways to find people to climb with, in an app built around safety, trust and motivation.**
 
-## Design
+## design
 
 I kept the architecture light: the essentials first, with features like training plans or posts coming in later phases, depending on how users responded.
 
@@ -76,7 +76,7 @@ I kept the architecture light: the essentials first, with features like training
   <figcaption>Fig. 05 · Creating an outing, step by step</figcaption>
 </figure>
 
-## What I learned
+## what I learned
 
 The most valuable thing was being wrong early. Had I designed around the original hypothesis, I'd have built an app for finding climbing partners, when what was needed was a tool to get organised with the ones they already had.
 

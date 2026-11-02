@@ -1,7 +1,7 @@
 ---
 order: 3
 tabLabel: "ai"
-title: One AI product, two users
+title: one AI product, two users
 cardTitle: "SUPER EDU & AGC"
 cardSub: "AI for teachers and students."
 heroLinks:
@@ -23,7 +23,7 @@ coverPosition: "right"
 hero: "Teacher workspace and student viewer side by side"
 ---
 
-## Part 1 · Teachers create
+## part 1 · teachers create
 
 A teacher generates the full content of a course with AI, in two phases:
 
@@ -32,7 +32,7 @@ A teacher generates the full content of a course with AI, in two phases:
 
 Every piece goes through review: the head of studies approves it or asks for changes.
 
-## My role
+## my role
 
 The product rules were defined by the team: the state model and the review flows. My job was to make them understandable: organise the information, keep processes consistent, and make something complex feel simple.
 
@@ -46,19 +46,19 @@ The product rules were defined by the team: the state model and the review flows
   <figcaption>Fig. 02 · Every piece of content follows the same state cycle</figcaption>
 </figure>
 
-## The brief and the AI assistant
+## the brief and the AI assistant
 
 The brief is what the teacher gives the AI before generating anything: read-only academic data, the students' prior knowledge, the number of topics with a recommended value, the course focus, mandatory topics, optional sections and reference sources.
 
 Next to it, an **AI assistant** offers actions like "Ask me questions and write the context". The AI doesn't only generate the course: it also helps the teacher write the brief, by interviewing them.
 
-## Part 2 · Students study
+## part 2 · students study
 
 With the content approved, students study it in a viewer that also generates study tools from it: summary, podcast, concept map, practice (flashcards, true or false, quizzes, mini cases) and an assistant.
 
 The question was where those tools live relative to the content: next to it, instead of it, or on top of it.
 
-## Exploration
+## exploration
 
 - **Idea 1, next to the content.** A "What do you want to do?" menu opens each tool in a side panel, beside the topic.
 - **Idea 2, instead of the content.** A side navigation groups the topic and the tools. Choosing a tool replaces the content.
@@ -70,13 +70,13 @@ Both already included asking the AI about selected text: the student highlights 
   <figcaption>Fig. 03 · From fixed panels to AI on demand</figcaption>
 </figure>
 
-## The decision
+## the decision
 
 I argued for the early ideas, especially the side panel: it let students read and use a tool at the same time.
 
 The team chose the simplest option: more familiar to students, closer to the brand and lighter on the interface. My job became making that option work without losing what was good in the first ideas. Using AI without leaving the text stayed, through contextual actions instead of fixed panels.
 
-## The final design
+## the final design
 
 Content leads, and AI appears when the student asks for it.
 
@@ -86,6 +86,6 @@ Content leads, and AI appears when the student asks for it.
 - **An optional assistant panel**, opened on demand.
 - **Practice in a dropdown**, and a course home with syllabus, progress and the student's notes.
 
-## Result
+## result
 
 The student viewer is in pilot, used by real students. It was handed to engineering in phases, on desktop and mobile, and everything is built on the multi-brand design system, including the assistant's chat input.

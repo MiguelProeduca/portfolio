@@ -1,8 +1,8 @@
 ---
 order: 2
 tabLabel: "estudiantes"
-title: El día a día del estudiante, en una sola app
-cardTitle: "App del estudiante · UNIR"
+title: el día a día del estudiante, en una sola app
+cardTitle: "app del estudiante · UNIR"
 cardSub: "Un espacio para organizar el día a día académico."
 heroLinks:
   - { label: "Portal del estudiante", type: "Proyecto" }
@@ -22,13 +22,13 @@ coverBorder: true
 hero: "Pantallas de la app del estudiante en móvil: mi espacio, correo, página de titulación y el tablero de tareas"
 ---
 
-## La app
+## la app
 
 Es el espacio personal del alumno de UNIR. Antes, todo esto vivía en un Moodle y en varias webs dispersas: había que saltar de un sitio a otro y no era fácil saber qué tenías pendiente, como en una universidad tradicional en la que todo pasa por secretaría.
 
 La app se diseñó desde cero, sin una versión anterior a la que sustituir, para que el alumno tenga su vida académica en un solo sitio.
 
-## Qué tiene
+## qué tiene
 
 **Cinco secciones principales:**
 
@@ -45,7 +45,7 @@ La app se diseñó desde cero, sin una versión anterior a la que sustituir, par
   <figcaption>Fig. 02 · Mi espacio, el resumen de todo</figcaption>
 </figure>
 
-## Cómo está planteada
+## cómo está planteada
 
 Con tantas secciones, el reto era que no pareciera un laberinto. Lo resolví con una estructura muy reconocible, iterada muchas veces con producto: **una sidebar con todas las secciones y una home que resume lo importante,** para que el alumno entienda dónde está cada cosa sin pensarlo.
 
@@ -53,7 +53,7 @@ Diseñé la UI de principio a fin y los flujos de UI de cada sección. La arquit
 
 Está pensada como aplicación aunque hoy es una web app, y funciona en móvil, tablet y escritorio. Todo está construido con el [sistema de diseño multimarca](../one-system-three-brands/).
 
-## La agenda
+## la agenda
 
 Fue la parte más difícil. Un calendario académico tiene que mostrar mucha información (clases, entregas, exámenes, eventos) en cuatro vistas distintas y en tres tamaños de pantalla, sin perder legibilidad. Como componente, fue el mayor reto de toda la app.
 
@@ -62,7 +62,7 @@ Fue la parte más difícil. Un calendario académico tiene que mostrar mucha inf
   <figcaption>Fig. 03 · El calendario académico</figcaption>
 </figure>
 
-## Las tareas
+## las tareas
 
 Es la parte que más me gusta. Reúne en un solo lugar todo lo que el alumno tiene que hacer, con dos vistas de las mismas tareas: **tablero,** con una columna por estado, y **lista,** más detallada.
 
@@ -80,7 +80,7 @@ Lo complejo fue decidir cómo se comporta cada tarea. Hay cuatro tipos, y solo l
   <figcaption>Fig. 04 · Dos vistas de las mismas tareas</figcaption>
 </figure>
 
-## Correo y chats
+## correo y chats
 
 Las otras dos piezas de las que estoy más contento. El correo funciona como un cliente completo y los chats permiten hablar con compañeros y profesores sin salir de la app, así que el alumno ya no necesita otras herramientas para comunicarse con la universidad.
 
@@ -89,6 +89,6 @@ Las otras dos piezas de las que estoy más contento. El correo funciona como un 
   <figcaption>Fig. 05 · Correo y chats</figcaption>
 </figure>
 
-## Dónde está hoy
+## dónde está hoy
 
 La app está publicada y en fase piloto, con alumnos reales. Su feedback nos llega de forma continua y sirve para seguir iterando.
