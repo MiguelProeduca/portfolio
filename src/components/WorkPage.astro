@@ -41,7 +41,7 @@ const base = prefix(lang);
   .work-bar { display: flex; align-items: center; justify-content: flex-end; min-height: 46px; padding: 0 clamp(12px, 1.25vw, 24px); }
 
   /* three tall cards per row, all the same size */
-  .cards { list-style: none; margin: 0; padding: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-content: start; }
+  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; align-content: start; }
   .card { position: relative; display: block; aspect-ratio: 370 / 462; overflow: hidden; background: #fff; }
   .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
   .card:hover img { transform: scale(1.04); }
@@ -54,6 +54,6 @@ const base = prefix(lang);
   .card:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
   @media (hover: none) { .card-label { opacity: 1; } }
-  @media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; } }
+  @media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 860px) { .work-right { min-height: 0; border-left: 0; } .work-bar { display: none; } }
 </style>
