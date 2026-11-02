@@ -23,19 +23,19 @@ const base = `${prefix(lang)}/`;
 </nav>
 
 <style>
-  .tabs { display: flex; align-items: stretch; background: #181C26; min-height: 46px; }
+  .tabs { display: flex; align-items: stretch; background: #111214; min-height: 46px; }
   .tabs ul { display: flex; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
   .tabs ul::-webkit-scrollbar { display: none; }
   .tabs li { display: flex; flex: none; }
   .tabs ul a {
     display: flex; align-items: center; justify-content: center;
     min-width: clamp(64px, 6.6vw, 126px); padding: 8px clamp(10px, 1.25vw, 24px);
-    color: #fff; font-family: 'Inter', sans-serif; font-weight: 800;
-    font-size: clamp(14px, 1.25vw, 24px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap;
+    color: #fff; font-family: 'Inter', sans-serif; font-weight: 300;
+    font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap;
     transition: background-color .2s ease, color .2s ease;
   }
   .tabs ul a:hover { background: #2B3142; color: #fff; }
-  .tabs ul a[aria-current="page"] { background: #fff; color: #181C26; }
+  .tabs ul a[aria-current="page"] { background: #fff; color: #111214; }
   .tabs ul a:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 0; }
 
   @media (max-width: 560px) {

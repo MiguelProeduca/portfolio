@@ -116,7 +116,7 @@ body { background: #fff; }
    the column they sit in, so the text follows when the split is dragged */
 .t-name { margin: 0; font-weight: 600; font-size: clamp(28px, 8.2cqi, 79px); line-height: 1.04; letter-spacing: -0.04em; }
 .t-role { margin: 0; font-weight: 600; font-size: clamp(40px, 15.8cqi, 151px); line-height: .86; letter-spacing: -0.06em; }
-.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, 3.75cqi, 36px); line-height: 1.15; letter-spacing: -0.02em; }
+.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, 3.75cqi, 36px); line-height: 1.06; letter-spacing: -0.07em; }
 .t-title { margin: 0; font-weight: 600; font-size: clamp(28px, 8.2cqi, 79px); line-height: 1; letter-spacing: -0.07em; }
 .t-caps { text-transform: uppercase; letter-spacing: -0.04em; }
 .t-body { margin: 0; font-weight: 400; font-size: clamp(15px, 2.92cqi, 28px); line-height: 1.3; }
