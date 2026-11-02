@@ -1,9 +1,12 @@
 ---
+// A project: dark panel on the left that stays put (title, text, facts),
+// the case on the right on white, read by scrolling.
 import { render, type CollectionEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Socials from './Socials.astro';
 import { site } from '../site';
 import { t, prefix, type Lang } from '../i18n';
-import { slugOf } from '../cases';
+import { getCases, slugOf } from '../cases';
 
 interface Props {
   lang: Lang;
@@ -14,15 +17,19 @@ const { lang, entry, next } = Astro.props;
 const s = t[lang];
 const { Content } = await render(entry);
 const d = entry.data;
+const base = prefix(lang);
+const cases = await getCases(lang);
+const current = slugOf(entry.id);
 ---
-<Base lang={lang} title={`${d.title} · ${site.name}`} description={d.summary} wide>
-  <article class="case">
-    <header class="case-head">
-      <p class="label">{d.company ?? d.kicker}{d.year && <span> · {d.year}</span>}</p>
-      <h1>{d.title}</h1>
-      <div class="intro">
-        <p class="lead">{d.lead}</p>
-        <dl class="meta">
+<Base lang={lang} title={`${d.title} · ${site.name}`} description={d.summary} screen>
+  <div class="project" slot="hero">
+    <aside class="panel">
+      <a class="back" href={`${base}/work/`}><span aria-hidden="true">←</span> {s.backToWork}</a>
+      <div class="panel-body" transition:animate="fade">
+        <p class="panel-meta">{d.company}{d.year && ` · ${d.year}`}</p>
+        <h1 class="t-title">{d.title}</h1>
+        <p class="t-lead">{d.lead}</p>
+        <dl class="facts">
           {d.meta.map((m) => (
             <div>
               <dt>{m.label}</dt>
@@ -31,104 +38,98 @@ const d = entry.data;
           ))}
         </dl>
       </div>
-    </header>
+    </aside>
 
-    {d.cover ? (
-      <img class:list={["cover", { "cover--anim": d.cover.endsWith('.gif') }]} src={d.cover} alt={d.hero.replace(/^\[|\]$/g, '')} />
-    ) : (
-      <div class="placeholder cover">{d.hero}</div>
-    )}
+    <div class="main">
+      <div class="main-bar">
+        <Socials class="main-socials" />
+        <nav class="switch" aria-label={s.projectsLabel}>
+          <a href={`${base}/work/`}>{s.allProjects}</a>
+          {cases.map((c) => (
+            <a href={`${base}/work/${slugOf(c.id)}/`} aria-current={slugOf(c.id) === current ? 'page' : undefined}>{c.data.tabLabel ?? c.data.company}</a>
+          ))}
+        </nav>
+      </div>
 
-    <div class="prose">
-      <Content />
+      <div class="main-body" transition:animate="fade">
+        {d.cover ? (
+          <img class="cover" src={d.cover} alt={d.hero.replace(/^\[|\]$/g, '')} />
+        ) : (
+          <div class="placeholder cover">{d.hero}</div>
+        )}
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        <a class="next" href={`${base}/work/${slugOf(next.id)}/`}>
+          <span class="next-label">{s.nextCase}</span>
+          <span class="next-title">{next.data.title} <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
     </div>
-  </article>
-
-  <a class="next" href={`${prefix(lang)}/work/${slugOf(next.id)}/`}>
-    <span class="label">{s.nextCase}</span>
-    <span class="next-title">{next.data.cardTitle ?? next.data.title} <span aria-hidden="true">→</span></span>
-  </a>
+  </div>
 </Base>
 
 <style>
-  /* Case pages share the home's voice: full width, big tight type, square corners, nothing extra. */
-  .case { --accent: #4B6A7E; padding-top: clamp(48px, 7vw, 104px); }
-  .label { margin: 0 0 20px; font-size: 15px; color: var(--accent); }
+  .project { display: grid; grid-template-columns: minmax(0, 35.5%) minmax(0, 1fr); min-height: 100svh; background: #fff; }
 
-  h1 {
-    margin: 0; max-width: 18ch; color: #181C26; text-wrap: balance;
-    font-size: clamp(40px, 6.4vw, 104px); line-height: .98; font-weight: 800; letter-spacing: -0.045em;
-  }
+  /* left: dark, stays in place while the case scrolls */
+  .panel { position: sticky; top: 0; height: 100svh; overflow-y: auto; display: flex; flex-direction: column; background: #131313; color: #fff; scrollbar-width: none; }
+  .back { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 clamp(20px, 1.25vw, 24px); background: #fff; color: #181C26; font-weight: 500; font-size: clamp(14px, 1.1vw, 20px); letter-spacing: -0.02em; }
+  .back:hover { color: #5A6481; }
+  .panel-body { container-type: inline-size; display: flex; flex-direction: column; gap: clamp(20px, 2.4vw, 44px); padding: clamp(40px, 5.5vw, 96px) clamp(20px, 1.25vw, 24px) 40px; }
+  .panel-meta { margin: 0 0 calc(-1 * clamp(8px, 1.4vw, 24px)); font-size: clamp(13px, 3cqi, 16px); color: #9AA3BD; }
+  .panel .t-title { font-size: clamp(30px, 11.5cqi, 79px); }
+  .panel .t-lead { font-size: clamp(16px, 5cqi, 34px); line-height: 1.12; }
+  .facts { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+  .facts div { padding: 12px 0; border-top: 1px solid rgba(255, 255, 255, .16); }
+  .facts dt { font-size: 12px; color: #9AA3BD; margin-bottom: 3px; }
+  .facts dd { margin: 0; font-size: 14px; font-weight: 500; }
 
-  .intro {
-    display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px;
-    margin-top: clamp(36px, 5vw, 64px);
-  }
-  @media (min-width: 960px) { .intro { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; } }
-  .lead { margin: 0; max-width: 36ch; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.35; font-weight: 500; letter-spacing: -0.015em; color: #5A6481; }
-  .meta { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; align-content: start; }
-  .meta div { padding: 14px 0; border-top: 1px solid var(--color-border); }
-  .meta dt { font-size: 13px; color: var(--color-text-subtle); margin-bottom: 4px; }
-  .meta dd { margin: 0; font-size: 15px; font-weight: 500; color: var(--color-heading); }
+  /* right: dark bar with socials, then the project switcher in white */
+  .main { min-width: 0; display: flex; flex-direction: column; }
+  .main-bar { position: sticky; top: 0; z-index: 3; background: #131313; display: grid; grid-template-columns: minmax(0, 1fr); }
+  .main-bar :global(.main-socials) { justify-self: end; min-height: 50px; padding: 0 clamp(12px, 1.25vw, 24px); }
+  .switch { display: flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; justify-self: start; background: #fff; }
+  .switch::-webkit-scrollbar { display: none; }
+  .switch a { flex: none; padding: 6px clamp(14px, 1.7vw, 32px); color: #181C26; font-weight: 500; font-size: clamp(14px, 1.1vw, 20px); letter-spacing: -0.02em; white-space: nowrap; }
+  .switch a:hover { background: #EEF0F7; color: #181C26; }
+  .switch a[aria-current="page"] { background: #181C26; color: #fff; }
 
-  .cover {
-    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
-    margin: clamp(48px, 6vw, 88px) 0 0; background: var(--color-surface-muted); border-radius: 0;
-  }
-  /* animated covers (square GIFs with white or transparent frames): show whole, on white */
-  .cover--anim { object-fit: contain; background: #fff; }
+  .main-body { display: flex; flex-direction: column; padding: 0 clamp(20px, 3.3vw, 64px) 64px; }
+  .cover { display: block; width: 100%; height: calc(100svh - 88px); object-fit: contain; background: #fff; margin: 0 0 clamp(40px, 5vw, 80px); border-radius: 0; }
+  .placeholder.cover { height: 60svh; }
 
-  /* Body: big section titles on the left, reading column on the right; figures run full width. */
-  .prose { --indent: 0px; padding-top: clamp(64px, 8vw, 120px); font-size: 18px; line-height: 1.65; color: var(--color-text-muted); }
-  @media (min-width: 960px) { .prose { --indent: calc((100% - 64px) * 7 / 12 + 64px); } }
-  .prose::after { content: ''; display: block; clear: both; }
-  .prose :global(> *) { margin: 0 0 18px var(--indent); max-width: 680px; }
-  .prose :global(h2) {
-    clear: both; margin: clamp(56px, 7vw, 104px) 0 24px; max-width: none;
-    color: #181C26; font-size: clamp(28px, 3vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.04em;
-  }
-  @media (min-width: 960px) {
-    .prose :global(h2) { float: left; width: calc((100% - 64px) * 7 / 12); padding-right: 32px; margin: 0; }
-    /* title and first block start on the same line: both get the section gap as padding */
-    .prose :global(h2 + *) { margin-top: 0; }
-    .prose :global(h2:not(:first-child)), .prose :global(h2:not(:first-child) + *) { padding-top: clamp(80px, 8vw, 120px); }
-  }
+  .prose { max-width: 760px; font-size: 18px; line-height: 1.65; color: #3A4152; }
+  .prose :global(> *) { margin: 0 0 18px; }
+  .prose :global(h2) { margin: clamp(56px, 6vw, 96px) 0 20px; color: #000; font-weight: 600; font-size: clamp(28px, 2.9vw, 48px); line-height: 1.02; letter-spacing: -0.06em; }
   .prose :global(h2:first-child) { margin-top: 0; }
-  .prose :global(strong) { font-weight: 600; color: var(--color-heading); }
-  .prose :global(a) { color: var(--color-heading); text-decoration: underline; text-underline-offset: 3px; }
+  .prose :global(strong) { font-weight: 600; color: #000; }
+  .prose :global(a) { color: #000; text-decoration: underline; text-underline-offset: 3px; }
   .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
   .prose :global(li) { margin-bottom: 8px; }
-  .prose :global(li::marker) { color: var(--color-text-subtle); }
-  .prose :global(blockquote) {
-    margin-top: 40px; margin-bottom: 40px; padding: 0;
-    color: #181C26; font-size: clamp(24px, 2.4vw, 34px); line-height: 1.2; font-weight: 700; letter-spacing: -0.03em;
-  }
+  .prose :global(blockquote) { margin: 40px 0; padding: 0; color: #000; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.2; font-weight: 600; letter-spacing: -0.04em; }
   .prose :global(blockquote p) { margin: 0; }
-
-  /* figures break out of the column to the full width */
-  .prose :global(figure) { clear: both; margin: clamp(56px, 7vw, 96px) 0; max-width: none; display: flex; flex-direction: column; gap: 14px; }
-  .prose :global(figure img) { width: 100%; height: auto; background: var(--color-surface-muted); }
-  .prose :global(figure .placeholder) { aspect-ratio: 16 / 7; border-radius: 0; }
-  .prose :global(figcaption) { font-size: 14px; color: var(--color-text-subtle); }
-
+  .prose :global(figure) { margin: clamp(40px, 5vw, 72px) 0; max-width: none; width: min(100%, calc(100vw * .645 - 2 * clamp(20px, 3.3vw, 64px))); display: flex; flex-direction: column; gap: 12px; }
+  .prose :global(figure img) { width: 100%; height: auto; background: #F3F4F8; }
+  .prose :global(figure .placeholder) { aspect-ratio: 16 / 9; border-radius: 0; }
+  .prose :global(figcaption) { font-size: 14px; color: #5A6481; }
   .prose :global(table) { width: 100%; border-collapse: collapse; font-size: 15px; }
-  .prose :global(th) { text-align: left; font-size: 13px; font-weight: 500; color: var(--color-text-subtle); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--color-border-strong); }
-  .prose :global(td) { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--color-border); vertical-align: top; }
-  .prose :global(td:first-child) { color: var(--color-heading); font-weight: 500; }
+  .prose :global(th) { text-align: left; font-size: 13px; font-weight: 500; color: #5A6481; padding: 10px 12px 10px 0; border-bottom: 1px solid #181C26; }
+  .prose :global(td) { padding: 12px 12px 12px 0; border-bottom: 1px solid #D6DCF5; vertical-align: top; }
 
-  h1, .prose :global(h2), .next-title { font-family: 'Inter', sans-serif; font-weight: 600; text-transform: none; letter-spacing: -0.06em; color: #000; }
-  h1 { font-size: clamp(44px, 8vw, 140px); line-height: .9; }
-  .prose :global(h2) { font-size: clamp(28px, 3.2vw, 52px); line-height: 1; }
-  .next-title { font-size: clamp(40px, 6.4vw, 110px); line-height: .95; }
+  .next { display: block; margin-top: clamp(64px, 8vw, 120px); padding-top: 28px; border-top: 1px solid #D6DCF5; color: #000; }
+  .next:hover { color: #000; }
+  .next-label { display: block; margin-bottom: 8px; font-size: 15px; color: #5A6481; }
+  .next-title { display: block; font-weight: 600; font-size: clamp(32px, 4.2vw, 72px); line-height: 1; letter-spacing: -0.06em; transition: color .2s; }
+  .next:hover .next-title { color: #5A6481; }
 
-  .next {
-    display: block; margin-top: clamp(80px, 10vw, 144px); padding-top: 32px; border-top: 1px solid var(--color-border);
-    --accent: #4B6A7E;
+  @media (max-width: 860px) {
+    .project { grid-template-columns: 1fr; }
+    .panel { position: static; height: auto; }
+    .main-bar { position: static; }
+    .cover { height: auto; max-height: 80svh; }
+    .prose :global(figure) { width: 100%; }
   }
-  .next:hover { color: inherit; }
-  .next-title {
-    display: block; color: #181C26; transition: color .2s;
-    font-size: clamp(36px, 5.6vw, 88px); line-height: 1; font-weight: 800; letter-spacing: -0.045em;
-  }
-  .next:hover .next-title { color: var(--accent); }
 </style>

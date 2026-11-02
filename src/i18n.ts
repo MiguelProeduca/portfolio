@@ -102,6 +102,8 @@ export const t = {
     filtersLabel: 'Filter work',
     emptyFilter: 'Advertising work is on its way.',
     backToAll: 'Back to all work',
+    backToWork: 'back to my work',
+    allProjects: 'all',
     workIntro: [
       'I design systems and digital products for education: a multi-brand design system, the UNIR student app and AI tools for teachers and students.',
       'Pick one to see what it is about, and open the full case from there.',
@@ -207,6 +209,8 @@ export const t = {
     filtersLabel: 'Filtrar trabajos',
     emptyFilter: 'Los trabajos de publicidad están en camino.',
     backToAll: 'Volver a todos',
+    backToWork: 'volver a mis trabajos',
+    allProjects: 'todos',
     workIntro: [
       'Diseño sistemas y productos digitales para la educación: un sistema de diseño multimarca, la app del estudiante de UNIR y herramientas de IA para profesores y alumnos.',
       'Pincha en uno para ver de qué va y, desde ahí, entrar al caso completo.',

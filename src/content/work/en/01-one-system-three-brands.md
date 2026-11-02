@@ -1,7 +1,7 @@
 ---
 order: 1
 category: "design-system"
-tabLabel: "proeduca (DS)"
+tabLabel: "design system"
 title: One system, three brands
 cardTitle: "Multi-brand design system"
 cardSub: "One design system for three brands."

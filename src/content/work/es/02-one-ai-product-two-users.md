@@ -1,6 +1,6 @@
 ---
 order: 3
-tabLabel: "ia educacional"
+tabLabel: "ia"
 title: Un producto de IA, dos usuarios
 cardTitle: "SUPER EDU y AGC"
 cardSub: "Inteligencia artificial para profesores y estudiantes."

@@ -1,6 +1,5 @@
 ---
-// Work: a mosaic of every project on the right (filterable). Picking one flips the
-// colours: the left turns dark with the project's title and text, the right shows it big.
+// Work: an even grid of every project on the right (filterable); each card opens its case.
 import Screen from './Screen.astro';
 import { site } from '../site';
 import { t, prefix, type Lang } from '../i18n';
@@ -20,14 +19,6 @@ const base = prefix(lang);
         {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
       </div>
     </div>
-    {cases.map((c) => (
-      <article class="work-detail" data-detail={slugOf(c.id)} hidden>
-        <p class="work-meta">{c.data.company} · {c.data.year}</p>
-        <h2 class="t-title">{c.data.title}</h2>
-        <p class="t-lead">{c.data.lead}</p>
-        <a class="work-case" href={`${base}/work/${slugOf(c.id)}/`}>{s.viewCase} <span aria-hidden="true">→</span></a>
-      </article>
-    ))}
   </div>
 
   <div class="work-right" slot="right" data-work>
@@ -41,44 +32,26 @@ const base = prefix(lang);
       <ul class="mosaic">
         {cases.map((c, i) => (
           <li data-cat={c.data.category}>
-            <button type="button" class="tile" data-pick={slugOf(c.id)} aria-label={c.data.cardTitle ?? c.data.title}>
+            <a class="tile" href={`${base}/work/${slugOf(c.id)}/`}>
               {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i < 4 ? 'eager' : 'lazy'} />}
               <span class="tile-label">{c.data.cardTitle ?? c.data.title}</span>
-            </button>
+            </a>
           </li>
         ))}
       </ul>
       <p class="mosaic-empty" data-empty hidden>{s.emptyFilter}</p>
     </div>
 
-    {cases.map((c) => (
-      <a class="work-view" data-view={slugOf(c.id)} href={`${base}/work/${slugOf(c.id)}/`} hidden aria-label={`${s.viewCase}: ${c.data.cardTitle ?? c.data.title}`}>
-        {c.data.cover && <img src={c.data.cover} alt="" loading="lazy" />}
-      </a>
-    ))}
   </div>
 </Screen>
 
 <script>
   function initWork() {
     const root = document.querySelector<HTMLElement>('[data-work]');
-    const screen = document.querySelector<HTMLElement>('[data-split]');
-    if (!root || !screen) return;
+    if (!root) return;
     const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
     const tiles = [...root.querySelectorAll<HTMLLIElement>('.mosaic li')];
-    const mosaic = root.querySelector<HTMLElement>('[data-mosaic]')!;
     const empty = root.querySelector<HTMLElement>('[data-empty]')!;
-    const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
-    const details = [...document.querySelectorAll<HTMLElement>('[data-detail]')];
-    const intro = document.querySelector<HTMLElement>('[data-intro]')!;
-
-    const showProject = (slug: string | null) => {
-      screen.classList.toggle('is-project', !!slug);
-      mosaic.hidden = !!slug;
-      intro.hidden = !!slug;
-      views.forEach((v) => (v.hidden = v.dataset.view !== slug));
-      details.forEach((d) => (d.hidden = d.dataset.detail !== slug));
-    };
     const filter = (key: string) => {
       filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === key)));
       let shown = 0;
@@ -88,36 +61,21 @@ const base = prefix(lang);
         if (on) shown++;
       });
       empty.hidden = shown > 0;
-      showProject(null);
     };
     filters.forEach((f) => f.addEventListener('click', () => filter(f.dataset.filter!)));
-    root.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((b) =>
-      b.addEventListener('click', () => {
-        filters.forEach((f) => f.setAttribute('aria-pressed', 'false'));
-        showProject(b.dataset.pick!);
-        // on phones the text sits above the image: bring it into view
-        if (matchMedia('(max-width: 860px)').matches) document.querySelector('[data-work-left]')?.scrollIntoView({ block: 'start' });
-      }),
-    );
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && screen.classList.contains('is-project')) filter('all'); });
   }
   document.addEventListener('astro:page-load', initWork);
 </script>
 
 <style>
   /* left column: white intro, or dark project detail once one is picked */
-  :global(.screen--fullbar .screen-left) { padding-top: clamp(40px, 5.5vw, 104px); transition: background-color .4s ease, color .4s ease; }
-  :global(.screen.is-project .screen-left) { background: #131313; color: #fff; }
+  :global(.screen--fullbar .screen-left) { padding-top: clamp(40px, 5.5vw, 104px); }
   .work-left { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 58px); }
-  .work-intro, .work-detail { display: flex; flex-direction: column; gap: clamp(24px, 2.6vw, 48px); }
-  .work-intro[hidden], .work-detail[hidden] { display: none; }
-  .work-meta { margin: 0; font-size: clamp(13px, 2cqi, 16px); color: #9AA3BD; }
-  .work-case { align-self: flex-start; font-weight: 600; font-size: clamp(16px, 3cqi, 24px); letter-spacing: -0.03em; color: #fff; border-bottom: 2px solid #fff; }
-  .work-case:hover { color: #9AA3BD; border-color: #9AA3BD; }
+  .work-intro { display: flex; flex-direction: column; gap: clamp(24px, 2.6vw, 48px); }
+  .work-intro[hidden] { display: none; }
 
   /* right column */
   .work-right { display: flex; flex-direction: column; min-height: 100%; background: #181C26; transition: background-color .4s ease; }
-  :global(.screen.is-project) .work-right { background: #fff; }
   .filters { display: flex; flex-wrap: wrap; background: #131313; }
   .filters button {
     padding: 8px clamp(14px, 1.6vw, 32px); border: 0; background: transparent; color: #fff; cursor: pointer;
@@ -127,13 +85,11 @@ const base = prefix(lang);
   .filters button[aria-pressed="true"] { background: #fff; color: #181C26; }
   .filters button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
 
-  .mosaic-wrap { flex: 1; display: flex; align-items: center; padding: clamp(16px, 2vw, 40px) 0; }
+  .mosaic-wrap { flex: 1; display: flex; align-items: flex-start; padding: clamp(16px, 2vw, 40px) 0; }
   .mosaic-wrap[hidden] { display: none; }
-  .mosaic { list-style: none; margin: 0; padding: 0 clamp(12px, 1.25vw, 24px); width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, .8vw, 16px); }
+  .mosaic { list-style: none; margin: 0; padding: 0 clamp(12px, 1.25vw, 24px); width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(12px, 1.25vw, 24px); }
   .mosaic li[hidden] { display: none; }
-  /* a loose rhythm: every second tile drops a little, like pieces laid on a table */
-  .mosaic li:nth-child(3n + 2) { transform: translateY(clamp(16px, 3vw, 56px)); }
-  .tile { position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; padding: 0; border: 0; overflow: hidden; background: #fff; cursor: pointer; }
+  .tile { position: relative; display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 0; overflow: hidden; background: #fff; cursor: pointer; }
   .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
   .tile:hover img { transform: scale(1.04); }
   .tile-label {
@@ -146,16 +102,10 @@ const base = prefix(lang);
   .mosaic-empty { margin: 0 auto; padding: 0 24px; color: #9AA3BD; font-size: clamp(15px, 1.2vw, 20px); }
   .mosaic-empty[hidden] { display: none; }
 
-  .work-view { position: relative; flex: 1; display: block; min-height: 320px; margin: clamp(16px, 2vw, 40px); }
-  .work-view[hidden] { display: none; }
-  .work-view img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
 
   @media (hover: none) { .tile-label { opacity: 1; } }
   @media (max-width: 860px) {
-    .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .mosaic li:nth-child(3n + 2) { transform: none; }
-    .mosaic li:nth-child(2n) { transform: translateY(24px); }
-    .mosaic-wrap { padding-bottom: 48px; }
-    .work-view { min-height: 0; aspect-ratio: 1; }
-  }
+    .mosaic { grid-template-columns: 1fr; }
+      .mosaic-wrap { padding-bottom: 48px; }
+    }
 </style>

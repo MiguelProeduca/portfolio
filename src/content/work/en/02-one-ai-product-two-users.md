@@ -1,6 +1,6 @@
 ---
 order: 3
-tabLabel: "AI for education"
+tabLabel: "ai"
 title: One AI product, two users
 cardTitle: "SUPER EDU & AGC"
 cardSub: "AI for teachers and students."
