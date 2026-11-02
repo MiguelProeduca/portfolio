@@ -1,5 +1,6 @@
 ---
 order: 1
+category: "design-system"
 tabLabel: "proeduca (DS)"
 title: Un sistema, tres marcas
 cardTitle: "Sistema de diseño multimarca"

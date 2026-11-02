@@ -21,6 +21,7 @@ const work = defineCollection({
     cover: z.string().optional(), // card image on the home, e.g. "/work/ds-cover.jpg" in public/
     coverBorder: z.boolean().default(false), // thin border on the home card, for light covers
     coverPosition: z.string().optional(), // CSS object-position for the home card crop, e.g. "right"
+    category: z.enum(['design-system', 'project', 'advertising']).default('project'), // filter on the work page
     tabLabel: z.string().optional(), // short label for the project tabs on the work page
     draft: z.boolean().default(false),
   }),

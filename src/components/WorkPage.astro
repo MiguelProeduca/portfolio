@@ -1,4 +1,6 @@
 ---
+// Work: a mosaic of every project on the right (filterable). Picking one flips the
+// colours: the left turns dark with the project's title and text, the right shows it big.
 import Screen from './Screen.astro';
 import { site } from '../site';
 import { t, prefix, type Lang } from '../i18n';
@@ -10,83 +12,150 @@ const s = t[lang];
 const cases = await getCases(lang);
 const base = prefix(lang);
 ---
-<Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`}>
-  <h1 class="t-title t-caps">{s.workTitle}</h1>
-  <div>
-    {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
-  </div>
-
-  <div class="projects" slot="right" data-projects>
-    <div class="projects-bar">
-      <div class="projects-top" aria-hidden="true"></div>
-      <div class="projects-tabs" role="tablist" aria-label={s.projectsLabel}>
-        {cases.map((c, i) => (
-          <button type="button" role="tab" id={`tab-${slugOf(c.id)}`} aria-controls={`panel-${slugOf(c.id)}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
-            {c.data.tabLabel ?? c.data.company}
-          </button>
-        ))}
+<Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`} fullBar>
+  <div class="work-left" data-work-left>
+    <div class="work-intro" data-intro>
+      <h1 class="t-title">{s.workTitle.toLowerCase()}</h1>
+      <div>
+        {s.workIntro.map((p) => <p class="t-lead">{p}</p>)}
       </div>
     </div>
-    {cases.map((c, i) => (
-      <section class="project" role="tabpanel" id={`panel-${slugOf(c.id)}`} aria-labelledby={`tab-${slugOf(c.id)}`} hidden={i !== 0}>
-        <h2 class="t-title">{c.data.cardTitle ?? c.data.title}</h2>
-        <p class="t-lead">{c.data.summary}</p>
-        <a class="project-media" href={`${base}/work/${slugOf(c.id)}/`} tabindex="-1" aria-hidden="true">
-          {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i === 0 ? 'eager' : 'lazy'} />}
-        </a>
-        <a class="project-link" href={`${base}/work/${slugOf(c.id)}/`}>{s.viewCase} <span aria-hidden="true">→</span></a>
-      </section>
+    {cases.map((c) => (
+      <article class="work-detail" data-detail={slugOf(c.id)} hidden>
+        <p class="work-meta">{c.data.company} · {c.data.year}</p>
+        <h2 class="t-title">{c.data.title}</h2>
+        <p class="t-lead">{c.data.lead}</p>
+        <a class="work-case" href={`${base}/work/${slugOf(c.id)}/`}>{s.viewCase} <span aria-hidden="true">→</span></a>
+      </article>
+    ))}
+  </div>
+
+  <div class="work-right" slot="right" data-work>
+    <div class="filters" role="toolbar" aria-label={s.filtersLabel}>
+      {s.filters.map((f, i) => (
+        <button type="button" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+      ))}
+    </div>
+
+    <div class="mosaic-wrap" data-mosaic>
+      <ul class="mosaic">
+        {cases.map((c, i) => (
+          <li data-cat={c.data.category}>
+            <button type="button" class="tile" data-pick={slugOf(c.id)} aria-label={c.data.cardTitle ?? c.data.title}>
+              {c.data.cover && <img src={c.data.cover} alt="" style={c.data.coverPosition ? `object-position: ${c.data.coverPosition}` : undefined} loading={i < 4 ? 'eager' : 'lazy'} />}
+              <span class="tile-label">{c.data.cardTitle ?? c.data.title}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <p class="mosaic-empty" data-empty hidden>{s.emptyFilter}</p>
+    </div>
+
+    {cases.map((c) => (
+      <a class="work-view" data-view={slugOf(c.id)} href={`${base}/work/${slugOf(c.id)}/`} hidden aria-label={`${s.viewCase}: ${c.data.cardTitle ?? c.data.title}`}>
+        {c.data.cover && <img src={c.data.cover} alt="" loading="lazy" />}
+      </a>
     ))}
   </div>
 </Screen>
 
 <script>
-  function initProjects() {
-    const root = document.querySelector<HTMLElement>('[data-projects]');
-    if (!root) return;
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-    const select = (tab: HTMLButtonElement, focus = false) => {
-      tabs.forEach((t) => {
-        const on = t === tab;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        const panel = document.getElementById(t.getAttribute('aria-controls')!);
-        if (panel) panel.hidden = !on;
-      });
-      if (focus) tab.focus();
+  function initWork() {
+    const root = document.querySelector<HTMLElement>('[data-work]');
+    const screen = document.querySelector<HTMLElement>('[data-split]');
+    if (!root || !screen) return;
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const tiles = [...root.querySelectorAll<HTMLLIElement>('.mosaic li')];
+    const mosaic = root.querySelector<HTMLElement>('[data-mosaic]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const views = [...root.querySelectorAll<HTMLElement>('[data-view]')];
+    const details = [...document.querySelectorAll<HTMLElement>('[data-detail]')];
+    const intro = document.querySelector<HTMLElement>('[data-intro]')!;
+
+    const showProject = (slug: string | null) => {
+      screen.classList.toggle('is-project', !!slug);
+      mosaic.hidden = !!slug;
+      intro.hidden = !!slug;
+      views.forEach((v) => (v.hidden = v.dataset.view !== slug));
+      details.forEach((d) => (d.hidden = d.dataset.detail !== slug));
     };
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => select(tab));
-      tab.addEventListener('keydown', (e) => {
-        const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-        if (step) { e.preventDefault(); select(tabs[(i + step + tabs.length) % tabs.length], true); }
+    const filter = (key: string) => {
+      filters.forEach((f) => f.setAttribute('aria-pressed', String(f.dataset.filter === key)));
+      let shown = 0;
+      tiles.forEach((li) => {
+        const on = key === 'all' || li.dataset.cat === key;
+        li.hidden = !on;
+        if (on) shown++;
       });
-    });
+      empty.hidden = shown > 0;
+      showProject(null);
+    };
+    filters.forEach((f) => f.addEventListener('click', () => filter(f.dataset.filter!)));
+    root.querySelectorAll<HTMLButtonElement>('[data-pick]').forEach((b) =>
+      b.addEventListener('click', () => {
+        filters.forEach((f) => f.setAttribute('aria-pressed', 'false'));
+        showProject(b.dataset.pick!);
+        // on phones the text sits above the image: bring it into view
+        if (matchMedia('(max-width: 860px)').matches) document.querySelector('[data-work-left]')?.scrollIntoView({ block: 'start' });
+      }),
+    );
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && screen.classList.contains('is-project')) filter('all'); });
   }
-  document.addEventListener('astro:page-load', initProjects);
+  document.addEventListener('astro:page-load', initWork);
 </script>
 
 <style>
-  .projects { container-type: inline-size; display: flex; flex-direction: column; gap: clamp(24px, 2.1vw, 40px); height: 100%; }
-  .projects-top { height: 46px; background: #181C26; }
-  .projects-tabs { display: flex; background: #181C26; min-height: clamp(32px, 2.45vw, 47px); overflow-x: auto; scrollbar-width: none; }
-  .projects-tabs::-webkit-scrollbar { display: none; }
-  .projects-tabs button {
-    flex: none; padding: 6px clamp(10px, .83vw, 16px); border: 0; background: #181C26; color: #fff; cursor: pointer;
-    font: 800 clamp(13px, 1.25vw, 24px)/1.27 'Inter', sans-serif; letter-spacing: -0.04em; white-space: nowrap;
+  /* left column: white intro, or dark project detail once one is picked */
+  :global(.screen--fullbar .screen-left) { padding-top: clamp(40px, 5.5vw, 104px); transition: background-color .4s ease, color .4s ease; }
+  :global(.screen.is-project .screen-left) { background: #131313; color: #fff; }
+  .work-left { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 58px); }
+  .work-intro, .work-detail { display: flex; flex-direction: column; gap: clamp(24px, 2.6vw, 48px); }
+  .work-intro[hidden], .work-detail[hidden] { display: none; }
+  .work-meta { margin: 0; font-size: clamp(13px, 2cqi, 16px); color: #9AA3BD; }
+  .work-case { align-self: flex-start; font-weight: 600; font-size: clamp(16px, 3cqi, 24px); letter-spacing: -0.03em; color: #fff; border-bottom: 2px solid #fff; }
+  .work-case:hover { color: #9AA3BD; border-color: #9AA3BD; }
+
+  /* right column */
+  .work-right { display: flex; flex-direction: column; min-height: 100%; background: #181C26; transition: background-color .4s ease; }
+  :global(.screen.is-project) .work-right { background: #fff; }
+  .filters { display: flex; flex-wrap: wrap; background: #131313; }
+  .filters button {
+    padding: 8px clamp(14px, 1.6vw, 32px); border: 0; background: transparent; color: #fff; cursor: pointer;
+    font: 800 clamp(14px, 1.25vw, 24px)/1.27 'Inter', sans-serif; letter-spacing: -0.04em; white-space: nowrap;
   }
-  .projects-tabs button:hover { background: #2B3142; }
-  .projects-tabs button[aria-selected="true"] { background: #fff; color: #181C26; }
-  .projects-tabs button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
-  .project { display: flex; flex-direction: column; gap: clamp(16px, 1.6vw, 28px); flex: 1; padding: 0 clamp(20px, 1.25vw, 24px) 32px; min-height: 0; }
-  .project[hidden] { display: none; }
-  .project-media { position: relative; flex: 1; min-height: 220px; overflow: hidden; background: #fff; }
-  .project-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
-  .project-media:hover img { transform: scale(1.03); }
-  .project-link { align-self: flex-start; font-weight: 600; font-size: clamp(16px, 1.25vw, 24px); letter-spacing: -0.03em; color: #000; border-bottom: 2px solid #000; }
-  .project-link:hover { color: #5A6481; border-color: #5A6481; }
+  .filters button:hover { background: #2B3142; }
+  .filters button[aria-pressed="true"] { background: #fff; color: #181C26; }
+  .filters button:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+
+  .mosaic-wrap { flex: 1; display: flex; align-items: center; padding: clamp(16px, 2vw, 40px) 0; }
+  .mosaic-wrap[hidden] { display: none; }
+  .mosaic { list-style: none; margin: 0; padding: 0 clamp(12px, 1.25vw, 24px); width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(8px, .8vw, 16px); }
+  .mosaic li[hidden] { display: none; }
+  /* a loose rhythm: every second tile drops a little, like pieces laid on a table */
+  .mosaic li:nth-child(3n + 2) { transform: translateY(clamp(16px, 3vw, 56px)); }
+  .tile { position: relative; display: block; width: 100%; aspect-ratio: 3 / 4; padding: 0; border: 0; overflow: hidden; background: #fff; cursor: pointer; }
+  .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .tile:hover img { transform: scale(1.04); }
+  .tile-label {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 32px 12px 10px; text-align: left;
+    color: #fff; font: 700 clamp(12px, .9vw, 16px)/1.2 'Inter', sans-serif; letter-spacing: -0.02em;
+    background: linear-gradient(to top, rgba(0, 0, 0, .7), transparent); opacity: 0; transition: opacity .25s ease;
+  }
+  .tile:hover .tile-label, .tile:focus-visible .tile-label { opacity: 1; }
+  .tile:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+  .mosaic-empty { margin: 0 auto; padding: 0 24px; color: #9AA3BD; font-size: clamp(15px, 1.2vw, 20px); }
+  .mosaic-empty[hidden] { display: none; }
+
+  .work-view { position: relative; flex: 1; display: block; min-height: 320px; margin: clamp(16px, 2vw, 40px); }
+  .work-view[hidden] { display: none; }
+  .work-view img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+
+  @media (hover: none) { .tile-label { opacity: 1; } }
   @media (max-width: 860px) {
-    .projects-top { display: none; }
-    .project-media { flex: none; aspect-ratio: 4 / 3; min-height: 0; }
+    .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .mosaic li:nth-child(3n + 2) { transform: none; }
+    .mosaic li:nth-child(2n) { transform: translateY(24px); }
+    .mosaic-wrap { padding-bottom: 48px; }
+    .work-view { min-height: 0; aspect-ratio: 1; }
   }
 </style>
