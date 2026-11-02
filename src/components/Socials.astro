@@ -16,16 +16,16 @@ const icons: Record<string, string> = {
   {site.social.map((s) => (
     <li>
       {s.url ? (
-        <a href={s.url} target="_blank" rel="noopener" aria-label={s.label}><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" set:html={icons[s.key]} /></a>
+        <a href={s.url} target="_blank" rel="noopener" aria-label={s.label}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" set:html={icons[s.key]} /></a>
       ) : (
-        <span title={s.label}><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" set:html={icons[s.key]} /></span>
+        <span title={s.label}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" set:html={icons[s.key]} /></span>
       )}
     </li>
   ))}
 </ul>
 
 <style>
-  .socials { display: flex; align-items: center; gap: clamp(14px, 1.25vw, 24px); list-style: none; margin: 0; padding: 0; color: #fff; }
+  .socials { display: flex; align-items: center; gap: clamp(12px, 1vw, 18px); list-style: none; margin: 0; padding: 0; color: #fff; }
   .socials li { display: flex; }
   .socials a, .socials span { display: flex; padding: 4px; color: inherit; opacity: .92; transition: opacity .2s ease; }
   .socials a:hover { opacity: 1; color: inherit; }
