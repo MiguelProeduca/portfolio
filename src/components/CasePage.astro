@@ -34,7 +34,7 @@ const d = entry.data;
     </header>
 
     {d.cover ? (
-      <img class="cover" src={d.cover} alt={d.hero.replace(/^\[|\]$/g, '')} />
+      <img class:list={["cover", { "cover--anim": d.cover.endsWith('.gif') }]} src={d.cover} alt={d.hero.replace(/^\[|\]$/g, '')} />
     ) : (
       <div class="placeholder cover">{d.hero}</div>
     )}
@@ -75,6 +75,8 @@ const d = entry.data;
     display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
     margin: clamp(48px, 6vw, 88px) 0 0; background: var(--color-surface-muted); border-radius: 0;
   }
+  /* animated covers (square GIFs with white or transparent frames): show whole, on white */
+  .cover--anim { object-fit: contain; background: #fff; }
 
   /* Body: big section titles on the left, reading column on the right; figures run full width. */
   .prose { --indent: 0px; padding-top: clamp(64px, 8vw, 120px); font-size: 18px; line-height: 1.65; color: var(--color-text-muted); }

@@ -16,7 +16,7 @@ meta:
   - { label: "Tools", value: "Figma, Token Studio, Zeroheight" }
 company: "Proeduca"
 year: "2025"
-cover: "/work/ds-cover.jpg"
+cover: "/work/ds-chat.gif"
 hero: "Overview of design system components: chat input, task cards, sidebar, calendar, buttons and form fields"
 ---
 
