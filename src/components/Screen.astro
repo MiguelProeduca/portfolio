@@ -54,13 +54,15 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
 </Base>
 
 <script>
-  // Drag the line between the two halves to resize them. The width is remembered
-  // (only in this browser) so it stays put when you change tab; double-click resets it.
-  const KEY = 'screen-split';
+  // Drag the line between the two halves to resize them, while you're on that screen.
+  // Every screen opens at its own default (half and half); when you change tab the line
+  // glides from where it was to the new screen's default instead of jumping. Double-click resets.
+  let last: number | null = null; // split of the screen we're leaving (survives tab changes)
+
   function initSplit() {
     const screen = document.querySelector<HTMLElement>('[data-split]');
     const handle = screen?.querySelector<HTMLElement>('[data-split-handle]');
-    if (!screen || !handle) return;
+    if (!screen || !handle) { last = null; return; }
     const def = Number(screen.dataset.default) || 50;
     // the left half never gets narrower than its tab bar
     const tabs = screen.querySelector<HTMLElement>('.screen-left .tabs ul');
@@ -70,21 +72,34 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
       return (px / screen.getBoundingClientRect().width) * 100;
     };
     const clamp = (v: number) => Math.min(75, Math.max(25, minLeft(), v));
-    const set = (v: number, save = true) => {
+    const set = (v: number) => {
       v = clamp(v);
       screen.style.setProperty('--split', `${v}%`);
       handle.setAttribute('aria-valuenow', String(v));
-      if (save) { try { localStorage.setItem(KEY, String(v)); } catch {} }
+      last = v;
     };
-    let stored: number | null = null;
-    try { const v = localStorage.getItem(KEY); stored = v ? Number(v) : null; } catch {}
-    set(stored ?? def, false);
-    addEventListener('resize', () => set(Number(handle.getAttribute('aria-valuenow')) || def, false));
-    document.fonts?.ready.then(() => set(Number(handle.getAttribute('aria-valuenow')) || def, false));
+    const glide = (to: number) => {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return set(to);
+      screen.getBoundingClientRect(); // commit the starting position before animating
+      screen.classList.add('is-gliding');
+      set(to);
+      setTimeout(() => screen.classList.remove('is-gliding'), 1000);
+    };
+
+    // start where the previous screen left the line, then glide to this screen's default
+    if (last !== null && Math.abs(last - clamp(def)) > 0.5) {
+      set(last);
+      glide(def);
+    } else {
+      set(def);
+    }
+    addEventListener('resize', () => set(Number(handle.getAttribute('aria-valuenow')) || def));
+    document.fonts?.ready.then(() => set(Number(handle.getAttribute('aria-valuenow')) || def));
 
     handle.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       handle.setPointerCapture(e.pointerId);
+      screen.classList.remove('is-gliding');
       screen.classList.add('is-dragging');
       const box = screen.getBoundingClientRect();
       const move = (ev: PointerEvent) => set(((ev.clientX - box.left) / box.width) * 100);
@@ -96,7 +111,7 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
       handle.addEventListener('pointermove', move);
       handle.addEventListener('pointerup', up);
     });
-    handle.addEventListener('dblclick', () => { set(def, false); try { localStorage.removeItem(KEY); } catch {} });
+    handle.addEventListener('dblclick', () => glide(def));
     handle.addEventListener('keydown', (e) => {
       const now = Number(handle.getAttribute('aria-valuenow'));
       if (e.key === 'ArrowLeft') { e.preventDefault(); set(now - 2); }
@@ -114,6 +129,9 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
   .screen-topbar :global(.screen-socials-bar) { padding: 0 clamp(12px, 1.25vw, 24px); }
   .screen-media :global(.screen-socials) { position: absolute; top: clamp(10px, 1vw, 16px); right: clamp(12px, 1.25vw, 24px); z-index: 2; }
   .screen--fullbar .screen-handle { top: 46px; }
+  /* --split is a real percentage so the browser can animate it between screens */
+  @property --split { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+  .screen.is-gliding { transition: --split .8s cubic-bezier(.65, 0, .2, 1); }
   .screen.is-dragging { cursor: col-resize; user-select: none; }
   .screen.is-dragging img { pointer-events: none; }
 
