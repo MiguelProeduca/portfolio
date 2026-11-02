@@ -112,13 +112,12 @@ html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *
 /* black-and-white direction: pure white page */
 body { background: #fff; }
 
-/* Tab pages: shared type scale (sizes from the 1920px design), scaled to the width of
-   the column they sit in, so the text shrinks when the split is dragged narrower; it never
-   grows past its half-screen size, so screens with a wider text column keep the same type */
-.t-name { margin: 0; font-weight: 600; font-size: clamp(28px, min(8.2cqi, calc(4.1vw - 3.9px)), 79px); line-height: 1.04; letter-spacing: -0.04em; }
-.t-role { margin: 0; font-weight: 600; font-size: clamp(40px, min(15.8cqi, calc(7.9vw - 7.6px)), 151px); line-height: .86; letter-spacing: -0.06em; }
-.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, min(3.75cqi, calc(1.875vw - 1.8px)), 36px); line-height: 1.06; letter-spacing: -0.07em; }
-.t-title { margin: 0; font-weight: 600; font-size: clamp(28px, min(8.2cqi, calc(4.1vw - 3.9px)), 79px); line-height: 1; letter-spacing: -0.07em; }
+/* Tab pages: shared type scale (sizes from the 1920px design). It follows the browser
+   window only, never the split: dragging the line between the halves doesn't change it */
+.t-name { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1.04; letter-spacing: -0.04em; }
+.t-role { margin: 0; font-weight: 600; font-size: clamp(40px, calc(7.9vw - 7.6px), 151px); line-height: .86; letter-spacing: -0.06em; }
+.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, calc(1.875vw - 1.8px), 36px); line-height: 1.06; letter-spacing: -0.07em; }
+.t-title { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1; letter-spacing: -0.07em; }
 .t-caps { text-transform: uppercase; letter-spacing: -0.04em; }
-.t-body { margin: 0; font-weight: 400; font-size: clamp(15px, min(2.92cqi, calc(1.46vw - 1.4px)), 28px); line-height: 1.3; }
+.t-body { margin: 0; font-weight: 400; font-size: clamp(15px, calc(1.46vw - 1.4px), 28px); line-height: 1.3; }
 .t-body + .t-body, .t-lead + .t-lead { margin-top: .8em; }
