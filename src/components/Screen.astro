@@ -12,13 +12,13 @@ interface Props {
   image?: string;
   imageAlt?: string;
   imagePosition?: string;
-  /** 'wide' gives the text column a little more room (experience, contact) */
+  /** kept for older calls; every screen now uses the same split so nothing jumps between tabs */
   split?: 'even' | 'wide';
 }
 const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even' } = Astro.props;
 ---
 <Base lang={lang} title={title} screen>
-  <div class:list={["screen", `screen--${split}`]} slot="hero">
+  <div class:list={["screen", `screen--${split}`]} slot="hero" data-split data-default="50">
     <div class="screen-left">
       <div class="screen-bar">
         <TabBar lang={lang} active={active} />
@@ -28,6 +28,7 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
         <slot />
       </div>
     </div>
+    <div class="screen-handle" role="separator" aria-orientation="vertical" aria-label="Ajustar el ancho de las dos mitades" aria-valuemin="25" aria-valuemax="75" aria-valuenow="50" tabindex="0" data-split-handle><span></span></div>
     {image ? (
       <div class="screen-media" transition:name="screen-media">
         <img src={image} alt={imageAlt} style={imagePosition ? `object-position: ${imagePosition}` : undefined} fetchpriority="high" />
@@ -40,19 +41,77 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
   </div>
 </Base>
 
+<script>
+  // Drag the line between the two halves to resize them. The width is remembered
+  // (only in this browser) so it stays put when you change tab; double-click resets it.
+  const KEY = 'screen-split';
+  function initSplit() {
+    const screen = document.querySelector<HTMLElement>('[data-split]');
+    const handle = screen?.querySelector<HTMLElement>('[data-split-handle]');
+    if (!screen || !handle) return;
+    const def = Number(screen.dataset.default) || 50;
+    const clamp = (v: number) => Math.min(75, Math.max(25, v));
+    const set = (v: number, save = true) => {
+      v = clamp(v);
+      screen.style.setProperty('--split', `${v}%`);
+      handle.setAttribute('aria-valuenow', String(Math.round(v)));
+      if (save) { try { localStorage.setItem(KEY, String(v)); } catch {} }
+    };
+    let stored: number | null = null;
+    try { const v = localStorage.getItem(KEY); stored = v ? Number(v) : null; } catch {}
+    set(stored ?? def, false);
+
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      screen.classList.add('is-dragging');
+      const box = screen.getBoundingClientRect();
+      const move = (ev: PointerEvent) => set(((ev.clientX - box.left) / box.width) * 100);
+      const up = () => {
+        screen.classList.remove('is-dragging');
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', up);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', up);
+    });
+    handle.addEventListener('dblclick', () => { set(def, false); try { localStorage.removeItem(KEY); } catch {} });
+    handle.addEventListener('keydown', (e) => {
+      const now = Number(handle.getAttribute('aria-valuenow'));
+      if (e.key === 'ArrowLeft') { e.preventDefault(); set(now - 2); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); set(now + 2); }
+    });
+  }
+  document.addEventListener('astro:page-load', initSplit);
+</script>
+
 <style>
-  .screen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #000; }
-  .screen--wide { grid-template-columns: minmax(0, 1010fr) minmax(0, 910fr); }
+  .screen { --split: 50%; position: relative; display: grid; grid-template-columns: minmax(0, var(--split)) minmax(0, 1fr); min-height: 100svh; background: #fff; color: #000; }
+  .screen.is-dragging { cursor: col-resize; user-select: none; }
+  .screen.is-dragging img { pointer-events: none; }
+
+  /* the draggable line between the halves */
+  .screen-handle {
+    position: absolute; top: 0; bottom: 0; left: var(--split); z-index: 5;
+    width: 24px; transform: translateX(-50%); cursor: col-resize; touch-action: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .screen-handle::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-50%); background: #181C26; opacity: 0; transition: opacity .2s ease; }
+  .screen-handle span { position: relative; width: 8px; height: 56px; background: #181C26; border: 2px solid #fff; transition: height .2s ease; }
+  .screen-handle:hover::before, .screen-handle:focus-visible::before, .is-dragging .screen-handle::before { opacity: 1; }
+  .screen-handle:hover span, .is-dragging .screen-handle span { height: 80px; }
+  .screen-handle:focus-visible { outline: none; }
+  .screen-handle:focus-visible span { outline: 2px solid #181C26; outline-offset: 2px; }
   .screen-left { display: flex; flex-direction: column; gap: clamp(24px, 2.1vw, 40px); min-width: 0; padding-bottom: 32px; }
   .screen-gap { height: clamp(32px, 2.45vw, 47px); background: #fff; }
-  .screen-body { display: flex; flex-direction: column; gap: clamp(28px, 3vw, 58px); padding: 0 var(--screen-pad, clamp(20px, 1.25vw, 24px)); }
-  .screen--wide .screen-body { --screen-pad: clamp(20px, 2.9vw, 56px); }
+  .screen-body { container-type: inline-size; display: flex; flex-direction: column; gap: clamp(28px, 3vw, 58px); padding: 0 var(--screen-pad, clamp(20px, 1.25vw, 24px)); }
   .screen-media { position: relative; min-height: 100%; overflow: hidden; background: #E8E9E6; }
   .screen-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .screen-right { display: flex; flex-direction: column; min-width: 0; }
 
   @media (max-width: 860px) {
     .screen, .screen--wide { grid-template-columns: 1fr; }
+    .screen-handle { display: none; }
     .screen-media { min-height: 0; aspect-ratio: 4 / 5; }
     .screen-gap { height: 16px; }
   }

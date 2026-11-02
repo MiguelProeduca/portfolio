@@ -1,6 +1,6 @@
 ---
 // The site's only navigation: a dark strip of tabs, the current one in white.
-import { t, prefix, switchPath, langs, type Lang } from '../i18n';
+import { t, prefix, type Lang } from '../i18n';
 
 interface Props {
   lang: Lang;
@@ -11,7 +11,6 @@ interface Props {
 const { lang, active, full = false } = Astro.props;
 const s = t[lang];
 const base = `${prefix(lang)}/`;
-const path = Astro.url.pathname;
 ---
 <nav class:list={["tabs", { "tabs--full": full }]} aria-label={s.tabsLabel}>
   <ul>
@@ -21,15 +20,6 @@ const path = Astro.url.pathname;
       </li>
     ))}
   </ul>
-  <div class="tabs-lang" role="group" aria-label={s.langLabel}>
-    {langs.map((l) =>
-      l === lang ? (
-        <span aria-current="true">{l}</span>
-      ) : (
-        <a href={switchPath(path, l)} hreflang={l} lang={l}>{l}</a>
-      ),
-    )}
-  </div>
 </nav>
 
 <style>
@@ -48,12 +38,7 @@ const path = Astro.url.pathname;
   .tabs ul a[aria-current="page"] { background: #fff; color: #181C26; }
   .tabs ul a:focus-visible { outline: 2px solid #fff; outline-offset: -4px; border-radius: 0; }
 
-  .tabs-lang { margin-left: auto; display: flex; align-items: center; gap: 10px; padding: 0 clamp(10px, 1.25vw, 24px); font-size: 13px; font-weight: 700; text-transform: lowercase; }
-  .tabs-lang span { color: #fff; }
-  .tabs-lang a { color: #8A93AD; }
-  .tabs-lang a:hover { color: #fff; }
   @media (max-width: 560px) {
     .tabs ul a { min-width: 0; padding: 8px; font-size: 13px; }
-    .tabs-lang { padding: 0 10px; gap: 8px; }
-  }
+    }
 </style>
