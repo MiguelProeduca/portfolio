@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 tabLabel: "ia"
 title: un producto de IA, dos usuarios
 cardTitle: "SUPER EDU y AGC"

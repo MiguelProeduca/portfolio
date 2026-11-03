@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 tabLabel: "estudiantes"
 title: el día a día del estudiante, en una sola app
 cardTitle: "app del estudiante · UNIR"

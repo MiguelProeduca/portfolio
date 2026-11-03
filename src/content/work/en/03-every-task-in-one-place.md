@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 3
 tabLabel: "students"
 title: A student's day-to-day, in one app
 cardTitle: "student app · UNIR"

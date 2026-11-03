@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 4
 tabLabel: "ai"
 title: one AI product, two users
 cardTitle: "SUPER EDU & AGC"
