@@ -65,7 +65,7 @@ img { max-width: 100%; height: auto; display: block; }
   font-size: clamp(22px, 2.2vw, 28px);
   line-height: 1.2;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-m);
 }
 
 /* two-column section: title left, content right */
@@ -114,10 +114,14 @@ body { background: #fff; }
 
 /* Tab pages: shared type scale (sizes from the 1920px design). It follows the browser
    window only, never the split: dragging the line between the halves doesn't change it */
-.t-name { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1.04; letter-spacing: -0.04em; }
-.t-role { margin: 0; font-weight: 600; font-size: clamp(40px, calc(7.9vw - 7.6px), 151px); line-height: .86; letter-spacing: -0.06em; }
-.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, calc(1.875vw - 1.8px), 36px); line-height: 1.06; letter-spacing: -0.07em; }
-.t-title { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1; letter-spacing: -0.07em; }
-.t-caps { text-transform: uppercase; letter-spacing: -0.04em; }
-.t-body { margin: 0; font-weight: 400; font-size: clamp(15px, calc(1.46vw - 1.4px), 28px); line-height: 1.3; }
+/* one tracking scale for the whole site: the bigger the type, the tighter, never so tight
+   that letters touch. Everything is set in lowercase. */
+:root { --track-xl: -0.04em; --track-l: -0.03em; --track-m: -0.02em; --track-s: -0.01em; }
+body { text-transform: lowercase; letter-spacing: var(--track-s); }
+.t-name { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1.04; letter-spacing: var(--track-l); }
+.t-role { margin: 0; font-weight: 600; font-size: clamp(40px, calc(7.9vw - 7.6px), 151px); line-height: .9; letter-spacing: var(--track-xl); }
+.t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, calc(1.875vw - 1.8px), 36px); line-height: 1.15; letter-spacing: var(--track-m); }
+.t-title { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1.02; letter-spacing: var(--track-l); }
+.t-caps { letter-spacing: var(--track-l); }
+.t-body { margin: 0; letter-spacing: var(--track-s); font-weight: 400; font-size: clamp(15px, calc(1.46vw - 1.4px), 28px); line-height: 1.3; }
 .t-body + .t-body, .t-lead + .t-lead { margin-top: .8em; }

@@ -76,7 +76,7 @@ const current = slugOf(entry.id);
 
   /* left: stays in place while the case scrolls */
   .panel { position: sticky; top: 0; height: 100svh; overflow-y: auto; display: flex; flex-direction: column; background: #fff; color: #181C26; scrollbar-width: none; border-right: 1px solid #D6DCF5; }
-  .back { display: flex; align-items: center; gap: 8px; min-height: 41px; padding: 0 clamp(20px, 1.25vw, 24px); background: #fff; color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); letter-spacing: -0.04em; }
+  .back { display: flex; align-items: center; gap: 8px; min-height: 41px; padding: 0 clamp(20px, 1.25vw, 24px); background: #fff; color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); letter-spacing: var(--track-s); }
   .back-bar { display: flex; background: #EFF2FB; }
   .back { flex: none; }
   .back:hover { color: #5A6481; }
@@ -95,7 +95,7 @@ const current = slugOf(entry.id);
   .main-bar :global(.main-socials) { justify-self: end; min-height: 41px; padding: 0 clamp(12px, 1.25vw, 24px); }
   .switch { display: flex; max-width: 100%; overflow-x: auto; scrollbar-width: none; justify-self: start; background: #fff; }
   .switch::-webkit-scrollbar { display: none; }
-  .switch a { flex: none; min-width: clamp(64px, 6.6vw, 126px); text-align: center; padding: 8px clamp(12px, 1.25vw, 24px); color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: -0.04em; white-space: nowrap; }
+  .switch a { flex: none; min-width: clamp(64px, 6.6vw, 126px); text-align: center; padding: 8px clamp(12px, 1.25vw, 24px); color: #181C26; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.27; letter-spacing: var(--track-s); white-space: nowrap; }
   .switch a:hover { background: #F6F7FC; color: #181C26; }
   .switch a[aria-current="page"] { background: #EFF2FB; color: #181C26; }
 
@@ -105,13 +105,13 @@ const current = slugOf(entry.id);
 
   .prose { max-width: 760px; font-size: 18px; line-height: 1.65; color: #3A4152; }
   .prose :global(> *) { margin: 0 0 18px; }
-  .prose :global(h2) { margin: clamp(56px, 6vw, 96px) 0 20px; color: #000; font-weight: 600; font-size: clamp(28px, 2.9vw, 48px); line-height: 1.02; letter-spacing: -0.06em; }
+  .prose :global(h2) { margin: clamp(56px, 6vw, 96px) 0 20px; color: #000; font-weight: 600; font-size: clamp(28px, 2.9vw, 48px); line-height: 1.02; letter-spacing: var(--track-l); }
   .prose :global(h2:first-child) { margin-top: 0; }
   .prose :global(strong) { font-weight: 600; color: #000; }
   .prose :global(a) { color: #000; text-decoration: underline; text-underline-offset: 3px; }
   .prose :global(ul), .prose :global(ol) { padding-left: 20px; }
   .prose :global(li) { margin-bottom: 8px; }
-  .prose :global(blockquote) { margin: 40px 0; padding: 0; color: #000; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.2; font-weight: 600; letter-spacing: -0.04em; }
+  .prose :global(blockquote) { margin: 40px 0; padding: 0; color: #000; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.2; font-weight: 600; letter-spacing: var(--track-m); }
   .prose :global(blockquote p) { margin: 0; }
   .prose :global(figure) { margin: clamp(40px, 5vw, 72px) 0; max-width: none; width: min(100%, calc(100vw * .645 - 2 * clamp(20px, 3.3vw, 64px))); display: flex; flex-direction: column; gap: 12px; }
   .prose :global(figure img) { width: 100%; height: auto; background: #F3F4F8; }
@@ -124,7 +124,7 @@ const current = slugOf(entry.id);
   .next { display: block; margin-top: clamp(64px, 8vw, 120px); padding-top: 28px; border-top: 1px solid #D6DCF5; color: #000; }
   .next:hover { color: #000; }
   .next-label { display: block; margin-bottom: 8px; font-size: 15px; color: #5A6481; }
-  .next-title { display: block; font-weight: 600; font-size: clamp(32px, 4.2vw, 72px); line-height: 1; letter-spacing: -0.06em; transition: color .2s; }
+  .next-title { display: block; font-weight: 600; font-size: clamp(32px, 4.2vw, 72px); line-height: 1; letter-spacing: var(--track-l); transition: color .2s; }
   .next:hover .next-title { color: #5A6481; }
 
   @media (max-width: 860px) {

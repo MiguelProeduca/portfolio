@@ -48,7 +48,7 @@ const base = prefix(lang);
   .card:hover img { transform: scale(1.04); }
   .card-label {
     position: absolute; left: 0; right: 0; bottom: 0; padding: 40px 14px 12px;
-    color: #fff; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.2; letter-spacing: -0.04em;
+    color: #fff; font-weight: 300; font-size: clamp(14px, 1.04vw, 20px); line-height: 1.2; letter-spacing: var(--track-s);
     background: linear-gradient(to top, rgba(0, 0, 0, .72), transparent); opacity: 0; transition: opacity .25s ease;
   }
   .card:hover .card-label, .card:focus-visible .card-label { opacity: 1; }
