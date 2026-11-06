@@ -1,7 +1,7 @@
 ---
 order: 4
 tabLabel: "ia"
-title: un producto de IA, dos usuarios
+title: Un producto de IA, dos usuarios
 cardTitle: "SUPER EDU y AGC"
 cardSub: "Inteligencia artificial para profesores y estudiantes."
 heroLinks:
@@ -23,7 +23,7 @@ coverPosition: "right"
 hero: "Espacio del profesor y visor del alumno, uno junto al otro"
 ---
 
-## parte 1 · el profesor crea
+## Parte 1 · El profesor crea
 
 El profesor genera con IA el contenido completo de una asignatura, en dos fases:
 
@@ -32,7 +32,7 @@ El profesor genera con IA el contenido completo de una asignatura, en dos fases:
 
 Cada pieza pasa por revisión: el director de estudios la aprueba o pide cambios.
 
-## mi papel
+## Mi papel
 
 Las reglas del producto venían definidas por el equipo: el modelo de estados y los flujos de revisión. Mi trabajo fue hacerlas comprensibles: organizar la información, mantener la coherencia entre procesos y que algo complejo se sintiera simple.
 
@@ -46,19 +46,19 @@ Las reglas del producto venían definidas por el equipo: el modelo de estados y 
   <figcaption>Fig. 02 · Cada pieza de contenido sigue el mismo ciclo de estados</figcaption>
 </figure>
 
-## la ficha y el asistente
+## La ficha y el asistente
 
 La ficha es el briefing que el profesor le da a la IA antes de generar nada: datos académicos de solo lectura, conocimiento previo de los alumnos, número de temas con un valor recomendado, enfoque de la asignatura, temas obligatorios, secciones opcionales y fuentes de referencia.
 
 A su lado, un **asistente de IA** propone acciones como "Hazme preguntas y redacta el contexto". La IA no solo genera la asignatura: también ayuda al profesor a escribir el briefing, entrevistándolo.
 
-## parte 2 · el alumno estudia
+## Parte 2 · El alumno estudia
 
 Con el contenido aprobado, el alumno lo estudia en un visor que además genera herramientas de estudio a partir de él: resumen, podcast, mapa conceptual, práctica (flashcards, verdadero o falso, test, mini-casos) y un asistente.
 
 La pregunta era dónde viven esas herramientas respecto al contenido: al lado, en lugar de él o encima.
 
-## exploración
+## Exploración
 
 - **Idea 1, junto al contenido.** Un menú "¿Qué quieres hacer?" abre cada herramienta en un panel lateral, al lado del tema.
 - **Idea 2, en lugar del contenido.** Una navegación lateral agrupa el tema y las herramientas. Al elegir una, sustituye al contenido.
@@ -70,13 +70,13 @@ Las dos incluían ya preguntar a la IA sobre texto seleccionado: el alumno subra
   <figcaption>Fig. 03 · De paneles fijos a IA a demanda</figcaption>
 </figure>
 
-## la decisión
+## La decisión
 
 Yo defendía las primeras ideas, sobre todo el panel lateral: permitía leer y usar una herramienta a la vez.
 
 El equipo eligió la opción más simple: más reconocible para el alumno, más cercana a la marca y más ligera de interfaz. Mi trabajo pasó a ser hacer que esa opción funcionara sin perder lo que valía de las primeras ideas. Usar la IA sin abandonar el texto se mantuvo, a través de acciones contextuales en lugar de paneles fijos.
 
-## el diseño final
+## El diseño final
 
 El contenido es el protagonista y la IA aparece cuando el alumno la pide.
 
@@ -86,6 +86,6 @@ El contenido es el protagonista y la IA aparece cuando el alumno la pide.
 - **Un panel de asistente opcional**, que se abre a demanda.
 - **La práctica en un desplegable**, y una home de asignatura con el temario, el progreso y los apuntes del alumno.
 
-## resultado
+## Resultado
 
 El visor del alumno está en fase piloto y ya lo usan alumnos reales. Se entregó a desarrollo por fases, en desktop y mobile, y todo está construido sobre el sistema de diseño multimarca, incluido el input de chat del asistente.

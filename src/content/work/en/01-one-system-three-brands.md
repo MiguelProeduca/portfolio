@@ -2,8 +2,8 @@
 order: 1
 category: "design-system"
 tabLabel: "design system"
-title: one system, three brands
-cardTitle: "multi-brand design system"
+title: One system, three brands
+cardTitle: "Multi-brand design system"
 cardSub: "One design system for three brands."
 heroLinks:
   - { label: "Multi-brand design", type: "Design system" }
@@ -22,7 +22,7 @@ cover: "/work/ds-chat.gif"
 hero: "Overview of design system components: chat input, task cards, sidebar, calendar, buttons and form fields"
 ---
 
-## the system
+## The system
 
 A single design system for UNIR's three digital products, each with its own brand:
 
@@ -34,7 +34,7 @@ They share one component library and one token architecture. What changes betwee
 
 Before, each product had grown its own system, with several versions of the same pieces. Unifying them was the starting point, not the goal: the goal is to design and build faster without losing consistency.
 
-## how it's built
+## How it's built
 
 **Layered tokens.** Values flow through five chained collections: primitives, shared semantics, colour semantics, component semantics and components. Each brand is a mode, and every collection shares one mode-naming convention, so switching a screen's brand is a predictable gesture. We set it up this way because without Figma Enterprise there's no native inheritance between brands.
 
@@ -47,7 +47,7 @@ Before, each product had grown its own system, with several versions of the same
 
 That's how we built, among others, the chat input, chat box, sidebar, calendar, task organizer, file upload, top bar, nav bar, menu bar and a mobile stepper.
 
-## a closer look · the chat input
+## A closer look · the chat input
 
 It's the component where the system's approach shows most. It serves two kinds of conversation, with the AI and between students, and instead of an "AI / Chat" property it has **"vertical / horizontal"**: the component depends on layout, not on use case.
 
@@ -61,13 +61,13 @@ When the AI also needed the horizontal layout, the component already supported i
   <figcaption>Fig. 03 · One component, two layouts, three brands: vertical in Prodi, horizontal in Estudiantes and Foundations.</figcaption>
 </figure>
 
-## how we work with it
+## How we work with it
 
 The system is built hand in hand with engineering, not handed over as a finished package. New screens are assembled from existing pieces, and when a new one is needed it goes into the system so all three brands can use it.
 
 For maintenance at scale (auditing tokens, renaming variables, documenting components) I use AI connected to Figma. The design decisions are mine.
 
-## where it is today
+## Where it is today
 
 It serves the student app, the AI tools and the internal back office. Where there were several versions of a piece, there is now one.
 

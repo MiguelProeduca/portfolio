@@ -2,7 +2,7 @@
 order: 3
 tabLabel: "students"
 title: A student's day-to-day, in one app
-cardTitle: "student app · UNIR"
+cardTitle: "Student app · UNIR"
 cardSub: "A space to organise everyday academic life."
 heroLinks:
   - { label: "Student portal", type: "Project" }
@@ -22,13 +22,13 @@ coverBorder: true
 hero: "Student app screens on mobile: my space, mail, degree page and the task board"
 ---
 
-## the app
+## The app
 
 It's the personal space for UNIR students. Before, all of this lived in a Moodle and several scattered websites: you had to jump from one to another, and it wasn't easy to know what you had pending, like a traditional university where everything goes through the admin office.
 
 The app was designed from scratch, with no previous version to replace, so students have their academic life in one place.
 
-## what's in it
+## What's in it
 
 **Five main sections:**
 
@@ -45,7 +45,7 @@ The app was designed from scratch, with no previous version to replace, so stude
   <figcaption>Fig. 02 · My space, the overview of everything</figcaption>
 </figure>
 
-## how it's laid out
+## How it's laid out
 
 With so many sections, the challenge was not to make it a maze. I solved it with a very recognisable structure, iterated many times with product: **a sidebar with every section and a home that sums up what matters,** so students understand where everything is without thinking about it.
 
@@ -53,7 +53,7 @@ I designed the UI end to end and the UI flows for each section. The architecture
 
 It's designed as an app even though today it's a web app, and it works on mobile, tablet and desktop. Everything is built with the [multi-brand design system](../one-system-three-brands/).
 
-## the calendar
+## The calendar
 
 It was the hardest part. An academic calendar has to show a lot of information (classes, submissions, exams, events) across four views and three screen sizes without losing legibility. As a component, it was the biggest challenge in the whole app.
 
@@ -62,7 +62,7 @@ It was the hardest part. An academic calendar has to show a lot of information (
   <figcaption>Fig. 03 · The academic calendar</figcaption>
 </figure>
 
-## tasks
+## Tasks
 
 My favourite part. It brings everything a student has to do into one place, with two views of the same tasks: a **board,** with one column per status, and a more detailed **list**.
 
@@ -80,7 +80,7 @@ The complex part was deciding how each task behaves. There are four types, and o
   <figcaption>Fig. 04 · Two views of the same tasks</figcaption>
 </figure>
 
-## mail and chats
+## Mail and chats
 
 The other two pieces I'm proudest of. Mail works as a full client, and chats let students talk to classmates and teachers without leaving the app, so they no longer need other tools to communicate with the university.
 
@@ -89,6 +89,6 @@ The other two pieces I'm proudest of. Mail works as a full client, and chats let
   <figcaption>Fig. 05 · Mail and chats</figcaption>
 </figure>
 
-## where it is today
+## Where it is today
 
 The app is live and in a pilot phase with real students. Their feedback comes in continuously and drives the next iterations.

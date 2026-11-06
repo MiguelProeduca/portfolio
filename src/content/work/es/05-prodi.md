@@ -2,8 +2,8 @@
 order: 2
 category: "project"
 tabLabel: "prodi"
-title: prodi
-cardTitle: "prodi · chat con IA"
+title: Prodi
+cardTitle: "Prodi · chat con IA"
 cardSub: "Un chat con inteligencia artificial de Proeduca."
 kicker: Producto de IA
 tag: Producto de IA · Prodi
@@ -18,7 +18,7 @@ cover: "/work/ds-chat.gif"
 hero: "[Pantallas de Prodi]"
 ---
 
-## en preparación
+## En preparación
 
 Este caso está en preparación. Pronto contaré cómo se diseñó Prodi, desde su sistema de diseño hasta la aplicación completa.
 

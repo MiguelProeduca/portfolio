@@ -115,9 +115,10 @@ body { background: #fff; }
 /* Tab pages: shared type scale (sizes from the 1920px design). It follows the browser
    window only, never the split: dragging the line between the halves doesn't change it */
 /* one tracking scale for the whole site: the bigger the type, the tighter, never so tight
-   that letters touch. Everything is set in lowercase. */
+   that letters touch. Text is written normally (capital first letter); only the small
+   interface labels (tabs, filters, back) are lowercase, straight from their copy. */
 :root { --track-xl: -0.04em; --track-l: -0.03em; --track-m: -0.02em; --track-s: -0.01em; }
-body { text-transform: lowercase; letter-spacing: var(--track-s); }
+body { letter-spacing: var(--track-s); }
 .t-name { margin: 0; font-weight: 600; font-size: clamp(28px, calc(4.1vw - 3.9px), 79px); line-height: 1.04; letter-spacing: var(--track-l); }
 .t-role { margin: 0; font-weight: 600; font-size: clamp(40px, calc(7.9vw - 7.6px), 151px); line-height: .9; letter-spacing: var(--track-xl); }
 .t-lead { margin: 0; font-weight: 600; font-size: clamp(16px, calc(1.875vw - 1.8px), 36px); line-height: 1.15; letter-spacing: var(--track-m); }

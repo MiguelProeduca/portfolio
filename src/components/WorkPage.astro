@@ -14,7 +14,7 @@ const cases = await getCases(lang);
 const base = prefix(lang);
 ---
 <Screen lang={lang} active="work" title={`${s.workTitle} · ${site.name}`} start="nav">
-  <h1 class="t-title work-title">{s.workTitle.toLowerCase()}</h1>
+  <h1 class="t-title work-title">{s.workTitle}</h1>
   <div>
     {s.workIntro.map((p) => <p class="t-lead work-lead">{p}</p>)}
   </div>

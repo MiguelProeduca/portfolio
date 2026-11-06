@@ -2,7 +2,7 @@
 order: 5
 tabLabel: "la rambla"
 title: La Rambla
-cardTitle: "app para escaladoras"
+cardTitle: "App para escaladoras"
 cardSub: "Una app para que las mujeres se organicen para escalar juntas."
 kicker: Producto · Proyecto de bootcamp
 tag: Producto · La Rambla
@@ -19,13 +19,13 @@ cover: "/work/rambla/cover.webp"
 hero: "Pantalla de inicio de La Rambla en un móvil"
 ---
 
-## contexto
+## Contexto
 
 La escalada vive un auge desde la pandemia, por el interés en el cuidado físico y el contacto con la naturaleza. Es un deporte históricamente masculinizado, pero cada vez lo practican más mujeres.
 
 El nombre, La Rambla, viene de la primera vía de grado 9a escalada por una mujer.
 
-## hipótesis
+## Hipótesis
 
 Mi punto de partida era que **a las mujeres les cuesta encontrar a otras mujeres con las que escalar.**
 
@@ -34,14 +34,14 @@ Mi punto de partida era que **a las mujeres les cuesta encontrar a otras mujeres
   <figcaption>Fig. 02 · La hipótesis de partida</figcaption>
 </figure>
 
-## investigación
+## Investigación
 
 - **Desk research:** estudios de rocódromos, profesionales de la educación deportiva y la federación de montaña. Alrededor del 37 % de quienes escalan en rocódromo y del 34 % de las personas federadas en montaña son mujeres.
 - **Encuestas** sobre motivaciones, hábitos y opinión sobre los grupos no mixtos.
 - **Seis entrevistas en profundidad** con escaladoras.
 - **Benchmark** de grupos de Telegram y Facebook para quedadas, y de apps de deporte en grupo, de quedadas y de citas.
 
-## la hipótesis era falsa
+## La hipótesis era falsa
 
 Las mujeres sí conocían a otras con quienes escalar. **El problema real era organizarse.** Además:
 
@@ -51,13 +51,13 @@ Las mujeres sí conocían a otras con quienes escalar. **El problema real era or
 
 > "Cuando salgo a escalar con otras mujeres, encuentro más sororidad, más compañerismo, más comprensión."
 
-## definición
+## Definición
 
 Con encuestas y entrevistas definí seis personas, de las que elegí cuatro, sus Jobs To Be Done y los user journeys, para detectar en qué puntos podrían abandonar la app. Con el Value Proposition Canvas convertí los pain points en funcionalidades.
 
 El enfoque quedó claro: **canales para encontrar con quién escalar, y una app centrada en la seguridad, la confianza y la motivación.**
 
-## diseño
+## Diseño
 
 Prioricé una arquitectura que no abrumara: lo esencial primero, y funciones como los entrenamientos o las publicaciones en fases posteriores, según la respuesta de las usuarias.
 
@@ -76,7 +76,7 @@ Prioricé una arquitectura que no abrumara: lo esencial primero, y funciones com
   <figcaption>Fig. 05 · Crear una salida, paso a paso</figcaption>
 </figure>
 
-## aprendizaje
+## Aprendizaje
 
 Lo más valioso fue equivocarme pronto. Si hubiera diseñado sobre la hipótesis inicial, habría hecho una app para encontrar compañeras, cuando lo que hacía falta era una herramienta para organizarse con las que ya tenían.
 

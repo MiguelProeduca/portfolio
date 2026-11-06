@@ -2,8 +2,8 @@
 order: 1
 category: "design-system"
 tabLabel: "design system"
-title: un sistema, tres marcas
-cardTitle: "sistema de diseño multimarca"
+title: Un sistema, tres marcas
+cardTitle: "Sistema de diseño multimarca"
 cardSub: "Un sistema de diseño para tres marcas."
 heroLinks:
   - { label: "Diseño multimarca", type: "Sistema de diseño" }
@@ -22,7 +22,7 @@ cover: "/work/ds-chat.gif"
 hero: "Vista general de componentes del sistema: input de chat, tarjetas de tarea, sidebar, calendario, botones y campos de formulario"
 ---
 
-## el sistema
+## El sistema
 
 Un único sistema de diseño para los tres productos digitales de UNIR, cada uno con su marca:
 
@@ -34,7 +34,7 @@ Comparten una sola librería de componentes y una sola arquitectura de tokens. L
 
 Antes, cada producto había crecido con su propio sistema y había varias versiones de las mismas piezas. Unificarlos fue el punto de partida, no el objetivo: el objetivo es poder diseñar y construir más rápido sin perder coherencia.
 
-## cómo está construido
+## Cómo está construido
 
 **Tokens en capas.** Los valores fluyen por cinco colecciones encadenadas: primitivos, semánticos comunes, semánticos de color, semánticos de componente y componentes. Cada marca es un modo, y todas las colecciones comparten la misma convención de nombres de modo, así que cambiar una pantalla de marca es un gesto predecible. Lo montamos así porque sin Figma Enterprise no hay herencia nativa entre marcas.
 
@@ -47,7 +47,7 @@ Antes, cada producto había crecido con su propio sistema y había varias versio
 
 Así se han creado, entre otros, el input de chat, el chatbox, la sidebar, la agenda, el organizador de tareas, el file upload, la top bar, la nav bar, la menu bar y un stepper para mobile.
 
-## un componente de cerca · el input de chat
+## Un componente de cerca · el input de chat
 
 Es el componente en el que más se nota el enfoque del sistema. Sirve a dos tipos de conversación, con la IA y entre estudiantes, y en lugar de una propiedad "IA / Chat" tiene **"vertical / horizontal"**: el componente depende del layout, no del caso de uso.
 
@@ -61,13 +61,13 @@ Cuando la IA necesitó también el layout horizontal, el componente ya lo soport
   <figcaption>Fig. 03 · Un componente, dos layouts, tres marcas: vertical en Prodi, horizontal en Estudiantes y Foundations.</figcaption>
 </figure>
 
-## cómo se trabaja con él
+## Cómo se trabaja con él
 
 El sistema se construye mano a mano con desarrollo, no se entrega cerrado. Las pantallas nuevas se montan con piezas que ya existen, y cuando hace falta una nueva entra en el sistema para que la puedan usar las tres marcas.
 
 Para el mantenimiento a escala (auditar tokens, renombrar variables, documentar componentes) uso IA conectada a Figma. Las decisiones de diseño las tomo yo.
 
-## dónde está hoy
+## Dónde está hoy
 
 Da servicio a la app de estudiantes, a las herramientas de IA y al back office interno. Donde había varias versiones de una pieza ahora hay una.
 

@@ -2,8 +2,8 @@
 order: 2
 category: "project"
 tabLabel: "prodi"
-title: prodi
-cardTitle: "prodi · AI chat"
+title: Prodi
+cardTitle: "Prodi · AI chat"
 cardSub: "An AI chat by Proeduca."
 kicker: AI product
 tag: AI product · Prodi
@@ -18,7 +18,7 @@ cover: "/work/ds-chat.gif"
 hero: "[Prodi screens]"
 ---
 
-## coming soon
+## Coming soon
 
 This case is being written. Soon I'll show how Prodi was designed, from its design system to the full app.
 
