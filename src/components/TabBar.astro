@@ -1,6 +1,7 @@
 ---
 // The site's only navigation: a white strip of tabs, the current one on a soft blue.
-// On phones it folds into a hamburger menu.
+// On phones it folds into a hamburger that opens a full-screen black menu.
+import Socials from './Socials.astro';
 import { t, prefix, type Lang } from '../i18n';
 
 interface Props {
@@ -27,6 +28,7 @@ const base = `${prefix(lang)}/`;
       </li>
     ))}
   </ul>
+  <Socials class="tabs-socials" />
 </nav>
 
 <script>
@@ -37,11 +39,13 @@ const base = `${prefix(lang)}/`;
       btn.dataset.ready = '1';
       const set = (open: boolean) => {
         nav.classList.toggle('is-open', open);
+        document.documentElement.style.overflow = open ? 'hidden' : '';
         btn.setAttribute('aria-expanded', String(open));
         btn.setAttribute('aria-label', (open ? btn.dataset.closeLabel : btn.dataset.openLabel) ?? '');
       };
       btn.addEventListener('click', () => set(!nav.classList.contains('is-open')));
       nav.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+      nav.querySelectorAll('.tabs-list a').forEach((a) => a.addEventListener('click', () => set(false)));
     });
   }
   document.addEventListener('astro:page-load', initTabs);
@@ -65,22 +69,33 @@ const base = `${prefix(lang)}/`;
 
   .tabs-head { display: none; }
 
-  /* phones: "m°" and a hamburger; the tabs open as a list below */
+  .tabs-head, .tabs :global(.tabs-socials) { display: none; }
+
+  /* phones: "m°" and a hamburger; it opens a full-screen black menu */
   @media (max-width: 860px) {
     .tabs { flex-direction: column; border-bottom: 1px solid #EFF2FB; }
-    .tabs-head { display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 8px 0 20px; }
+    .tabs-head { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 8px 0 20px; }
     .tabs-home { font-weight: 500; font-size: 18px; color: #181C26; }
     .tabs-burger { display: grid; gap: 5px; padding: 14px 12px; margin: 0; border: 0; background: none; cursor: pointer; }
-    .tabs-burger span { display: block; width: 24px; height: 2px; border-radius: 2px; background: #181C26; transition: transform .25s ease, opacity .2s ease; }
+    .tabs-burger span { display: block; width: 24px; height: 2px; border-radius: 2px; background: #181C26; transition: transform .25s ease, opacity .2s ease, background-color .2s ease; }
+    .tabs-burger:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+    .tabs .tabs-list { display: none; }
+    .tabs-list li:first-child { display: none; } /* "m°" already sits in the header */
+
+    .is-open { position: fixed; inset: 0; z-index: 50; background: #111214; border-bottom: 0; overflow-y: auto; }
+    .is-open .tabs-home { color: #fff; }
+    .is-open .tabs-burger span { background: #fff; }
     .is-open .tabs-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .is-open .tabs-burger span:nth-child(2) { opacity: 0; }
     .is-open .tabs-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .tabs-burger:focus-visible { outline: 2px solid #181C26; outline-offset: -2px; }
-    .tabs .tabs-list { display: none; flex-direction: column; overflow: visible; padding: 4px 0 16px; }
-    .is-open .tabs-list { display: flex; }
-    .tabs-list li:first-child { display: none; } /* "m°" already sits in the header */
+    .is-open .tabs-list { display: flex; flex-direction: column; overflow: visible; padding: 32px 0 24px; }
     .tabs .tabs-list li { width: 100%; }
-    .tabs .tabs-list a { width: 100%; }
-    .tabs .tabs-list a { justify-content: flex-start; min-width: 0; padding: 12px 20px; font-size: 28px; font-weight: 400; letter-spacing: var(--track-l); }
+    .tabs .tabs-list a {
+      width: 100%; justify-content: flex-start; min-width: 0; padding: 6px 20px;
+      color: #fff; font-size: clamp(40px, 12vw, 56px); font-weight: 500; line-height: 1.1; letter-spacing: var(--track-l);
+    }
+    .tabs .tabs-list a:hover { background: none; color: #9AA3BD; }
+    .tabs .tabs-list a[aria-current="page"] { background: none; color: #5A6481; }
+    .is-open :global(.tabs-socials) { display: flex; margin-top: auto; padding: 24px 20px 32px; }
   }
 </style>

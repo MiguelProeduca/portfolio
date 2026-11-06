@@ -177,7 +177,9 @@ const { lang, active, title, image, imageAlt = '', imagePosition, split = 'even'
     .screen, .screen--wide { grid-template-columns: 1fr; }
     .screen-handle { display: none; }
     .screen-topbar :global(.screen-socials-bar) { display: none; }
-    .screen-media { min-height: 0; aspect-ratio: 4 / 5; }
+    /* phones: no collages, an editorial text-only reading */
+    .screen-media { display: none; }
+    .screen-left { padding-bottom: 56px; }
     .screen-gap { height: 16px; }
   }
 </style>
