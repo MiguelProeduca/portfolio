@@ -1,5 +1,6 @@
 ---
 // The site's only navigation: a white strip of tabs, the current one on a soft blue.
+// On phones it folds into a hamburger menu.
 import { t, prefix, type Lang } from '../i18n';
 
 interface Props {
@@ -12,8 +13,14 @@ const { lang, active, full = false } = Astro.props;
 const s = t[lang];
 const base = `${prefix(lang)}/`;
 ---
-<nav class:list={["tabs", { "tabs--full": full }]} aria-label={s.tabsLabel}>
-  <ul>
+<nav class:list={["tabs", { "tabs--full": full }]} aria-label={s.tabsLabel} data-tabs>
+  <div class="tabs-head">
+    <a class="tabs-home" href={base}>m°</a>
+    <button class="tabs-burger" type="button" aria-expanded="false" aria-label={s.menu} data-open-label={s.menu} data-close-label={s.closeMenu}>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <ul class="tabs-list">
     {s.tabs.map((tab) => (
       <li>
         <a href={`${base}${tab.path}`} aria-current={tab.key === active ? 'page' : undefined}>{tab.label}</a>
@@ -21,6 +28,24 @@ const base = `${prefix(lang)}/`;
     ))}
   </ul>
 </nav>
+
+<script>
+  function initTabs() {
+    document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((nav) => {
+      const btn = nav.querySelector<HTMLButtonElement>('.tabs-burger');
+      if (!btn || btn.dataset.ready) return;
+      btn.dataset.ready = '1';
+      const set = (open: boolean) => {
+        nav.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        btn.setAttribute('aria-label', (open ? btn.dataset.closeLabel : btn.dataset.openLabel) ?? '');
+      };
+      btn.addEventListener('click', () => set(!nav.classList.contains('is-open')));
+      nav.addEventListener('keydown', (e) => { if (e.key === 'Escape') { set(false); btn.focus(); } });
+    });
+  }
+  document.addEventListener('astro:page-load', initTabs);
+</script>
 
 <style>
   .tabs { display: flex; align-items: stretch; background: #fff; min-height: 41px; }
@@ -38,7 +63,24 @@ const base = `${prefix(lang)}/`;
   .tabs ul a[aria-current="page"] { background: #EFF2FB; color: #181C26; }
   .tabs ul a:focus-visible { outline: 2px solid #181C26; outline-offset: -4px; border-radius: 0; }
 
-  @media (max-width: 560px) {
-    .tabs ul a { min-width: 0; padding: 8px; font-size: 13px; }
-    }
+  .tabs-head { display: none; }
+
+  /* phones: "m°" and a hamburger; the tabs open as a list below */
+  @media (max-width: 860px) {
+    .tabs { flex-direction: column; border-bottom: 1px solid #EFF2FB; }
+    .tabs-head { display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 8px 0 20px; }
+    .tabs-home { font-weight: 500; font-size: 18px; color: #181C26; }
+    .tabs-burger { display: grid; gap: 5px; padding: 14px 12px; margin: 0; border: 0; background: none; cursor: pointer; }
+    .tabs-burger span { display: block; width: 24px; height: 2px; border-radius: 2px; background: #181C26; transition: transform .25s ease, opacity .2s ease; }
+    .is-open .tabs-burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .is-open .tabs-burger span:nth-child(2) { opacity: 0; }
+    .is-open .tabs-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .tabs-burger:focus-visible { outline: 2px solid #181C26; outline-offset: -2px; }
+    .tabs .tabs-list { display: none; flex-direction: column; overflow: visible; padding: 4px 0 16px; }
+    .is-open .tabs-list { display: flex; }
+    .tabs-list li:first-child { display: none; } /* "m°" already sits in the header */
+    .tabs .tabs-list li { width: 100%; }
+    .tabs .tabs-list a { width: 100%; }
+    .tabs .tabs-list a { justify-content: flex-start; min-width: 0; padding: 12px 20px; font-size: 28px; font-weight: 400; letter-spacing: var(--track-l); }
+  }
 </style>
